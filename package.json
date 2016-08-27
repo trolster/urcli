@@ -10,5 +10,8 @@
   "homepage": "https://github.com/trolster/ur-cli#readme",
   "bin": {
     "urcli": "./lib/cli.js"
+  },
+  "dependencies": {
+    "request": "^2.74.0"
   }
 }
