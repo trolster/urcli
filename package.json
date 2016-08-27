@@ -1,0 +1,14 @@
+{
+  "name": "ur-cli",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trolster/ur-cli.git"
+  },
+  "author": "Mikkel Trolle Larsen <trolster2@gmail.com> (http://mtl.codes)",
+  "license": "ISC",
+  "homepage": "https://github.com/trolster/ur-cli#readme",
+  "bin": {
+    "urcli": "./lib/cli.js"
+  }
+}
