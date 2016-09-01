@@ -12,6 +12,7 @@
     "urcli": "./lib/cli.js"
   },
   "dependencies": {
+    "commander": "^2.9.0",
     "request": "^2.74.0"
   }
 }
