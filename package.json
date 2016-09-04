@@ -5,7 +5,7 @@
     "type": "git",
     "url": "git+https://github.com/trolster/ur-cli.git"
   },
-  "author": "Mikkel Trolle Larsen <trolster2@gmail.com> (http://mtl.codes)",
+  "author": "Mikkel Trolle Larsen <trolster2@gmail.com>",
   "license": "ISC",
   "homepage": "https://github.com/trolster/ur-cli#readme",
   "bin": {
@@ -17,5 +17,8 @@
     "moment": "^2.14.1",
     "node-notifier": "^4.6.1",
     "request": "^2.74.0"
+  },
+  "engines" : {
+    "node" : ">=6.0.0"
   }
 }
