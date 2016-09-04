@@ -1,6 +1,6 @@
 {
   "name": "ur-cli",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trolster/ur-cli.git"
@@ -18,7 +18,7 @@
     "node-notifier": "^4.6.1",
     "request": "^2.74.0"
   },
-  "engines" : {
-    "node" : ">=6.0.0"
+  "engines": {
+    "node": ">=6.0.0"
   }
 }
