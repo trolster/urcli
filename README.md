@@ -11,20 +11,36 @@
 ## Usage
 
 1. Clone the project.
-2. Place a config file in the root.
+2. Place a apiConfig.json file in the root.
 3. Run `node lib/cli.js <someCommand>`.
+
+It's best to set the token using the token command: `node lib/cli.js token <yourToken>`, as that also sets the tokens age, so that you don't have to.
 
 **apiConfig.json**
 
-It needs to have the following information:
+It should look something like this:
 
 ```json
 {
-  "token": "yourToken",
-  "certified": [23, 34, 145],
-  "default_projects": [34, 23],
-  "language": "en-us"
+  "tokenAge": 277,
+  "certs": {
+    "46": "About Me",
+    "134": "Front End Grit: A Developer Mindset",
+    "144": "Design A Game",
+    "145": "Article to Mockup"
+  },
+  "language": "en-us",
+  "token": "yourToken"
 }
 ```
 
-`default_projects` are used when you run the `create` command without any project ids as arguments: `node lib/cli.js create`.
+## `assign`
+
+To get started using the assing command,
+1. make sure to set the token using the token command.
+2. Then get your certifications using the certs command: `node lib/cli.js certs`.
+3. Finally use the assign command followed by the ids of the projects you wish to queue up for: `node lib/cli.js assign <projectId> [..moreIds]`.
+
+## License
+
+[ISC](LICENSE) © Mikkel Trolle Larsen.
