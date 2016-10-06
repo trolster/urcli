@@ -2,6 +2,7 @@
 .vscode
 assets
 apiConfig.json
+submissions.json
 
 ### Node ###
 # Logs
