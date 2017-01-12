@@ -9,7 +9,7 @@
   "license": "MIT",
   "homepage": "https://github.com/trolster/ur-cli#readme",
   "bin": {
-    "urcli": "./lib/cli.js"
+    "urcli": "./lib/urcli.js"
   },
   "dependencies": {
     "chalk": "^1.1.3",
