@@ -1,8 +1,6 @@
-.ideas
-.vscode
 assets
 apiConfig.json
-submissions.json
+.env*
 
 ### Node ###
 # Logs
