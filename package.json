@@ -6,7 +6,7 @@
     "url": "git+https://github.com/trolster/ur-cli.git"
   },
   "author": "Mikkel Trolle Larsen <trolster2@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "homepage": "https://github.com/trolster/ur-cli#readme",
   "bin": {
     "urcli": "./lib/cli.js"

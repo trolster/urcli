@@ -61,4 +61,4 @@ Example command: `node lib/cli.js assign 144 145 46`
 
 ## License
 
-[ISC](LICENSE) © Mikkel Trolle Larsen.
+[MIT](LICENSE) © Mikkel Trolle Larsen.
