@@ -40,11 +40,11 @@ For instance, if you had run the command `urcli assign 145 144` and later wanted
 
 #### Notifications
 
-The assign script updates every 30 seconds to see if you've gotten a submission assigned. If you've been assigned a submission it will notify you vith a desktop notification:
+The assign script updates every 30 seconds to see if you've gotten a submission assigned. If you've been assigned a submission it will notify you with a desktop notification:
 
 <img src="README/ss_desktop_notifications.png" alt="Desktop notifications on a Mac" width="700px">
 
-You will also get a notification when you get new student feedback:
+You will also get a notification when you get new feedback from students:
 
 <img src="README/ss_feedbacks_notifications.png" alt="Desktop notifications on a Mac" width="700px">
 
@@ -54,11 +54,13 @@ The script also updates your queue position and checks for new feedbacks every 5
 
 ## The `token` command
 
-It's best to renew the token using the token command: `urcli token "your-token"`. That also sets the tokens age, so that you don't have to. But if you use a token that's older than a few days, the expiry warning might be off, so get a new one every time. Be sure to put the token in quotes since they often include dashes.
+You renew your token using the token command: `urcli token "your-token"`. That also sets the tokens age, so that it can warn you if the token is about to expire. But if you use a token that's older than a few days, the expiry warning might be off, so get a new token every time.
+
+:information_source: Be sure to put the token in quotes since they often include dashes (`-`) which mess up the command.
 
 #### Token expiry warning
 
-The script always shows you how old your token is at the top of the prompt. It will give you a warning when your token is less than 5 days from expiring. The text goes from green to red, so it's fairly obvious.
+The script always shows you the age of your token at the top of the prompt. It will give you a warning when your token is less than 5 days from expiring. The text goes from green to red, so it's fairly obvious.
 
 ## The `money` command
 
