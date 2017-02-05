@@ -73,6 +73,8 @@ To get really specific you can use the options `--from` and `--to`. After the fl
 
 Example: `urcli money --from 2016-01 --to 2016-07-26`, will generate an earnings report for the year 2016 up to (but not including) July 26th.
 
+:exclamation: The `money` command may be a few hours off because of weird timezone issues.
+
 ## License
 
 [MIT](LICENSE) © Mikkel Trolle Larsen.
