@@ -29,7 +29,7 @@ The `assign` command creates or updates a submission_request object on Udacity's
 #### Exiting `assign`
 
 You can exit the script in two ways:
-- Press `ESC` to exit without deleting your submission_request object on the server. You will stay in the queues you are in for as long as the submission_request persists (up to an hour).
+- Press `ESC` to exit without deleting your submission_request object on the server. The submission request will be refreshed so that you will stay in the queues you are in for an hour.
 - Press `CTRL-C` to exit _and_ delete the submission_request on the server. This means that you leave all the queues that you are in.
 
 #### Updating `assign`
