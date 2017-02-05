@@ -52,6 +52,14 @@ The script also updates your queue position and checks for new feedbacks every 5
 
 <img src="README/ss_cli_prompt.png" alt="CLI Prompt information display" width="700px">
 
+#### PushBullet Notifications
+
+You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on, and then run the `assign` command with the `--push <accessToken>` option.
+
+Ex.: `urcli assign 145 --push "o.ZxY9mPKB7aWIjiAI2CPKvnMMMqBPxHT8"`
+
+Once you get a submission assigned you'll get a notification on all active devices with PushBullet installed. You can create an access token on your [pushbullet.com account page](https://www.pushbullet.com/#settings/account).
+
 ## The `token` command
 
 You renew your token using the token command: `urcli token "your-token"`. That also sets the tokens age, so that it can warn you if the token is about to expire. But if you use a token that's older than a few days, the expiry warning might be off, so get a new token every time.
