@@ -54,9 +54,11 @@ The script also updates your queue position and checks for new feedbacks every 5
 
 #### PushBullet Notifications
 
-You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on, and then run the `assign` command with the `--push <accessToken>` option.
+You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on.
 
-Ex.: `urcli assign 145 --push "o.ZxY9mPKB7aWIjiAI2CPKvnMMMqBPxHT8"`
+To test if the notifications work (without having to wait to get a review assigned) use the testcommand: `urcli pushonce "accessToken"`. If that works then run the `assign` command with the `--push <accessToken>` option:
+
+Ex.: `urcli assign all --push "o.ZxY9mPKB7aWIjiAI2CPKvnMMMqBPxHT8"`
 
 Once you get a submission assigned you'll get a notification on all active devices with PushBullet installed. You can create an access token on your [pushbullet.com account page](https://www.pushbullet.com/#settings/account).
 
