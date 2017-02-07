@@ -10,7 +10,7 @@
 
 1. Run `npm install -g urcli`.
 1. Get a new token from the API Access link in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard).
-<img src="README/ss_api_access.png" alt="Token retrieval" width="500px">
+<img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
 1. Run `urcli setup "your-token"`. All you will be asked to do is to type in the languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`. The script will take care of the rest of the setup process for you.
 1. Run `urcli assign` proceeded by valid project ids for projects you are certified for. Ex:
     - `urcli assign 145`, creates a submission_request with project 145.
@@ -42,15 +42,15 @@ For instance, if you had run the command `urcli assign 145 144` and later wanted
 
 The assign script updates every 30 seconds to see if you've gotten a submission assigned. If you've been assigned a submission it will notify you with a desktop notification:
 
-<img src="README/ss_desktop_notifications.png" alt="Desktop notifications on a Mac" width="700px">
+<img src="http://i.imgur.com/XaKNhaK.png" alt="Desktop notifications on a Mac" width="700px">
 
 You will also get a notification when you get new feedback from students:
 
-<img src="README/ss_feedbacks_notifications.png" alt="Desktop notifications on a Mac" width="700px">
+<img src="http://i.imgur.com/86RG4la.png" alt="Desktop notifications on a Mac" width="700px">
 
 The script also updates your queue position and checks for new feedbacks every 5 minutes. It outputs all relevant information to the terminal:
 
-<img src="README/ss_cli_prompt.png" alt="CLI Prompt information display" width="700px">
+<img src="http://i.imgur.com/8h2jjht.png" alt="CLI Prompt information display" width="700px">
 
 #### PushBullet Notifications
 
