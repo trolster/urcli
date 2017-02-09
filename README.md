@@ -10,7 +10,7 @@
 
 1. Run `npm install -g urcli`.
 1. Get a new token from the API Access link in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard).
-<img src="README/ss_api_access.png" alt="Token retrieval" width="500px">
+<img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
 1. Run `urcli setup "your-token"`. All you will be asked to do is to type in the languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`. The script will take care of the rest of the setup process for you.
 1. Run `urcli assign` proceeded by valid project ids for projects you are certified for. Ex:
     - `urcli assign 145`, creates a submission_request with project 145.
@@ -40,25 +40,37 @@ For instance, if you had run the command `urcli assign 145 144` and later wanted
 
 #### Notifications
 
-The assign script updates every 30 seconds to see if you've gotten a submission assigned. If you've been assigned a submission it will notify you vith a desktop notification:
+The assign script updates every 30 seconds to see if you've gotten a submission assigned. If you've been assigned a submission it will notify you with a desktop notification:
 
-<img src="README/ss_desktop_notifications.png" alt="Desktop notifications on a Mac" width="700px">
+<img src="http://i.imgur.com/XaKNhaK.png" alt="Desktop notifications on a Mac" width="700px">
 
-You will also get a notification when you get new student feedback:
+You will also get a notification when you get new feedback from students:
 
-<img src="README/ss_feedbacks_notifications.png" alt="Desktop notifications on a Mac" width="700px">
+<img src="http://i.imgur.com/86RG4la.png" alt="Desktop notifications on a Mac" width="700px">
 
 The script also updates your queue position and checks for new feedbacks every 5 minutes. It outputs all relevant information to the terminal:
 
-<img src="README/ss_cli_prompt.png" alt="CLI Prompt information display" width="700px">
+<img src="http://i.imgur.com/8h2jjht.png" alt="CLI Prompt information display" width="700px">
+
+#### PushBullet Notifications
+
+You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on.
+
+To test if the notifications work (without having to wait to get a review assigned) use the testcommand: `urcli pushonce "accessToken"`. If that works then run the `assign` command with the `--push <accessToken>` option:
+
+Ex.: `urcli assign all --push "o.ZxY9mPKB7aWIjiAI2CPKvnMMMqBPxHT8"`
+
+Once you get a submission assigned you'll get a notification on all active devices with PushBullet installed. You can create an access token on your [pushbullet.com account page](https://www.pushbullet.com/#settings/account).
 
 ## The `token` command
 
-It's best to renew the token using the token command: `urcli token "your-token"`. That also sets the tokens age, so that you don't have to. But if you use a token that's older than a few days, the expiry warning might be off, so get a new one every time. Be sure to put the token in quotes since they often include dashes.
+You renew your token using the token command: `urcli token "your-token"`. That also sets the tokens age, so that it can warn you if the token is about to expire. But if you use a token that's older than a few days, the expiry warning might be off, so get a new token every time.
+
+:information_source: Be sure to put the token in quotes since they often include dashes (`-`) which mess up the command.
 
 #### Token expiry warning
 
-The script always shows you how old your token is at the top of the prompt. It will give you a warning when your token is less than 5 days from expiring. The text goes from green to red, so it's fairly obvious.
+The script always shows you the age of your token at the top of the prompt. It will give you a warning when your token is less than 5 days from expiring. The text goes from green to red, so it's fairly obvious.
 
 ## The `money` command
 
