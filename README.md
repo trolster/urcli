@@ -74,7 +74,7 @@ The script always shows you the age of your token at the top of the prompt. It w
 
 ## The `money` command
 
-The `money` command creates an earnings report for the interval you specify:
+The `money` command creates a time and earnings report for the interval you specify:
 
 - `urcli money` - Returns two reports; one for your total earnings and one for the current month you are in.
 - `urcli money 1` - (You can use month numbers as intervals). This command will generate a report for the whole month of January of the current year. Tip: to get a month from a previous year, simply use the format `YYYY-MM`. Ex.: `urcli money 2015-11`.
@@ -82,6 +82,8 @@ The `money` command creates an earnings report for the interval you specify:
 - `urcli money yesterday` - Generates an earnings report for yesterday.
 
 To get really specific you can use the options `--from` and `--to`. After the flag you need to write out a valid date in the format, `YYYY-MM-DDTHH:MM:SS`, to which to calculate earnings (where `YYYY-MM` is required and `DD-THH:MM:SS` is optional).
+
+The "turnaround time" is defined as the period in hours from the time the review was assigned up to its submission.
 
 Example: `urcli money --from 2016-01 --to 2016-07-26`, will generate an earnings report for the year 2016 up to (but not including) July 26th.
 
