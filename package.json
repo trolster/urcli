@@ -15,6 +15,7 @@
     "chalk": "^1.1.3",
     "cli-table2": "^0.2.0",
     "commander": "^2.9.0",
+    "currency-formatter": "^1.1.1",
     "moment": "^2.14.1",
     "node-fetch": "^1.6.0",
     "node-notifier": "^4.6.1",
