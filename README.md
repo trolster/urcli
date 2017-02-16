@@ -36,7 +36,7 @@ You can exit the script in two ways:
 
 You can update your submission request instead of deleting it and creating a new one. You might want to do that in the case where you just want to change which projects you wish to review without leaving any queues. Simply exit the assign script by pressing `ESC` (this will leave the submission_request object intact on the server) and use the assign command again with the changed arguments.
 
-For instance, if you had previously run the command `urcli assign 145 144` and later wanted to change that to just 145, but _without_ leaving the queue for 145, you simply exit the script using `ESC` and run the command `urcli assign 145`. This will change the current submission_request object to only queue up for project 145,
+For instance, if you had previously run the command `urcli assign 145 144` and later wanted to change that to just 145, but _without_ leaving the queue for 145, you simply exit the script using `ESC` and run the command `urcli assign 145`. This will change the current submission_request object to only queue up for project 145, and will immediately remove you from the queue for project 144.
 
 #### Notifications
 
