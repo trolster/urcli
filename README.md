@@ -87,7 +87,9 @@ To get really specific you can use the options `--from` and `--to`. After the fl
 
 Example: `urcli money --from 2016-01 --to 2016-07-26`, will generate an earnings report for the year 2016 up to (but not including) July 26th.
 
-The `Average Turnaround Time` is the time period from when the review was assigned up to when you submit it. Faster turnaround times are better, and Udacity asks that you attempt to keep this below 2 hours.
+#### `Average Turnaround Time`
+
+Turnaround time for a review is the time period from when the review was assigned up to when you submit it. `Average Turnaround Time` is the average for all reviews the you have done for that particular project. Faster turnaround times are better, and Udacity asks that you attempt to keep this below 2 hours.
 
 :exclamation: The `money` command may be a few hours off because of weird timezone issues.
 
