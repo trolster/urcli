@@ -1,4 +1,4 @@
-# CLI tool for Udacity Reviews API
+# CLI tool for the Udacity Reviews API
 
 `urcli` is a Command Line Interface for configuring and running API calls against the Udacity Reviews API. You can find the API documentation here: https://review.udacity.com/api-doc/index.html.
 
