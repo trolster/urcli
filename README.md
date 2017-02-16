@@ -20,7 +20,7 @@
 
 ## The `assign` command
 
-The `assign` command creates or updates a submission_request object on Udacity's servers. This object is what is keeping you in the queue. If you get a submission assigned the object is deleted on the server, and the `assign` script takes care of creating a new one.
+The `assign` command creates or updates a submission_request object on Udacity's servers. This object is what is keeping you in project queues. If you get a submission assigned the object is deleted on the server, and the `assign` script takes care of creating a new one.
 
 - `urcli assign all` - Will ask for all the types of projects that you are certified for.
 - `urcli assign 145` - Will ask for projects of the type that has ID 145.
@@ -36,7 +36,7 @@ You can exit the script in two ways:
 
 You can update your submission request instead of deleting it and creating a new one. You might want to do that in the case where you just want to change which projects you wish to review without leaving any queues. Simply exit the assign script by pressing `ESC` (this will leave the submission_request object intact on the server) and use the assign command again with the changed arguments.
 
-For instance, if you had run the command `urcli assign 145 144` and later wanted to change that to just 145, but _without_ leaving the queue for 145, you just exit the script using `ESC` and run the command `urcli assign 145`. This will change the current submission_request object to only include project 145,
+For instance, if you had previously run the command `urcli assign 145 144` and later wanted to change that to just 145, but _without_ leaving the queue for 145, you simply exit the script using `ESC` and run the command `urcli assign 145`. This will change the current submission_request object to only queue up for project 145,
 
 #### Notifications
 
@@ -58,13 +58,15 @@ You can get notified on other devices using the [PushBullet](https://www.pushbul
 
 To test if the notifications work (without having to wait to get a review assigned) use the testcommand: `urcli pushonce "accessToken"`. If that works then run the `assign` command with the `--push <accessToken>` option:
 
+:information_source: You can create an access token on your [pushbullet.com account page](https://www.pushbullet.com/#settings/account).
+
 Ex.: `urcli assign all --push "o.ZxY9mPKB7aWIjiAI2CPKvnMMMqBPxHT8"`
 
-Once you get a submission assigned you'll get a notification on all active devices with PushBullet installed. You can create an access token on your [pushbullet.com account page](https://www.pushbullet.com/#settings/account).
+Once you get a submission assigned you'll get a notification on all active devices with PushBullet installed.
 
 ## The `token` command
 
-You renew your token using the token command: `urcli token "your-token"`. That also sets the tokens age, so that it can warn you if the token is about to expire. But if you use a token that's older than a few days, the expiry warning might be off, so get a new token every time.
+You renew your token using the token command: `urcli token "your-token"`. That also records the tokens age, so that it can warn you if the token is about to expire. But if you use a token that's older than a few days, the expiry warning might be off, so get a new token every time you use this command.
 
 :information_source: Be sure to put the token in quotes since they often include dashes (`-`) which mess up the command.
 
@@ -74,7 +76,7 @@ The script always shows you the age of your token at the top of the prompt. It w
 
 ## The `money` command
 
-The `money` command creates a time and earnings report for the interval you specify:
+The `money` command creates an earnings report for the interval you specify:
 
 - `urcli money` - Returns two reports; one for your total earnings and one for the current month you are in.
 - `urcli money 1` - (You can use month numbers as intervals). This command will generate a report for the whole month of January of the current year. Tip: to get a month from a previous year, simply use the format `YYYY-MM`. Ex.: `urcli money 2015-11`.
@@ -83,11 +85,24 @@ The `money` command creates a time and earnings report for the interval you spec
 
 To get really specific you can use the options `--from` and `--to`. After the flag you need to write out a valid date in the format, `YYYY-MM-DDTHH:MM:SS`, to which to calculate earnings (where `YYYY-MM` is required and `DD-THH:MM:SS` is optional).
 
-The "turnaround time" is defined as the period in hours from the time the review was assigned up to its submission.
-
 Example: `urcli money --from 2016-01 --to 2016-07-26`, will generate an earnings report for the year 2016 up to (but not including) July 26th.
 
+The `Average Turnaround Time` is the time period from when the review was assigned up to when you submit it. Faster turnaround times are better, and Udacity asks that you attempt to keep this below 2 hours.
+
 :exclamation: The `money` command may be a few hours off because of weird timezone issues.
+
+## The `certs` command
+
+If you gain a new certification after you've started using urcli, you can update the stored list of certifications by running the `certs` command. It will also log the contents of your current configurations file to the terminal, which includes the updated list of your certifications.
+Tip: Certifications are also updated any time you run the `setup` command.
+
+## The `setup` command
+
+You have to run this command when you first install urcli. It gets your certifications and asks you to record which languages you are certified for as well. Once you've run this command you are ready to roll.
+
+## The configuration file
+
+The configuration file is stored in your home folder, so that it persists through application updates. You find it here `~/.urcli_config`.
 
 ## License
 
