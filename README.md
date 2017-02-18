@@ -88,7 +88,7 @@ Turnaround time for a review is the time period from when the review was assigne
 
 You renew your token using the token command: `urcli token "your-token"`. That also records the tokens age, so that it can warn you if the token is about to expire. But if you use a token that's older than a few days, the expiry warning might be off, so get a new token every time you use this command.
 
-:bulb: Be sure to put the token in quotes since they often include dashes (`-`) which mess up the command.
+:bulb: Be sure to put the token in quotes since they often include dashes (`-`) which messes up the command.
 
 #### Token expiry warning
 
@@ -101,7 +101,7 @@ Tip: Certifications are also updated any time you run the `setup` command.
 
 ## The `setup` command
 
-You only have to run this command when you first install urcli: `urcli setup "your-token"`. You have to supply it with a new token which you can find in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard) (see [Quickstart](#Quickstart)).
+You only have to run this command when you first install urcli: `urcli setup "your-token"`. You have to supply it with a new token which you can find in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard) (see [Quickstart](#quickstart)).
 
 It gets your certifications from the API and asks you to record which languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`. Once you've run this command you are ready to start using the cli.
 
