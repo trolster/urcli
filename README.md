@@ -11,20 +11,21 @@
 1. Run `npm install -g urcli`.
 1. Get a new token from the API Access link in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard).
 <img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
-1. Run `urcli setup "your-token"`. All you will be asked to do is to type in the languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`. The script will take care of the rest of the setup process for you.
+1. Run `urcli setup "your-token"`. You will be asked to type in the languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`.
 1. Run `urcli assign` proceeded by valid project ids for projects you are certified for. Ex:
-    - `urcli assign 145`, creates a submission_request with project 145.
-    - `urcli assign 134 145 46`, creates a submission_request with project 145, 134 and 46.
-    - `urcli assign all`, creates a submission request with all projects you are certified for.
+    - `urcli assign 145`, places you in the queue for project 145.
+    - `urcli assign 134 145 46`, places you in the queues for project 145, 134 and 46.
+    - `urcli assign all`, places you in the queue for every project you are certified for.
 1. Profit! (literally).
+
+:bulb: When using the `setup` command, be sure to put the token in quotes, `urcli setup "your-token"`, since tokens often include dashes (`-`) which messes things up.
 
 ## The `assign` command
 
-The `assign` command creates or updates a submission_request object on Udacity's servers. This object is what is keeping you in project queues. If you get a submission assigned the object is deleted on the server, and the `assign` script takes care of creating a new one.
-
-- `urcli assign all` - Will ask for all the types of projects that you are certified for.
-- `urcli assign 145` - Will ask for projects of the type that has ID 145.
-- `urcli assign 145 144 134` - Will ask for those three types of projects.
+The `assign` command creates or updates a submission_request object on Udacity's servers. This object is what is keeping you in project queues. If you get a submission assigned the object is deleted on the server, and the `assign` script takes care of creating a new one. Ex.:
+- `urcli assign 145`, places you in the queue for project 145.
+- `urcli assign 134 145 46`, places you in the queues for project 145, 134 and 46.
+- `urcli assign all`, places you in the queue for every project you are certified for.
 
 #### Exiting `assign`
 
@@ -64,16 +65,6 @@ Ex.: `urcli assign all --push "o.ZxY9mPKB7aWIjiAI2CPKvnMMMqBPxHT8"`
 
 Once you get a submission assigned you'll get a notification on all active devices with PushBullet installed.
 
-## The `token` command
-
-You renew your token using the token command: `urcli token "your-token"`. That also records the tokens age, so that it can warn you if the token is about to expire. But if you use a token that's older than a few days, the expiry warning might be off, so get a new token every time you use this command.
-
-:information_source: Be sure to put the token in quotes since they often include dashes (`-`) which mess up the command.
-
-#### Token expiry warning
-
-The script always shows you the age of your token at the top of the prompt. It will give you a warning when your token is less than 5 days from expiring. The text goes from green to red, so it's fairly obvious.
-
 ## The `money` command
 
 The `money` command creates an earnings report for the interval you specify:
@@ -89,9 +80,19 @@ Example: `urcli money --from 2016-01 --to 2016-07-26`, will generate an earnings
 
 #### `Average Turnaround Time`
 
-Turnaround time for a review is the time period from when the review was assigned up to when you submit it. `Average Turnaround Time` is the average for all reviews the you have done for that particular project. Faster turnaround times are better, and Udacity asks that you attempt to keep this below 2 hours.
+Turnaround time for a review is the time period from when the review was assigned up to when you submit it. `Average Turnaround Time` is the average for all reviews that you have done for that particular project. Faster turnaround times are better, and Udacity asks that you attempt to keep this below 2 hours.
 
 :exclamation: The `money` command may be a few hours off because of weird timezone issues.
+
+## The `token` command
+
+You renew your token using the token command: `urcli token "your-token"`. That also records the tokens age, so that it can warn you if the token is about to expire. But if you use a token that's older than a few days, the expiry warning might be off, so get a new token every time you use this command.
+
+:bulb: Be sure to put the token in quotes since they often include dashes (`-`) which mess up the command.
+
+#### Token expiry warning
+
+The script always shows you the age of your token at the top of the prompt. It will give you a warning when your token is less than 5 days from expiring. The text goes from green to red, so it's fairly obvious.
 
 ## The `certs` command
 
@@ -100,11 +101,15 @@ Tip: Certifications are also updated any time you run the `setup` command.
 
 ## The `setup` command
 
-You have to run this command when you first install urcli. It gets your certifications and asks you to record which languages you are certified for as well. Once you've run this command you are ready to roll.
+You only have to run this command when you first install urcli: `urcli setup "your-token"`. You have to supply it with a new token which you can find in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard) (see [Quickstart](#Quickstart)).
 
-## The configuration file
+It gets your certifications from the API and asks you to record which languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`. Once you've run this command you are ready to start using the cli.
 
-The configuration file is stored in your home folder, so that it persists through application updates. You find it here `~/.urcli_config`.
+:bulb: Be sure to put the token in quotes since they often include dashes (`-`) which mess up the command.
+
+#### The configuration file
+
+The `setup` command creates a configuration file which is stored in your home folder. You find it here `~/.urcli_config`.
 
 ## License
 
