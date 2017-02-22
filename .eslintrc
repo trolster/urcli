@@ -7,6 +7,7 @@
     "space-before-function-paren": ["error", "never"],
     "max-len": ["error", 120, 4],
     "no-unused-vars": ["error", {"argsIgnorePattern": "next"}],
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "no-console": 0
   }
 }
