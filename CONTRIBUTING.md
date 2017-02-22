@@ -4,6 +4,7 @@ Thanks for checking out the urcli! We've put together the following guidelines t
 
 ## Table of Contents
 
+0. [Found a bug?](#found-a-bug)
 0. [Types of contributions we're looking for](#types-of-contributions-were-looking-for)
 0. [Ground rules & expectations](#ground-rules--expectations)
 0. [How to contribute](#how-to-contribute)
@@ -12,8 +13,16 @@ Thanks for checking out the urcli! We've put together the following guidelines t
 0. [Contribution review process](#contribution-review-process)
 0. [Community](#community)
 
+## Found a bug?
+Please don't hesitate to open an [issue](https://github.com/trolster/ur-cli/issues). We'll need to know the following:
+
+* Version of Node
+* Platform you're running on (macOS, SunOS, Linux, Windows)
+* Architecture you're running on (32bit or 64bit and x86 or ARM)
+* If you are getting any error messages, please include them as well
+
 ## Types of contributions we're looking for
-First and foremost, this project should be easy to set up and use. Your first contribution might be starting a new conversation, or adding to an existing conversation, around making things easier to understand and/or easier to use. You can do so under [Issues](https://github.com/trolster/ur-cli/issues).
+First and foremost, this software is supposed to be easy to set up and use. Your first contribution might be starting a new conversation, or adding to an existing conversation, around making things easier to understand and/or easier to use. You can do so under [Issues](https://github.com/trolster/ur-cli/issues).
 
 There are also many ways you can directly contribute to the cli (in descending order of need):
 
