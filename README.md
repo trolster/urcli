@@ -112,7 +112,7 @@ It gets your certifications from the API and asks you to record which languages 
 The `setup` command creates a configuration file which is stored in your home folder. You find it here `~/.urcli_config`.
 
 ## For using this API on Android Device:
-Since, Android is based on Linux. So, we can use its power to access this API. :simple_smile:
+Since, Android is based on Linux. So, we can use its power to access this API.
 * You need to install one of the [android terminal app](https://play.google.com/store/search?q=android%20terminal) eg, termux. 
 * Type these commands:
   * `apt update && apt upgrade`
