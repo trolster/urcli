@@ -54,18 +54,21 @@ If you're writing code, see the [Airbnb style guide](https://github.com/airbnb/j
 
 ## Setting up your environment
 
-This software runs in Node.js. If you have Node.js > 6.0.0 installed you are good to go.
+This software runs in Node.js. If you have [Node.js](https://nodejs.org/en/) version 6 or higher installed you are good to go.
+
+Node.js install guide: https://docs.npmjs.com/getting-started/installing-node
+The npm package manager guide: https://docs.npmjs.com/getting-started/what-is-npm
 
 Once you have cloned the repo, you should install all packages from npm: `npm install`.
 
-The proejct uses Babel for transpilation. So when you are running commands directly from /src, you will need to run them using the `babel-node` command. Ex.: `babel-node lib/urcli.js money 2017-02`. This is equivalent of running the command `urcli money 2017-02`
+The project uses [Babel](https://babeljs.io/) for compilation of JavaScript. So when you are running commands directly from /lib, you will need to run them using the `babel-node` command. Ex.: `babel-node lib/urcli.js money 2017-02`. This is equivalent of running the command `urcli money 2017-02`
 
 ## Contribution review process
 
-This repo is currently maintained by @trolster. I will likely review your contribution. If you haven't heard from me in 10 days, feel free to bump the thread or @-mention me to review your contribution.
+This repo is currently maintained by @trolster. I will likely review your contribution. If you haven't heard from me within 10 days, feel free to bump the thread or @-mention me to review your contribution.
 
 ## Community
 
-Discussions about the Open Source Guides take place on this repository's [Issues](https://github.com/trolster/ur-cli/issues) and [Pull Requests](https://github.com/trolster/ur-cli/pulls) sections. Anybody is welcome to join these conversations.
+Discussions about the urcli take place on this repository's [Issues](https://github.com/trolster/ur-cli/issues) and [Pull Requests](https://github.com/trolster/ur-cli/pulls) sections. Anybody is welcome to join these conversations.
 
 Wherever possible, do not take these conversations to private channels, including contacting me (the maintainer) directly. Keeping communication public means everybody can benefit and learn from the conversation.
