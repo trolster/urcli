@@ -54,10 +54,11 @@ If you're writing code, see the [Airbnb style guide](https://github.com/airbnb/j
 
 ## Setting up your environment
 
-This software runs in Node.js. If you have [Node.js](https://nodejs.org/en/) version 6 or higher installed you are good to go.
+This software runs in [Node.js](https://nodejs.org/en/) and if you have version 6 or higher installed you are good to go.
 
-Node.js install guide: https://docs.npmjs.com/getting-started/installing-node
-The npm package manager guide: https://docs.npmjs.com/getting-started/what-is-npm
+To get started with Node, check out:
+- [Node.js install guide](https://docs.npmjs.com/getting-started/installing-node)
+- [The npm package manager guide](https://docs.npmjs.com/getting-started/what-is-npm)
 
 Once you have cloned the repo, you should install all packages from npm: `npm install`.
 
