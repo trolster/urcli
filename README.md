@@ -111,6 +111,10 @@ It gets your certifications from the API and asks you to record which languages 
 
 The `setup` command creates a configuration file which is stored in your home folder. You find it here `~/.urcli_config`.
 
+## Contributing
+
+Got a question or an idea? Found a bug? Check out our [contributing guidelines](https://github.com/trolster/ur-cli/blob/master/CONTRIBUTING.md) for ways to offer feedback and contribute.
+
 ## License
 
 [MIT](LICENSE) © Mikkel Trolle Larsen.
