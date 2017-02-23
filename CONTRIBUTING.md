@@ -66,7 +66,7 @@ The project uses [Babel](https://babeljs.io/) for compilation of JavaScript. So 
 
 ## Contribution review process
 
-This repo is currently maintained by @trolster. I will likely review your contribution. If you haven't heard from me within 10 days, feel free to bump the thread or @-mention me to review your contribution.
+This repo is currently maintained by [@trolster](https://github.com/trolster). I will likely review your contribution. If you haven't heard from me within 10 days, feel free to bump the thread or @-mention me to review your contribution.
 
 ## Community
 
