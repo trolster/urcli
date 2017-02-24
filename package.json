@@ -8,6 +8,9 @@
   "author": "Mikkel Trolle Larsen <trolster2@gmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/trolster/ur-cli#readme",
+  "scripts": {
+    "test": "eslint ./"
+  },
   "bin": {
     "urcli": "./lib/urcli.js"
   },
