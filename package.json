@@ -9,7 +9,7 @@
   "license": "MIT",
   "homepage": "https://github.com/trolster/ur-cli#readme",
   "scripts": {
-    "test": "eslint ./"
+    "test": "eslint ./src"
   },
   "bin": {
     "urcli": "./lib/urcli.js"
