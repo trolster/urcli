@@ -9,7 +9,8 @@
   "license": "MIT",
   "homepage": "https://github.com/trolster/ur-cli#readme",
   "scripts": {
-    "test": "eslint ./src"
+    "test": "eslint ./src",
+    "build": "babel src -d lib --presets es2015-node,stage-3"
   },
   "bin": {
     "urcli": "./lib/urcli.js"
