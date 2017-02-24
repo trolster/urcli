@@ -1,8 +1,8 @@
 // project dependencies
-const moment = require('moment');
-const cli = require('commander');
+import moment from 'moment';
+import cli from 'commander';
 // our modules
-const config = require('./config');
+import config from './config';
 
 cli.parse(process.argv);
 
