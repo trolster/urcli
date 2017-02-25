@@ -9,7 +9,9 @@
   "license": "MIT",
   "homepage": "https://github.com/trolster/ur-cli#readme",
   "scripts": {
-    "test": "eslint ./src && jest",
+    "lint": "eslint .src/",
+    "pretest": "npm run lint",
+    "test": "jest",
     "prebuild": "npm run test",
     "build": "babel src -d lib --presets es2015-node,stage-3"
   },
