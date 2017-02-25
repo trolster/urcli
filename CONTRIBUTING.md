@@ -62,7 +62,7 @@ To get started with Node, check out:
 
 Once you have cloned the repo, you should install all packages from npm: `npm install`.
 
-The project uses [Babel](https://babeljs.io/) for compilation of JavaScript. So when you are running commands directly from /lib, you will need to run them using the `babel-node` command. Ex.: `babel-node lib/urcli.js money 2017-02`. This is equivalent of running the command `urcli money 2017-02`
+The project uses [Babel](https://babeljs.io/) for compilation of JavaScript. So when you are running commands directly from /src, you will need to run them using the `babel-node` command. Ex.: `babel-node src/urcli.js money 2017-02`. This is equivalent of running the command `urcli money 2017-02`
 
 ## Contribution review process
 
