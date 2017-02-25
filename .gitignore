@@ -1,6 +1,5 @@
-assets
-.env*
-TODO*
+# local files and folders
+lib/
 
 ### Node ###
 # Logs

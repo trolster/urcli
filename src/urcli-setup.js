@@ -10,7 +10,7 @@ const config = require('./config');
 cli.parse(process.argv);
 
 if (!cli.args[0]) {
-  return new Error('You must enter a token (use quotes)');
+  throw new Error('You must enter a token (use quotes)');
 }
 
 config.token = cli.args[0];
@@ -68,5 +68,3 @@ rl.on('line', (line) => {
     config.save();
   });
 });
-
-return null;
