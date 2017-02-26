@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const cli = require('commander');
-const pkg = require('../package');
+import cli from 'commander';
+import pkg from '../package.json';
 
 cli.name('urcli');
 
@@ -22,7 +22,7 @@ if (!cli.args.length) {
   process.exit(0);
 }
 
-process.on('uncaughtException', (e) => {
-  console.error('CLI Error:', e, e.stack);
-  process.exit(0);
-});
+// output all uncaught exceptions
+process.on('uncaughtException', err => console.error('uncaught exception:', err));
+// output all uncaught promise rejections
+process.on('unhandledRejection', err => console.error('unhandled rejection:', err));
