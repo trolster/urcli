@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
+// project dependencies
 import cli from 'commander';
+// our modules
 import pkg from '../package.json';
 
 cli.name('urcli');
