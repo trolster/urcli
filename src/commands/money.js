@@ -51,7 +51,6 @@ function definePeriods(args, options) {
   }
 
   args.forEach((arg) => {
-    console.log(arg);
     // Regex expressions to match user input. Note that MM and YYYY-MM inputs
     // are validated by the regex itself, while YYYY-MM-DD has to be validated
     // seperately by the moment library because of leap years and such nonsense.
