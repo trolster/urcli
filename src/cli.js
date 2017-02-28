@@ -10,7 +10,6 @@ import {
   setupCmd,
   assignCmd,
   moneyCmd,
-  testCmd,
 } from './commands';
 
 cli
@@ -57,14 +56,6 @@ cli
   .description('Lets you know how much you\'ve earned in a given period.')
   .action((periods, options) => {
     moneyCmd(periods, options);
-  });
-
-cli
-  .command('test')
-  .arguments('<cmd> [accessToken]')
-  .description('Test notifications')
-  .action((cmd, accessToken) => {
-    testCmd(cmd, accessToken);
   });
 
 export default cli;
