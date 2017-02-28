@@ -21,7 +21,7 @@ class Config {
   }
   save(configValues) {
     Object.assign(this, configValues);
-    process.env.CONFIG = this;
+    process.env.CONFIG = JSON.stringify(this);
   }
 }
 
