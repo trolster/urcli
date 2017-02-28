@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // npm modules
 import cli from 'commander';
 // our modules
