@@ -172,7 +172,7 @@ class Report {
 }
 
 function printReports() {
-  periods.forEach(async (period) => {
+  const resolvedReports = periods.map(async (period) => {
     const task = 'completed';
     const token = config.token;
     const body = {
@@ -184,7 +184,9 @@ function printReports() {
     const report = new Report(completed.body, period);
     report.create();
     report.print();
+    return Promise.resolve();
   });
+  Promise.all(resolvedReports).then(() => process.exit(0));
 }
 
 export const moneyCmd = (args, options) => {
