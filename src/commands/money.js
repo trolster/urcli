@@ -1,5 +1,6 @@
 // npm modules
 import moment from 'moment';
+import momentParseformat from 'moment-parseformat';
 import chalk from 'chalk';
 import currencyFormatter from 'currency-formatter';
 // our modules
@@ -12,7 +13,11 @@ function definePeriods(args, options) {
   const defaultEndTime = moment.utc().add(1, 'h');
 
   function validateDate(date) {
-    if (!moment.utc(date).isValid()) throw new Error(`Invalid date: ${date}`);
+    if (!moment(date).isValid()) {
+      console.error(`You have entered an invalid date: ${date}`);
+      process.exit(0);
+    }
+    return true;
   }
 
   function createDefaultPeriods() {
@@ -71,7 +76,14 @@ function definePeriods(args, options) {
     } else if (arg === 'yesterday') {
       createDayPeriod(moment.utc().subtract(1, 'd').format('YYYY-MM-DD'));
     } else {
-      throw new Error(`Invalid period defined: ${arg}`);
+      if (validateDate(arg)) {
+        console.error(chalk.red(`\nYou have entered an invalid date: "${arg}".`));
+        console.error(chalk.red(`The date format "${momentParseformat(arg)}" is not supported by this command.`));
+        console.error('\nPlease enter dates in the following format: "YYYY-MM-DD" or "YYYY-MM"');
+        console.error('You can also use the special shortcuts "today" and "yesterday" (ex.: urcli money today)');
+        process.exit(0);
+      }
+      throw new Error('validateDate failed to throw an error.');
     }
   });
 }
