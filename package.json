@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "eslint .src/",
     "pretest": "npm run lint",
-    "test": "jest",
+    "test": "jest --forceExit",
     "prebuild": "npm run test",
     "build": "babel src -d lib --presets es2015-node,stage-3"
   },
