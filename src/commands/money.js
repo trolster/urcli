@@ -11,11 +11,17 @@ const periods = [];
 function definePeriods(args, options) {
   // Add one hour to the default end time to take inconsistencies into account.
   const defaultEndTime = moment.utc().add(1, 'h');
+  const logErrorAndExit = (arg, reason) => {
+    console.error(chalk.red(`\nYou have entered an invalid date: "${arg}": ${reason}`));
+    console.error('\nPlease enter dates in the following format: "YYYY-MM-DD" or "YYYY-MM"');
+    console.error('You can also use the special shortcuts "today" and "yesterday" (ex.: urcli money today)');
+    process.exit(0);
+  };
 
   function validateDate(date) {
     if (!moment(date).isValid()) {
-      console.error(`You have entered an invalid date: ${date}`);
-      process.exit(0);
+      const errorReason = `The date "${date}" doesn't exist.`;
+      logErrorAndExit(date, errorReason);
     }
     return true;
   }
@@ -77,11 +83,8 @@ function definePeriods(args, options) {
       createDayPeriod(moment.utc().subtract(1, 'd').format('YYYY-MM-DD'));
     } else {
       if (validateDate(arg)) {
-        console.error(chalk.red(`\nYou have entered an invalid date: "${arg}".`));
-        console.error(chalk.red(`The date format "${momentParseformat(arg)}" is not supported by this command.`));
-        console.error('\nPlease enter dates in the following format: "YYYY-MM-DD" or "YYYY-MM"');
-        console.error('You can also use the special shortcuts "today" and "yesterday" (ex.: urcli money today)');
-        process.exit(0);
+        const errorReason = `The format "${momentParseformat(arg)}" is not supported.`;
+        logErrorAndExit(arg, errorReason);
       }
       throw new Error('validateDate failed to throw an error.');
     }
