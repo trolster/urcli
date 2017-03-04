@@ -126,9 +126,10 @@ class Report {
   countReview(review) {
     const id = review.project_id;
     const price = parseInt(review.price, 10);
-    const assignedAt = moment.utc(review.assigned_at);
-    const completedAt = moment.utc(review.completed_at);
+    const assignedAt = moment(review.assigned_at);
+    const completedAt = moment(review.completed_at);
     const turnaroundTime = completedAt.diff(assignedAt);
+
 
     // If the report does not yet contain an entry for the project type, create
     // the entry and try counting the review again.
