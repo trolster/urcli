@@ -179,8 +179,16 @@ class Report {
     console.log(chalk.white(`Total Earned: ${currencyFormatter.format(this.totalEarned, {code: 'USD'})}`));
 
     // Only print Daily Average if we have more than one day to average
-    const numberOfDays = moment(this.endDate).diff(this.startDate, 'days');
+    let numberOfDays = moment(this.endDate).diff(this.startDate, 'days');
+    // console.log(moment.utc().diff(this.startDate, 'days', true));
     if (numberOfDays > 1) {
+      // If current month, add hours of current day to numberOfDays
+      const month = moment(this.startDate).format('YYYY-MM');
+      const isCurrentMonth = () => month === moment.utc().format('YYYY-MM');
+      if (isCurrentMonth()) {
+        numberOfDays = moment.utc().diff(this.startDate, 'days', true);
+      }
+      // Print Daily Average
       console.log(chalk.white(`Daily Average: ${
         currencyFormatter.format(this.totalEarned / numberOfDays, {code: 'USD'})}`));
     }
