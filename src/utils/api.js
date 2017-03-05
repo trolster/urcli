@@ -30,15 +30,13 @@ export const api = (options) => {
   const headers = {Authorization: token};
   const json = true;
   const body = options.body || '';
+  const timeout = 20;
 
-  const requestOptions = {url, method, headers, json, body};
+  const requestOptions = {url, method, headers, json, body, timeout};
   return new Promise((resolve, reject) => {
-    request(requestOptions, (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
+    request(requestOptions, (error, res) => {
+      if (error) return reject({error, requestOptions, res});
+      return resolve(res);
     });
   });
 };
