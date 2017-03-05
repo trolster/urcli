@@ -41,6 +41,7 @@ cli
   .command('assign')
   .arguments('<ids...>')
   .option('--push <accessToken>', 'Get push notifications using <accessToken>.')
+  .option('--feedbacks', 'Get notified on new feedbacks.')
   .description('Place requests in the queue.')
   .action((ids, options) => {
     assignCmd(ids, options);

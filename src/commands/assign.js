@@ -17,6 +17,8 @@ const assigned = [];
 const tickrate = 30000; // 30 seconds
 const infoInterval = 10; // 10 * 30 seconds === 5 minutes
 
+let options;
+
 let error = '';
 let accessToken = '';
 let tick = 0;
@@ -79,14 +81,18 @@ function setPrompt() {
 
   // Info on when the next check will occur for queue position and feedbacks.
   if (tick % infoInterval === 0) {
-    console.log(chalk.blue('Checked the queue a few seconds ago...'));
-    console.log(chalk.blue('Checked for new feedbacks a few seconds ago...\n'));
+    if (options.feedbacks) {
+      console.log(chalk.blue('Checked for new feedbacks a few seconds ago...'));
+    }
+    console.log(chalk.blue('Checked the queue a few seconds ago...\n'));
   } else {
     const remainingSeconds = (infoInterval - (tick % infoInterval)) * (tickrate / 1000);
     const infoIsCheckedAt = moment().add(remainingSeconds, 'seconds');
     const humanReadableMessage = moment().to(infoIsCheckedAt);
-    console.log(chalk.blue(`Updating queue information ${humanReadableMessage}`));
-    console.log(chalk.blue(`Checking feedbacks ${humanReadableMessage}\n`));
+    if (options.feedbacks) {
+      console.log(chalk.blue(`Checking feedbacks ${humanReadableMessage}`));
+    }
+    console.log(chalk.blue(`Updating queue information ${humanReadableMessage}\n`));
   }
 
   // Assigned info.
@@ -145,7 +151,7 @@ function validateProjectIds(ids) {
   return ids;
 }
 
-function validateAccessToken(options) {
+function validateAccessToken() {
   if (options.push) {
     accessToken = options.push;
     const pusher = new PushBullet(accessToken);
@@ -319,7 +325,9 @@ async function submissionRequests() {
           // Check the queue positions and for new feedbacks.
           if (tick % infoInterval === 0) {
             checkPositions();
-            checkFeedbacks();
+            if (options.feedbacks) {
+              checkFeedbacks();
+            }
           }
         }
       }
@@ -339,9 +347,10 @@ async function submissionRequests() {
   }, tickrate);
 }
 
-export const assignCmd = (ids, options) => {
+export const assignCmd = (ids, opts) => {
   projectIds = validateProjectIds(ids);
-  validateAccessToken(options);
+  options = opts;
+  validateAccessToken();
   setupExitListeners();
   createRequestBody();
   // Start the request loop.
