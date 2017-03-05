@@ -78,9 +78,9 @@ function definePeriods(args, options) {
       const year = moment().month() + 1 < arg ? moment().year() - 1 : moment().year();
       createMonthPeriod(moment().year(year).month(arg - 1).format('YYYY-MM'));
     } else if (arg === 'today') {
-      createDayPeriod(moment.utc().format('YYYY-MM-DD'));
+      createDayPeriod(moment.utc());
     } else if (arg === 'yesterday') {
-      createDayPeriod(moment.utc().subtract(1, 'd').format('YYYY-MM-DD'));
+      createDayPeriod(moment.utc().subtract(1, 'd'));
     } else {
       if (validateDate(arg)) {
         const errorReason = `The format "${momentParseformat(arg)}" is not supported.`;
