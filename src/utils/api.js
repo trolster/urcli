@@ -30,7 +30,7 @@ export const api = (options) => {
   const headers = {Authorization: token};
   const json = true;
   const body = options.body || '';
-  const timeout = 20;
+  const timeout = 9000;
 
   const requestOptions = {url, method, headers, json, body, timeout};
   return new Promise((resolve, reject) => {

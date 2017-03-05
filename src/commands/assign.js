@@ -14,7 +14,7 @@ const requestBody = {};
 const startTime = moment();
 const assigned = [];
 // The wait between calling submissionRequests().
-const tickrate = 3000; // 30 seconds
+const tickrate = 30000; // 30 seconds
 const infoInterval = 10; // 10 * 30 seconds === 5 minutes
 
 let error = '';
