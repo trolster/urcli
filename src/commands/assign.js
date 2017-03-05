@@ -14,9 +14,10 @@ const requestBody = {};
 const startTime = moment();
 const assigned = [];
 // The wait between calling submissionRequests().
-const tickrate = 30000; // 30 seconds
+const tickrate = 3000; // 30 seconds
 const infoInterval = 10; // 10 * 30 seconds === 5 minutes
 
+let error = '';
 let accessToken = '';
 let tick = 0;
 let assignedCount = 0;
@@ -32,6 +33,11 @@ function setPrompt() {
   readline.clearScreenDown(process.stdout);
 
   // Warnings.
+  if (error) {
+    console.log(chalk.red('The API is currently not responding, or very slow to respond.'));
+    console.log(chalk.red('The script will continue to run and try to get a connection.'));
+  }
+  error = '';
   const tokenExpiryWarning = moment(tokenAge).diff(moment(), 'days') < 5;
   const tokenExpires = moment(tokenAge).fromNow();
   console.log(chalk[tokenExpiryWarning ? 'red' : 'green'](`Token expires ${tokenExpires}`));
@@ -287,34 +293,43 @@ async function checkFeedbacks() {
 async function submissionRequests() {
   // Call API to check how many submissions are currently assigned.
   let task = 'count';
-  const count = await api({token, task});
-  if (assignedCount < count.body.assigned_count) {
-    checkAssigned();
-  }
-  assignedCount = count.body.assigned_count;
-  // If then the assignedCount is less than the maximum number of assignments
-  // allowed, we go through checking the submission_request.
-  if (assignedCount < 2) {
-    task = 'get';
-    const getResponse = await api({token, task});
-    const submissionRequest = getResponse.body[0];
-    // If there is no current submission_request we create a new one.
-    if (!submissionRequest) {
-      createSubmissionRequest();
-    } else {
-      requestId = submissionRequest.id;
-
-      if (needToUpdate(submissionRequest)) {
-        updateSubmissionRequest();
+  try {
+    const count = await api({token, task});
+    if (assignedCount < count.body.assigned_count) {
+      checkAssigned();
+    }
+    assignedCount = count.body.assigned_count;
+    // If then the assignedCount is less than the maximum number of assignments
+    // allowed, we go through checking the submission_request.
+    if (assignedCount < 2) {
+      task = 'get';
+      const getResponse = await api({token, task});
+      const submissionRequest = getResponse.body[0];
+      // If there is no current submission_request we create a new one.
+      if (!submissionRequest) {
+        createSubmissionRequest();
       } else {
-        // Refresh the submission_request if it's is about to expire.
-        checkRefresh(submissionRequest.closed_at);
-        // Check the queue positions and for new feedbacks.
-        if (tick % infoInterval === 0) {
-          checkPositions();
-          checkFeedbacks();
+        requestId = submissionRequest.id;
+
+        if (needToUpdate(submissionRequest)) {
+          updateSubmissionRequest();
+        } else {
+          // Refresh the submission_request if it's is about to expire.
+          checkRefresh(submissionRequest.closed_at);
+          // Check the queue positions and for new feedbacks.
+          if (tick % infoInterval === 0) {
+            checkPositions();
+            checkFeedbacks();
+          }
         }
       }
+    }
+  } catch (e) {
+    if (e.error.code === 'ETIMEDOUT') {
+      error = 'ETIMEDOUT';
+    } else {
+      console.error(JSON.stringify(e, null, 2));
+      throw new Error(e);
     }
   }
   setTimeout(() => {
