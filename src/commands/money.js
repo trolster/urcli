@@ -30,8 +30,8 @@ function definePeriods(args, options) {
   }
 
   function createOptionsPeriod() {
-    const start = options.from ? options.from : defaultStartTime;
-    const end = options.to ? options.to : defaultEndTime;
+    const start = options.from ? moment.utc(options.from) : defaultStartTime;
+    const end = options.to ? moment.utc(options.to) : defaultEndTime;
     periods.push([start, end]);
   }
 
