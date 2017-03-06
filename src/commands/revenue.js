@@ -186,7 +186,7 @@ class Report {
       const month = moment(this.startDate).format('YYYY-MM');
       const isCurrentMonth = () => month === moment.utc().format('YYYY-MM');
       if (isCurrentMonth()) {
-        numberOfDays = moment.utc().diff(this.startDate, 'days', true);
+        numberOfDays = moment.utc().diff(moment.utc(this.startDate), 'days', true);
       }
       // Print Daily Average
       console.log(chalk.white(`Daily Average: ${
