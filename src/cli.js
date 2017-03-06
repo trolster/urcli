@@ -7,7 +7,7 @@ import {
   certsCmd,
   setupCmd,
   assignCmd,
-  moneyCmd,
+  revenueCmd,
 } from './commands';
 
 cli
@@ -48,13 +48,13 @@ cli
   });
 
 cli
-  .command('money')
+  .command('revenue')
   .arguments('[periods...]')
   .option('--from <date>', 'select from <date>.')
   .option('--to <date>', 'select to <date>.')
   .description('Lets you know how much you\'ve earned in a given period.')
   .action((periods, options) => {
-    moneyCmd(periods, options);
+    revenueCmd(periods, options);
   });
 
 export default cli;

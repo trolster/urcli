@@ -17,7 +17,7 @@ function definePeriods(args, options) {
   const logErrorAndExit = (arg, reason) => {
     console.error(chalk.red(`\nYou have entered an invalid date: "${arg}": ${reason}`));
     console.error('\nPlease enter dates in the following format: "YYYY-MM-DD" or "YYYY-MM"');
-    console.error('You can also use the special shortcuts "today" and "yesterday" (ex.: urcli money today)');
+    console.error('You can also use the special shortcuts "today" and "yesterday" (ex.: urcli revenue today)');
     process.exit(0);
   };
 
@@ -206,7 +206,7 @@ function printReports() {
   Promise.all(resolvedReports).then(() => process.exit(0));
 }
 
-export const moneyCmd = (args, options) => {
+export const revenueCmd = (args, options) => {
   definePeriods(args, options);
   printReports();
 };
