@@ -42,7 +42,7 @@ function definePeriods(args, options) {
     const isCurrentMonth = () => month === moment.utc().format('YYYY-MM');
     const start = moment(month).utc();
     // If month is the current month the end should be today, otherwise it should be the end of the month.
-    const end = isCurrentMonth() ? moment.utc().endOf('day') : moment(month).utc().add(1, 'M');
+    const end = isCurrentMonth() ? moment.utc().add(1, 'h') : moment(month).utc().add(1, 'M');
     periods.push([start, end]);
   }
 
