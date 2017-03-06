@@ -11,6 +11,9 @@ const periods = [];
 function definePeriods(args, options) {
   // Add one hour to the default end time to take inconsistencies into account.
   const defaultEndTime = moment.utc().add(1, 'h');
+  const defaultStartTime = moment.utc('2014-01-01');
+  const currentMonth = moment.utc().format('YYYY-MM');
+
   const logErrorAndExit = (arg, reason) => {
     console.error(chalk.red(`\nYou have entered an invalid date: "${arg}": ${reason}`));
     console.error('\nPlease enter dates in the following format: "YYYY-MM-DD" or "YYYY-MM"');
@@ -26,23 +29,16 @@ function definePeriods(args, options) {
     return true;
   }
 
-  function createDefaultPeriods() {
-    const month = moment.utc().format('YYYY-MM');
-    periods.push([moment.utc('2014-01-01'), defaultEndTime]);
-    periods.push([moment.utc(month), defaultEndTime]);
-  }
-
   function createOptionsPeriod() {
-    const start = options.from ? options.from : moment.utc('2014-01-01');
+    const start = options.from ? options.from : defaultStartTime;
     const end = options.to ? options.to : defaultEndTime;
     periods.push([start, end]);
   }
 
   function createMonthPeriod(month) {
-    const isCurrentMonth = () => month === moment.utc().format('YYYY-MM');
     const start = moment(month).utc();
     // If month is the current month the end should be today, otherwise it should be the end of the month.
-    const end = isCurrentMonth() ? moment.utc().add(1, 'h') : moment(month).utc().add(1, 'M');
+    const end = month === currentMonth ? defaultEndTime : moment(month).utc().add(1, 'M');
     periods.push([start, end]);
   }
 
@@ -50,6 +46,11 @@ function definePeriods(args, options) {
     const start = moment(day).startOf('day');
     const end = moment(day).endOf('day');
     periods.push([start, end]);
+  }
+
+  function createDefaultPeriods() {
+    periods.push([defaultStartTime, defaultEndTime]);
+    createMonthPeriod(currentMonth);
   }
 
   if (!args.length && !options.to && !options.from) {
