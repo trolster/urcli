@@ -57,4 +57,13 @@ cli
     revenueCmd(periods, options);
   });
 
+cli
+  .command('money')
+  .arguments('[args]')
+  .description('This command is deprecated and it will be removed in future releases. Use the "revenue" command instead.')
+  .action(() => {
+    console.log('This command is deprecated and it will be removed in future releases. Use the "revenue" command instead.');
+    process.exit(0);
+  });
+
 export default cli;
