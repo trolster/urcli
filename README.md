@@ -1,11 +1,10 @@
 # CLI tool for the Udacity Reviews API
 
+`urcli` is a Command Line Interface for configuring and running API calls against the Udacity Reviews API. You can find the API documentation here: https://review.udacity.com/api-doc/index.html.
+
 [![npm downloads](https://img.shields.io/npm/dt/urcli.svg?style=flat)](https://www.npmjs.com/package/urcli)
 [![npm version](https://img.shields.io/npm/v/urcli.svg?style=flat)](https://www.npmjs.com/package/urcli)
 [![npm license](https://img.shields.io/npm/l/urcli.svg?style=flat)](https://www.npmjs.com/package/urcli)
-
-`urcli` is a Command Line Interface for configuring and running API calls against the Udacity Reviews API. You can find the API documentation here: https://review.udacity.com/api-doc/index.html.
-
 ## Requirements
 - [Node.js](https://nodejs.org/en/download/) v6.0.0 or higher
 - NPM (v3.0.0+ recommended) (this comes with Node.js)
