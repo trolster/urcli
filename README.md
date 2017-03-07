@@ -1,10 +1,10 @@
 # CLI tool for the Udacity Reviews API
 
-`urcli` is a Command Line Interface for configuring and running API calls against the Udacity Reviews API. You can find the API documentation here: https://review.udacity.com/api-doc/index.html.
-
 [![npm downloads](https://img.shields.io/npm/dt/urcli.svg?style=flat)](https://www.npmjs.com/package/urcli)
 [![npm version](https://img.shields.io/npm/v/urcli.svg?style=flat)](https://www.npmjs.com/package/urcli)
 [![npm license](https://img.shields.io/npm/l/urcli.svg?style=flat)](https://www.npmjs.com/package/urcli)
+
+`urcli` is a Command Line Interface for configuring and running API calls against the Udacity Reviews API. You can find the API documentation here: https://review.udacity.com/api-doc/index.html.
 
 ## Requirements
 - [Node.js](https://nodejs.org/en/download/) v6.0.0 or higher
@@ -14,7 +14,9 @@
 
 1. Run `npm install -g urcli`.
 1. Get a new token from the API Access link in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard).
-<img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
+
+    <img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
+
 1. Run `urcli setup "your-token"`. You will be asked to type in the languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`.
 1. Run `urcli assign` proceeded by valid project ids for projects you are certified for. Ex:
     - `urcli assign 145`, places you in the queue for project 145.
