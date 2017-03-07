@@ -16,7 +16,7 @@
     "build": "babel src -d lib --presets es2015-node,stage-3"
   },
   "bin": {
-    "urcli": "./lib/urcli.js"
+    "urcli": "./lib"
   },
   "dependencies": {
     "chalk": "^1.1.3",
