@@ -1,5 +1,5 @@
-// project dependencies
-const request = require('request');
+// npm modules
+import request from 'request';
 
 function endpoint(task, id) {
   const base = 'https://review-api.udacity.com/api/v1';
@@ -13,7 +13,7 @@ function endpoint(task, id) {
     completed: [`${base}/me/submissions/completed/`, 'GET'],
     assign: [`${base}/projects/${id}/submissions/assign`, 'POST'],
     unassign: [`${base}/submissions/${id}/unassign`, 'PUT'],
-    // NEW ENDPOINTS
+    // submission_request endpoints
     get: [`${base}/me/submission_requests/`, 'GET'],
     getById: [`${base}/submission_requests/${id}`, 'GET'],
     create: [`${base}/submission_requests/`, 'POST'],
@@ -24,37 +24,19 @@ function endpoint(task, id) {
   }[task];
 }
 
-module.exports = (options) => {
-  const {token, task, id, body} = options;
+export const api = (options) => {
+  const {token, task, id} = options;
   const [url, method] = endpoint(task, id);
-  const requestOptions = {
-    url,
-    method,
-    headers: {
-      Authorization: token,
-    },
-    json: true,
-    timeout: 9000,
-  };
-  if (body) {
-    requestOptions.body = body;
-  }
-  if (process.env.NODE_ENV === 'testing') {
-    console.log('REQUEST:');
-    console.log(requestOptions);
-  }
+  const headers = {Authorization: token};
+  const json = true;
+  const body = options.body || '';
+  const timeout = 9000;
+
+  const requestOptions = {url, method, headers, json, body, timeout};
   return new Promise((resolve, reject) => {
-    request(requestOptions, (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (process.env.NODE_ENV === 'testing') {
-          console.log('RESPONSE:');
-          console.log(res.body);
-        }
-        resolve(res);
-      }
+    request(requestOptions, (error, res) => {
+      if (error) return reject({error, requestOptions, res});
+      return resolve(res);
     });
   });
 };
-

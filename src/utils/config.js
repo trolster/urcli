@@ -1,7 +1,7 @@
 // node modules
-const fs = require('fs');
-// project dependencies
-const homedir = require('homedir');
+import fs from 'fs';
+// npm modules
+import homedir from 'homedir';
 // homedir() is a cross platform way of getting the users home directory.
 // On macOS it would end up being '/Users/username/.urcli_config.json'.
 const configFilePath = `${homedir()}/.urcli_config.json`;
@@ -19,7 +19,8 @@ class Config {
       }
     }
   }
-  save() {
+  save(configValues) {
+    Object.assign(this, configValues);
     const config = JSON.stringify(this, null, 2);
     try {
       fs.writeFileSync(configFilePath, config);
@@ -32,4 +33,4 @@ class Config {
   }
 }
 
-module.exports = new Config();
+export const config = new Config();

@@ -1,88 +1,93 @@
-// project dependencies
-const cli = require('commander');
-const moment = require('moment');
-const chalk = require('chalk');
-const currencyFormatter = require('currency-formatter');
+// npm modules
+import moment from 'moment';
+import momentParseformat from 'moment-parseformat';
+import chalk from 'chalk';
+import currencyFormatter from 'currency-formatter';
 // our modules
-const apiCall = require('./apiCall');
-const config = require('./config');
+import {api, config} from '../utils';
 
 const periods = [];
 
-function validateDate(date) {
-  const dateObj = moment.utc(date);
-  if (!dateObj.isValid()) {
-    throw new Error(`Invalid date: ${date}`);
-  }
-  return dateObj;
-}
-
-cli
-  .option('-f, --from <date>', 'select from <date>.', validateDate)
-  .option('-t, --to <date>', 'select to <date>.', validateDate)
-  .parse(process.argv);
-
-function definePeriods() {
+function definePeriods(args, options) {
   // Add one hour to the default end time to take inconsistencies into account.
   const defaultEndTime = moment.utc().add(1, 'h');
-  // Make default periods if the user didn't input any.
-  if (!cli.args.length && !cli.to && !cli.from) {
-    const month = moment.utc().format('YYYY-MM');
-    periods.push([moment.utc('2014-01-01'), defaultEndTime]);
-    periods.push([moment.utc(month), defaultEndTime]);
+  const defaultStartTime = moment.utc('2014-01-01');
+  const currentMonth = moment.utc().format('YYYY-MM');
+
+  const logErrorAndExit = (arg, reason) => {
+    console.error(chalk.red(`\nYou have entered an invalid date: "${arg}": ${reason}`));
+    console.error('\nPlease enter dates in the following format: "YYYY-MM-DD" or "YYYY-MM"');
+    console.error('You can also use the special shortcuts "today" and "yesterday" (ex.: urcli revenue today)');
+    process.exit(0);
+  };
+
+  function validateDate(date) {
+    if (!moment(date).isValid()) {
+      const errorReason = `The date "${date}" doesn't exist.`;
+      logErrorAndExit(date, errorReason);
+    }
+    return true;
   }
-  // Make options periods.
-  if (cli.from || cli.to) {
-    const start = cli.from ? cli.from : moment.utc('2014-01-01');
-    const end = cli.to ? cli.to : defaultEndTime;
+
+  function createOptionsPeriod() {
+    const start = options.from ? moment.utc(options.from) : defaultStartTime;
+    const end = options.to ? moment.utc(options.to) : defaultEndTime;
     periods.push([start, end]);
   }
-  // Regex expressions to match user input.
-  // Matches numbers from 1-12.
-  const matchMonth = /^[1-9]|1[012]$/;
-  // Matches the format YYYY-MM.
-  const matchYearMonth = /^(19|20)\d\d[- /.](0[1-9]|1[012])$/;
 
-  cli.args.forEach((arg) => {
-    // Testing what arguments we got from the user.
-    if (matchYearMonth.test(arg)) {
-      const start = moment(arg).utc();
-      // Check if month asked is the current month
-      if (arg === moment.utc().format('YYYY-MM')) {
-        // Make the last day to query as being today
-        const end = moment.utc().endOf('day');
-        periods.push([start, end]);
-      } else {
-        // Otherwise, pick the midnight of the first day of next month.
-        const end = moment(arg).utc().add(1, 'M');
-        periods.push([start, end]);
-      }
+  function createMonthPeriod(month) {
+    const start = moment(month).utc();
+    // If month is the current month the end should be today, otherwise it should be the end of the month.
+    const end = month === currentMonth ? defaultEndTime : moment(month).utc().add(1, 'M');
+    periods.push([start, end]);
+  }
+
+  function createDayPeriod(day) {
+    const start = moment(day).startOf('day');
+    const end = moment(day).endOf('day');
+    periods.push([start, end]);
+  }
+
+  function createDefaultPeriods() {
+    periods.push([defaultStartTime, defaultEndTime]);
+    createMonthPeriod(currentMonth);
+  }
+
+  if (!args.length && !options.to && !options.from) {
+    createDefaultPeriods();
+  }
+  if (options.from || options.to) {
+    if (options.from) validateDate(options.from);
+    if (options.to) validateDate(options.to);
+    createOptionsPeriod();
+  }
+
+  args.forEach((arg) => {
+    // Regex expressions to match user input. Note that MM and YYYY-MM inputs
+    // are validated by the regex itself, while YYYY-MM-DD has to be validated
+    // seperately by the moment library because of leap years and such nonsense.
+    const matchMonth = /^\d{1}$|^[01]{1}[012]{1}$/; // 1-9, 01-09 and 10-12.
+    const matchYearMonth = /^201\d{1}-\d{2}$|^201\d{1}-1{1}[012]{1}$/; // YYYY-MM.
+    const matchYearMonthDay = /^201\d{1}-\d{2}-\d{2}$|^201\d{1}-1{1}[012]{1}-\d{2}$/; // YYYY-MM-DD
+
+    if (matchYearMonthDay.test(arg)) {
+      validateDate(arg);
+      createDayPeriod(arg);
+    } else if (matchYearMonth.test(arg)) {
+      createMonthPeriod(arg);
     } else if (matchMonth.test(arg)) {
-      let year = moment().year();
-      const month = moment().month() + 1;
-      if (arg > month) {
-        year -= 1;
-      }
-      const yearAndMonth = arg < 9 ? `${year}-0${arg}` : `${year}-${arg}`;
-      const start = moment(yearAndMonth).utc();
-      // Check if month asked is the current month
-      if (arg === month.toString()) {
-        // Make the last day to query as being today
-        const end = moment.utc().endOf('day');
-        periods.push([start, end]);
-      } else {
-        // Otherwise, pick the midnight of the first day of next month.
-        const end = moment(yearAndMonth).utc().add(1, 'M');
-        periods.push([start, end]);
-      }
+      const year = moment().month() + 1 < arg ? moment().year() - 1 : moment().year();
+      createMonthPeriod(moment().year(year).month(arg - 1).format('YYYY-MM'));
     } else if (arg === 'today') {
-      const start = moment.utc().startOf('day');
-      const end = moment.utc().endOf('day');
-      periods.push([start, end]);
+      createDayPeriod(moment.utc());
     } else if (arg === 'yesterday') {
-      const start = moment.utc().subtract(1, 'd').startOf('day');
-      const end = moment.utc().subtract(1, 'd').endOf('day');
-      periods.push([start, end]);
+      createDayPeriod(moment.utc().subtract(1, 'd'));
+    } else {
+      if (validateDate(arg)) {
+        const errorReason = `The format "${momentParseformat(arg)}" is not supported.`;
+        logErrorAndExit(arg, errorReason);
+      }
+      throw new Error('validateDate failed to throw an error.');
     }
   });
 }
@@ -122,9 +127,10 @@ class Report {
   countReview(review) {
     const id = review.project_id;
     const price = parseInt(review.price, 10);
-    const assignedAt = moment.utc(review.assigned_at);
-    const completedAt = moment.utc(review.completed_at);
+    const assignedAt = moment(review.assigned_at);
+    const completedAt = moment(review.completed_at);
     const turnaroundTime = completedAt.diff(assignedAt);
+
 
     // If the report does not yet contain an entry for the project type, create
     // the entry and try counting the review again.
@@ -183,22 +189,24 @@ class Report {
 }
 
 function printReports() {
-  definePeriods();
-  periods.forEach((period) => {
-    const requestBody = {
+  const resolvedReports = periods.map(async (period) => {
+    const task = 'completed';
+    const token = config.token;
+    const body = {
       start_date: period[0].format('YYYY-MM-DDTHH:MM:ssZ'),
       end_date: period[1].format('YYYY-MM-DDTHH:MM:ssZ'),
     };
-    apiCall({
-      token: config.token,
-      task: 'completed',
-      body: requestBody,
-    }).then((res) => {
-      const report = new Report(res.body, period);
-      report.create();
-      report.print();
-    });
+
+    const completed = await api({token, task, body});
+    const report = new Report(completed.body, period);
+    report.create();
+    report.print();
+    return Promise.resolve();
   });
+  Promise.all(resolvedReports).then(() => process.exit(0));
 }
 
-printReports();
+export const revenueCmd = (args, options) => {
+  definePeriods(args, options);
+  printReports();
+};

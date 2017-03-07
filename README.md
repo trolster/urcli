@@ -41,7 +41,7 @@ You can exit the script in two ways:
 
 You can update your submission request instead of deleting it and creating a new one. You might want to do that in the case where you just want to change which projects you wish to review without leaving any queues. Simply exit the assign script by pressing `ESC` (this will leave the submission_request object intact on the server) and use the assign command again with the changed arguments.
 
-For instance, if you had previously run the command `urcli assign 145 144` and later wanted to change that to just 145, but _without_ leaving the queue for 145, you simply exit the script using `ESC` and run the command `urcli assign 145`. This will change the current submission_request object to only queue up for project 145, and will immediately remove you from the queue for project 144.
+For instance, if you had previously run the command `urcli assign 145 144` and later wanted to change that to just 145, but _without_ leaving the queue for 145, you exit the script using `ESC` and run the command `urcli assign 145`. This will change the current submission_request object to only queue up for project 145, and will immediately remove you from the queue for project 144.
 
 #### Notifications
 
@@ -59,9 +59,7 @@ The script also updates your queue position and checks for new feedbacks every 5
 
 #### PushBullet Notifications
 
-You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on.
-
-To test if the notifications work (without having to wait to get a review assigned) use the testcommand: `urcli pushonce "accessToken"`. If that works then run the `assign` command with the `--push <accessToken>` option:
+You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on and then run the `assign` command with the `--push <accessToken>` option.
 
 :information_source: You can create an access token on your [pushbullet.com account page](https://www.pushbullet.com/#settings/account).
 
@@ -69,24 +67,30 @@ Ex.: `urcli assign all --push "o.ZxY9mPKB7aWIjiAI2CPKvnMMMqBPxHT8"`
 
 Once you get a submission assigned you'll get a notification on all active devices with PushBullet installed.
 
-## The `money` command
+## The `revenue` command
 
-The `money` command creates an earnings report for the interval you specify:
+The `revenue` command creates an earnings report for the interval you specify:
 
-- `urcli money` - Returns two reports; one for your total earnings and one for the current month you are in.
-- `urcli money 1` - (You can use month numbers as intervals). This command will generate a report for the whole month of January of the current year. Tip: to get a month from a previous year, simply use the format `YYYY-MM`. Ex.: `urcli money 2015-11`.
-- `urcli money today` - Generates an earnings report for today.
-- `urcli money yesterday` - Generates an earnings report for yesterday.
+- `urcli revenue` - Returns two reports; one for your total earnings and one for the earnings of the current month you are in.
+- `urcli revenue 2015-11-24` - Generates an earnings report for that date.
+- `urcli revenue 2016-05` - Generates an earnings report for that month.
+- `urcli revenue 1` - (You can use the month numbers, 1-12, as periods). This command will generate a report for the whole month of January of the current year. Tip: If you input a future month it will generate a report for the same month of the previous year.
+- `urcli revenue today` - Generates an earnings report for today.
+- `urcli revenue yesterday` - Generates an earnings report for yesterday.
+
+#### About timezones
+
+**Udacity uses [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time) when registering when a review was completed. Therefore all periods that you request are converted to [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time). Otherwise the revenue displayed would not correspond to what you actually get paid. So if you use the command `urcli revenue today` it's a UTC day and it has probably started at a very different time than when your day started.**
+
+#### Revenue options
 
 To get really specific you can use the options `--from` and `--to`. After the flag you need to write out a valid date in the format, `YYYY-MM-DDTHH:MM:SS`, to which to calculate earnings (where `YYYY-MM` is required and `DD-THH:MM:SS` is optional).
 
-Example: `urcli money --from 2016-01 --to 2016-07-26`, will generate an earnings report for the year 2016 up to (but not including) July 26th.
+Example: `urcli revenue --from 2016-01 --to 2016-07-26`, will generate an earnings report for the year 2016 up to (but not including) July 26th.
 
 #### `Average Turnaround Time`
 
 Turnaround time for a review is the time period from when the review was assigned up to when you submit it. `Average Turnaround Time` is the average for all reviews that you have done for that particular project. Faster turnaround times are better, and Udacity asks that you attempt to keep this below 2 hours.
-
-:exclamation: The `money` command may be a few hours off because of weird timezone issues.
 
 ## The `token` command
 
