@@ -57,6 +57,10 @@ The script also updates your queue position and checks for new feedbacks every 5
 
 <img src="http://i.imgur.com/8h2jjht.png" alt="CLI Prompt information display" width="700px">
 
+#### Feedback Notifications
+
+You can get noktified about any new feedbacks from students by using the `--feedbacks` option with the `assign` command. Ex: `urcli assign 145 --feedbacks`.
+
 #### PushBullet Notifications
 
 You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on and then run the `assign` command with the `--push <accessToken>` option.
