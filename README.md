@@ -59,7 +59,7 @@ The script also updates your queue position and checks for new feedbacks every 5
 
 #### Feedback Notifications
 
-You can get noktified about any new feedbacks from students by using the `--feedbacks` option with the `assign` command. Ex: `urcli assign 145 --feedbacks`.
+You can get notified about any new feedbacks from students by using the `--feedbacks` option with the `assign` command. Ex: `urcli assign 145 --feedbacks`.
 
 #### PushBullet Notifications
 
