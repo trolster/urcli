@@ -333,8 +333,8 @@ async function submissionRequests() {
       }
     }
   } catch (e) {
-    if (e.error.code === 'ETIMEDOUT') {
-      error = 'ETIMEDOUT';
+    if (e.error.code === 'ETIMEDOUT' || e.error.code === 'ENOTFOUND') {
+      error = e.error.code;
     } else {
       console.error(JSON.stringify(e, null, 2));
       throw new Error(e);
