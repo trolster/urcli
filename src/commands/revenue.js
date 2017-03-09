@@ -72,7 +72,7 @@ function definePeriods(args, options) {
 
     if (matchYearMonthDay.test(arg)) {
       validateDate(arg);
-      createDayPeriod(arg);
+      createDayPeriod(moment.utc(arg));
     } else if (matchYearMonth.test(arg)) {
       createMonthPeriod(arg);
     } else if (matchMonth.test(arg)) {
@@ -201,8 +201,8 @@ function printReports() {
     const task = 'completed';
     const token = config.token;
     const body = {
-      start_date: period[0].format('YYYY-MM-DDTHH:MM:ssZ'),
-      end_date: period[1].format('YYYY-MM-DDTHH:MM:ssZ'),
+      start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+      end_date: period[1].format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
     };
 
     const completed = await api({token, task, body});
