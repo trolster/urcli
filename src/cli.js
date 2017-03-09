@@ -60,9 +60,10 @@ cli
 cli
   .command('money')
   .arguments('[args]')
-  .description('This command is deprecated and it will be removed in future releases. Use the "revenue" command instead.')
+  .description('This command is deprecated. It will be removed in future releases. Use the "revenue" command instead.')
   .action(() => {
-    console.log('This command is deprecated and it will be removed in future releases. Use the "revenue" command instead.');
+    console.log('The money command has deprecated and will be removed in future releases.');
+    console.log('    Use the "revenue" command instead.');
     process.exit(0);
   });
 

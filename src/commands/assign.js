@@ -38,6 +38,7 @@ function setPrompt() {
   if (error) {
     console.log(chalk.red('The API is currently not responding, or very slow to respond.'));
     console.log(chalk.red('The script will continue to run and try to get a connection.'));
+    console.log(chalk.red(`Error Code: ${error}`));
   }
   error = '';
   const tokenExpiryWarning = moment(tokenAge).diff(moment(), 'days') < 5;
@@ -333,12 +334,7 @@ async function submissionRequests() {
       }
     }
   } catch (e) {
-    if (e.error.code === 'ETIMEDOUT' || e.error.code === 'ENOTFOUND') {
-      error = e.error.code;
-    } else {
-      console.error(JSON.stringify(e, null, 2));
-      throw new Error(e);
-    }
+    error = e.error.code;
   }
   setTimeout(() => {
     tick += 1;
