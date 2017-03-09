@@ -117,7 +117,7 @@ You only have to run this command when you first install urcli: `urcli setup "yo
 
 It gets your certifications from the API and asks you to record which languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`. Once you've run this command you are ready to start using the cli.
 
-:bulb: Be sure to put the token in quotes since they often include dashes (`-`) which mess up the command.
+:bulb: Be sure to put the token in quotes since they often include dashes (`-`) which messes up the command.
 
 #### The configuration file
 
@@ -125,7 +125,7 @@ The `setup` command creates a configuration file which is stored in your home fo
 
 ## Contributing
 
-Got a question or an idea? Found a bug? Check out our [contributing guidelines](https://github.com/trolster/ur-cli/blob/master/CONTRIBUTING.md) for ways to offer feedback and contribute.
+Got a question or an idea? Found a bug? Check out our [contributing guidelines](https://github.com/trolster/urcli/blob/master/.github/CONTRIBUTING.md) for ways to offer feedback and contribute.
 
 ## License
 
