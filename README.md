@@ -43,23 +43,23 @@ You can update your submission request instead of deleting it and creating a new
 
 For instance, if you had previously run the command `urcli assign 145 144` and later wanted to change that to just 145, but _without_ leaving the queue for 145, you exit the script using `ESC` and run the command `urcli assign 145`. This will change the current submission_request object to only queue up for project 145, and will immediately remove you from the queue for project 144.
 
-#### Notifications
+#### Assignment Notifications
 
 The assign script updates every 30 seconds to see if you've gotten a submission assigned. If you've been assigned a submission it will notify you with a desktop notification:
 
 <img src="http://i.imgur.com/XaKNhaK.png" alt="Desktop notifications on a Mac" width="700px">
 
-You will also get a notification when you get new feedback from students:
-
-<img src="http://i.imgur.com/86RG4la.png" alt="Desktop notifications on a Mac" width="700px">
-
-The script also updates your queue position and checks for new feedbacks every 5 minutes. It outputs all relevant information to the terminal:
-
-<img src="http://i.imgur.com/8h2jjht.png" alt="CLI Prompt information display" width="700px">
-
 #### Feedback Notifications
 
 You can get notified about any new feedbacks from students by using the `--feedbacks` option with the `assign` command. Ex: `urcli assign 145 --feedbacks`.
+
+<img src="http://i.imgur.com/86RG4la.png" alt="Desktop notifications on a Mac" width="700px">
+
+#### Terminal Information
+
+The script updates your queue position (and checks for new feedbacks) every 5 minutes. It outputs all relevant information to the terminal:
+
+<img src="http://i.imgur.com/8h2jjht.png" alt="CLI Prompt information display" width="700px">
 
 #### PushBullet Notifications
 
