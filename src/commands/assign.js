@@ -142,7 +142,7 @@ function setupExitListeners() {
 
 function validateProjectIds(ids) {
   const certIds = Object.keys(certs);
-  if (ids === 'all') {
+  if (ids[0] === 'all') {
     return certIds;
   }
   const invalidIds = ids.filter(id => certIds.indexOf(id) === -1);
