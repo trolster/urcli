@@ -98,6 +98,31 @@ function setPrompt() {
 
   // Assigned info.
   console.log(chalk.green(`Currently assigned: ${chalk.white(assignedCount)}`));
+
+  // Create a new table for projects that the user is assigned for
+  const submissionDetails = new Table({
+    head: [
+      {hAlign: 'center', content: 'sub'},
+      {hAlign: 'center', content: 'id'},
+      {hAlign: 'left', content: 'name'},
+      {hAlign: 'center', content: 'time'}],
+    colWidths: [10, 7, 40, 7],
+  });
+
+  assigned
+    .forEach((submission) => {
+      submissionDetails.push([
+        {hAlign: 'center', content: submission.submission_id},
+        {hAlign: 'center', content: submission.project_id},
+        {hAlign: 'left', content: certs[submission.project_id].name},
+        {hAlign: 'center', content: submission.timeToFinish},
+      ]);
+    });
+  if (assignedCount > 0) {
+    console.log(`${submissionDetails.toString()}\n`);
+  }
+
+
   console.log(chalk.green(`Total assigned: ${
     chalk.white(assignedTotal)} since ${startTime.format('dddd, MMMM Do YYYY, HH:mm')}\n`));
   // How to exit.
@@ -207,7 +232,11 @@ async function checkAssigned() {
         }
         // Add the id of the newly assigned submission to the list of assigned
         // submissions.
-        assigned.push(s.id);
+        assigned.push({
+          submission_id: s.id,
+          project_id: s.project.id,
+          timeToFinish: (12 - moment.utc().diff(s.assigned_at, 'hours')),
+        });
         assignmentNotification(s.project, s.id);
       });
   }
