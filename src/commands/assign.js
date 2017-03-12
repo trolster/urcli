@@ -97,9 +97,11 @@ function setPrompt() {
   }
 
   // Assigned info.
+  //
+  // Shows the number of projects that are currently assigned
   console.log(chalk.green(`Currently assigned: ${chalk.white(assignedCount)}`));
 
-  // Create a new table for projects that the user is assigned for
+  // Shows assigned projects in a table
   const submissionDetails = new Table({
     head: [
       {hAlign: 'center', content: 'sub'},
@@ -122,9 +124,10 @@ function setPrompt() {
     console.log(`${submissionDetails.toString()}\n`);
   }
 
-
+  // Shows the number of projects that were assigned since the start of urcli
   console.log(chalk.green(`Total assigned: ${
     chalk.white(assignedTotal)} since ${startTime.format('dddd, MMMM Do YYYY, HH:mm')}\n`));
+
   // How to exit.
   console.log(chalk.green.dim(`Press ${
     chalk.white('ctrl+c')} to exit the queue cleanly by deleting the submission_request.`));
