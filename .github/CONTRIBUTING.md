@@ -1,4 +1,5 @@
 # Contributing to urcli
+#### This guide is based on the [GitHub guide to Open Source development](https://github.com/github/opensource.guide/blob/gh-pages/CONTRIBUTING.md)
 
 Thanks for checking out the urcli! We've put together the following guidelines to help you figure out where you can best be helpful.
 
@@ -46,8 +47,18 @@ Before we get started, here are a few things we expect from you (and that you sh
 If you'd like to contribute, start by searching through the [issues](https://github.com/trolster/ur-cli/issues) and [pull requests](https://github.com/trolster/ur-cli/pulls) to see whether someone else has raised a similar idea or question.
 
 If you don't see your idea listed, and you think it fits into the goals of this guide, do one of the following:
-* **If your contribution is minor,** such as a typo fix, **or self-contained,** such as writing a translation, open a pull request.
+* **If your contribution is minor,** such as a small bugfix or a typo fix, open a pull request.
 * **If your contribution is major,** such as a new feature, start by opening an issue first. That way, other people can weigh in on the discussion before you do any work.
+
+### How to do a Pull Request
+
+1. Fork this repository
+1. Create your branch (`git checkout -b my-new-thing`)
+1. Commit your changes (`git commit -am 'commit-message'`)
+1. Push to the branch (`git push origin my-new-thing`)
+1. Create a new Pull Request
+
+For more, see this guide: https://help.github.com/articles/creating-a-pull-request/.
 
 ## Style guide
 If you're writing code, see the [Airbnb style guide](https://github.com/airbnb/javascript) to help your style match the rest of the code.
