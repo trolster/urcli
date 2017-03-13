@@ -127,6 +127,22 @@ The `setup` command creates a configuration file which is stored in your home fo
 
 Got a question or an idea? Found a bug? Check out our [contributing guidelines](https://github.com/trolster/urcli/blob/master/.github/CONTRIBUTING.md) for ways to offer feedback and contribute.
 
+For bug fixes and minor documentation changes:
+1. Fork this repository
+1. Create your branch (`git checkout -b my-new-thing`)
+1. Commit your changes (`git commit -am 'commit-message'`)
+1. Push to the branch (`git push origin my-new-thing`)
+1. Create a new Pull Request
+
+For new features you need to do everything above, but before you write any code you should first read the [contributing guidelines](https://github.com/trolster/urcli/blob/master/.github/CONTRIBUTING.md) and then open an issue explaining what you have in mind. Making sure your feature fits with the direction the project is going can save you a lot of otherwise wasted effort.
+
+## Contributors
+
+Thanks to the people who helped make this project better:
+
+[Gustavo Bragança](https://github.com/gabraganca)
+[Gilad Gressel](https://github.com/giladgressel)
+
 ## License
 
 [MIT](LICENSE) © Mikkel Trolle Larsen.
