@@ -2,6 +2,7 @@
 import readline from 'readline';
 // npm modules
 import moment from 'moment';
+import chalk from 'chalk';
 // our modules
 import {api, config} from '../utils';
 
@@ -44,6 +45,12 @@ export const setupCmd = (token) => {
   rl.on('close', async () => {
     const task = 'certifications';
     const certifications = await api({token, task});
+    if (certifications.statusCode !== 200) {
+      console.error(chalk.red('The script encountered an error:'));
+      console.error(chalk.red(`statusCode: ${certifications.statusCode}`));
+      console.error(chalk.red(`This is the token you passed in as an argument: ${token}`));
+      throw new Error();
+    }
     const certs = certifications.body
       .filter(cert => cert.status === 'certified')
       .reduce((acc, cert) => {
