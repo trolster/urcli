@@ -141,8 +141,8 @@ For new features you need to do everything above, but before you write any code 
 
 Thanks to the people who helped make this project better:
 
-[Gustavo Bragança](https://github.com/gabraganca)
-[Gilad Gressel](https://github.com/giladgressel)
+- [Gustavo Bragança](https://github.com/gabraganca)
+- [Gilad Gressel](https://github.com/giladgressel)
 
 ## License
 
