@@ -104,20 +104,23 @@ function setPrompt() {
   // Shows assigned projects in a table
   const submissionDetails = new Table({
     head: [
-      {hAlign: 'center', content: 'sub'},
       {hAlign: 'center', content: 'id'},
       {hAlign: 'left', content: 'name'},
-      {hAlign: 'center', content: 'time'}],
-    colWidths: [10, 7, 40, 7],
+      {hAlign: 'center', content: 'sub_id'},
+      {hAlign: 'center', content: 'time_left'}],
+    colWidths: [7, 40, 10, 15],
   });
 
   assigned
     .forEach((submission) => {
+      const assignedAt = moment.utc(submission.assignedAt);
+      const completeTime = assignedAt.add(12, 'hours');
+      const timeLeft = moment.utc().to(completeTime);
       submissionDetails.push([
-        {hAlign: 'center', content: submission.submission_id},
         {hAlign: 'center', content: submission.project_id},
         {hAlign: 'left', content: certs[submission.project_id].name},
-        {hAlign: 'center', content: submission.timeToFinish},
+        {hAlign: 'center', content: submission.submissionID},
+        {hAlign: 'center', content: timeLeft},
       ]);
     });
   if (assignedCount > 0) {
@@ -236,9 +239,9 @@ async function checkAssigned() {
         // Add the id of the newly assigned submission to the list of assigned
         // submissions.
         assigned.push({
-          submission_id: s.id,
+          submissionID: s.id,
           project_id: s.project.id,
-          timeToFinish: (12 - moment.utc().diff(s.assigned_at, 'hours')),
+          assignedAt: s.assigned_at,
         });
         assignmentNotification(s.project, s.id);
       });
