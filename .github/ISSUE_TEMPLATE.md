@@ -1,17 +1,19 @@
-## Guidelines to submit an issue
+# Guidelines to submit an issue
 
+**Please make sure that your have the latest version of Node.js installed before you report a bug.** The command is `node -v` and you need version 6 or higher.
+
+---
 If you are opening an issue because you would like to propose a new feature,
-please write the title as "Feature Request:" plus a small description of your
-suggestion.
+please write the title as "Feature Request:" followed by a short description of the feature.
 
-If you are opening an issue because you found a bug, please make sure that
-your have the latest version installed. If yes then describe it by following
-these guidelines:
+Describe bugs using this template:
 
-### Expected behavior
+## Which version of Node.js are you running?
 
-### Actual behavior
+## What behavior were you expecting to see?
 
-### Steps to reproduce the problem
+## What was the actual behavior?
 
-### Your Operating System (e.g., Linux Ubuntu, MacOS, Windows)
+## Describe the steps needed to reproduce the problem?
+
+## What is your Operating System (e.g., Linux Ubuntu, MacOS, Windows)?
