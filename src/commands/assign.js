@@ -1,3 +1,4 @@
+
 // node modules
 import readline from 'readline';
 // npm modules
@@ -6,6 +7,7 @@ import notifier from 'node-notifier';
 import chalk from 'chalk';
 import Table from 'cli-table2';
 import PushBullet from 'pushbullet';
+import opn from 'opn';
 // our modules
 import {api, config} from '../utils';
 
@@ -96,17 +98,22 @@ function setPrompt() {
   }
 
   // Assigned info.
-  //
-  // Shows the number of projects that are currently assigned
-  console.log(chalk.green(`Currently assigned: ${chalk.white(assigned.length)}\n`));
+  if (assigned.length) {
+    const count = assigned.length === 1 ? 'one submission' : 'two submissions';
+    console.log(chalk.green(`You currently have ${count} assigned.`));
+    console.log(chalk.gray.dim('Start a review in your default browser by pressing "key".'));
+  } else {
+    console.log(chalk.green('No submissions are currently assigned.'));
+  }
+  console.log(chalk.white.dim('Open the review dashboard by pressing "0"\n'));
 
   // Shows assigned projects in a table
   const submissionDetails = new Table({
     head: [
-      {hAlign: 'center', content: 'open'},
+      {hAlign: 'center', content: 'key'},
       {hAlign: 'left', content: 'project name'},
       {hAlign: 'center', content: 'time left'}],
-    colWidths: [8, 40, 15],
+    colWidths: [5, 40, 15],
   });
 
   assigned
@@ -115,7 +122,7 @@ function setPrompt() {
       const completeTime = assignedAt.add(12, 'hours');
       const timeLeft = moment.utc().to(completeTime);
       submissionDetails.push([
-        {hAlign: 'center', content: `ctrl-${idx + 1}`},
+        {hAlign: 'center', content: idx + 1},
         {hAlign: 'left', content: certs[submission.project_id].name},
         {hAlign: 'center', content: timeLeft},
       ]);
@@ -136,34 +143,33 @@ function setPrompt() {
 }
 
 function setEventListeners() {
+  const baseReviewURL = 'https://review.udacity.com/#!/submissions/';
   readline.emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);
-  // Suspend on ESC and refresh the submission_request rather than deleting it.
   process.stdin.on('keypress', (str, key) => {
-    console.log(key);
     switch (key.sequence) {
+      // Suspend on ESC and refresh the submission_request rather than deleting it.
       case '\u001b': // ESCAPE
         api({token, task: 'refresh', id: requestId});
         console.log(chalk.green('Exited without deleting the submission_request...'));
         console.log(chalk.green('The current submission_request will expire in an hour.'));
         process.exit(0);
         break;
+      // Delete submission_request object and exit on CTRL-C
       case '\u0003': // CTRL-C
-        process.exit(0);
         api({token, task: 'delete', id: requestId}).then(() => {
           console.log(chalk.green('Successfully deleted request and exited..'));
           process.exit(0);
-        }).catch((err) => {
-          console.error(chalk.red('Was unable to exit cleanly.'));
-          console.error(err);
-          process.exit(1);
         });
         break;
+      case '0':
+        opn('https://review.udacity.com/#!/submissions/dashboard');
+        break;
       case '1':
-        console.log('You got 1');
+        if (assigned[0]) opn(`${baseReviewURL}${assigned[0].id}`);
         break;
       case '2':
-        console.log('You got 2');
+        if (assigned[1]) opn(`${baseReviewURL}${assigned[1].id}`);
         break;
       default:
         break;
