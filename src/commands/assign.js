@@ -136,7 +136,6 @@ function setPrompt() {
     chalk.white('ctrl+c')} to exit the queue cleanly by deleting the submission_request.`));
   console.log(chalk.green.dim(`Press ${
     chalk.white('ESC')} to suspend the script without deleting the submission_request.\n`));
-  assigned.forEach(a => console.log(a.id));
 }
 
 function setupExitListeners() {
