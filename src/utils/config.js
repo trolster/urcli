@@ -30,6 +30,7 @@ class Config {
     }
     console.log('configuration saved:');
     console.log(config);
+    return Promise.resolve();
   }
 }
 
