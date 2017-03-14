@@ -21,7 +21,6 @@ let options;
 let error = '';
 let accessToken = '';
 let tick = 0;
-let assignedCount = 0;
 let assignedTotal = 0;
 let requestId = 0;
 let assigned = [];
@@ -75,7 +74,7 @@ function setPrompt() {
   // console.log a warning if max number of submissions are assigned, otherwise
   // console.log the projectDetails table
   if (!positions.length) {
-    console.log(chalk.yellow(`    You have ${chalk.white(assignedCount)} (max) submissions assigned.\n`));
+    console.log(chalk.yellow(`    You have ${chalk.white(assigned.length)} (max) submissions assigned.\n`));
   } else {
     console.log(`${projectDetails.toString()}\n`);
   }
@@ -99,7 +98,7 @@ function setPrompt() {
   // Assigned info.
   //
   // Shows the number of projects that are currently assigned
-  console.log(chalk.green(`Currently assigned: ${chalk.white(assignedCount)}`));
+  console.log(chalk.green(`Currently assigned: ${chalk.white(assigned.length)}`));
 
   // Shows assigned projects in a table
   const submissionDetails = new Table({
@@ -123,7 +122,7 @@ function setPrompt() {
         {hAlign: 'center', content: timeLeft},
       ]);
     });
-  if (assignedCount > 0) {
+  if (assigned.length > 0) {
     console.log(`${submissionDetails.toString()}\n`);
   }
 
@@ -208,7 +207,7 @@ function createRequestBody() {
 
 function assignmentNotification(projectInfo, submissionId) {
   const {name, id} = projectInfo;
-  const title = `New Review Assigned! (${assignedCount})`;
+  const title = `New Review Assigned! (${assigned.length})`;
   const message = `${moment().format('HH:mm')} - ${name} (${id})`;
   const sound = 'Ping';
   const open = `https://review.udacity.com/#!/submissions/${submissionId}`;
@@ -329,13 +328,12 @@ async function submissionRequests() {
   // Call API to check how many submissions are currently assigned.
   try {
     const count = await api({token, task: 'count'});
-    if (assignedCount !== count.body.assigned_count) {
+    if (assigned.length !== count.body.assigned_count) {
       checkAssigned();
     }
-    assignedCount = count.body.assigned_count;
-    // If then the assignedCount is less than the maximum number of assignments
+    // If then the assigned.length is less than the maximum number of assignments
     // allowed, we go through checking the submission_request.
-    if (assignedCount < 2) {
+    if (assigned.length < 2) {
       const getResponse = await api({token, task: 'get'});
       const submissionRequest = getResponse.body[0];
       // If there is no current submission_request we create a new one.
