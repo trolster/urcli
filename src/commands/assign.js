@@ -113,13 +113,13 @@ function setPrompt() {
 
   assigned
     .forEach((submission) => {
-      const assignedAt = moment.utc(submission.assignedAt);
+      const assignedAt = moment.utc(submission.assigned_at);
       const completeTime = assignedAt.add(12, 'hours');
       const timeLeft = moment.utc().to(completeTime);
       submissionDetails.push([
         {hAlign: 'center', content: submission.project_id},
         {hAlign: 'left', content: certs[submission.project_id].name},
-        {hAlign: 'center', content: submission.submissionID},
+        {hAlign: 'center', content: submission.id},
         {hAlign: 'center', content: timeLeft},
       ]);
     });
