@@ -101,11 +101,11 @@ function setPrompt() {
   if (assigned.length) {
     const count = assigned.length === 1 ? 'one submission' : 'two submissions';
     console.log(chalk.green(`You currently have ${count} assigned.`));
-    console.log(chalk.gray.dim('Start a review in your default browser by pressing "key".'));
+    console.log(chalk.white.dim('Start a review in your default browser by pressing "key".'));
   } else {
     console.log(chalk.green('No submissions are currently assigned.'));
   }
-  console.log(chalk.white.dim('Open the review dashboard by pressing "0"\n'));
+  console.log(chalk.white.dim('Open the review dashboard by pressing "0".\n'));
 
   // Shows assigned projects in a table
   const submissionDetails = new Table({
