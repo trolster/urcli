@@ -12,7 +12,6 @@ import {api, config} from '../utils';
 const {token, tokenAge, languages, certs} = config;
 const requestBody = {};
 const startTime = moment();
-const assigned = [];
 // The wait between calling submissionRequests().
 const tickrate = 30000; // 30 seconds
 const infoInterval = 10; // 10 * 30 seconds === 5 minutes
@@ -25,6 +24,7 @@ let tick = 0;
 let assignedCount = 0;
 let assignedTotal = 0;
 let requestId = 0;
+let assigned = [];
 let unreadFeedbacks = [];
 let positions = [];
 let projectIds = [];
@@ -136,6 +136,7 @@ function setPrompt() {
     chalk.white('ctrl+c')} to exit the queue cleanly by deleting the submission_request.`));
   console.log(chalk.green.dim(`Press ${
     chalk.white('ESC')} to suspend the script without deleting the submission_request.\n`));
+  assigned.forEach(a => console.log(a.id));
 }
 
 function setupExitListeners() {
@@ -224,28 +225,21 @@ function assignmentNotification(projectInfo, submissionId) {
 }
 
 async function checkAssigned() {
-  const task = 'assigned';
-  const assignedResponse = await api({token, task});
+  const assignedResponse = await api({token, task: 'assigned'});
 
   if (assignedResponse.body.length) {
     assignedResponse.body
-      .filter(s => assigned.indexOf(s.id) === -1)
-      .forEach((s) => {
+      .filter(submission => assigned.map(s => s.id).indexOf(submission.id) === -1)
+      .forEach((submission) => {
         // Only add it to the total number of assigned if it's been assigned
         // after the command was initiated.
-        if (Date.parse(s.assigned_at) > Date.parse(startTime)) {
+        if (Date.parse(submission.assigned_at) > Date.parse(startTime)) {
           assignedTotal += 1;
         }
-        // Add the id of the newly assigned submission to the list of assigned
-        // submissions.
-        assigned.push({
-          submissionID: s.id,
-          project_id: s.project.id,
-          assignedAt: s.assigned_at,
-        });
-        assignmentNotification(s.project, s.id);
+        assignmentNotification(submission.project, submission.id);
       });
   }
+  assigned = assignedResponse.body;
 }
 
 async function checkPositions() {
@@ -334,18 +328,16 @@ async function checkFeedbacks() {
 
 async function submissionRequests() {
   // Call API to check how many submissions are currently assigned.
-  let task = 'count';
   try {
-    const count = await api({token, task});
-    if (assignedCount < count.body.assigned_count) {
+    const count = await api({token, task: 'count'});
+    if (assignedCount !== count.body.assigned_count) {
       checkAssigned();
     }
     assignedCount = count.body.assigned_count;
     // If then the assignedCount is less than the maximum number of assignments
     // allowed, we go through checking the submission_request.
     if (assignedCount < 2) {
-      task = 'get';
-      const getResponse = await api({token, task});
+      const getResponse = await api({token, task: 'get'});
       const submissionRequest = getResponse.body[0];
       // If there is no current submission_request we create a new one.
       if (!submissionRequest) {
