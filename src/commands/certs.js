@@ -16,5 +16,5 @@ export const certsCmd = async () => {
       };
       return acc;
     }, {});
-  config.save({certs});
+  config.save({certs}).then(() => process.exit(0));
 };
