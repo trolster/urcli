@@ -135,35 +135,38 @@ function setPrompt() {
     chalk.white('ESC')} to suspend the script without deleting the submission_request.\n`));
 }
 
-function setupExitListeners() {
-  // It's necessary to add a readline interface to catch <ctrl>-C on Windows.
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  // Exit cleanly on <ctrl>-C by deleting the submission_request.
-  rl.on('SIGINT', () => {
-    const task = 'delete';
-    const id = requestId;
-    api({token, task, id}).then(() => {
-      console.log(chalk.green('Successfully deleted request and exited..'));
-      process.exit(0);
-    }).catch((err) => {
-      console.error(chalk.red('Was unable to exit cleanly.'));
-      console.error(err);
-      process.exit(1);
-    });
-  });
+function setEventListeners() {
+  readline.emitKeypressEvents(process.stdin);
+  process.stdin.setRawMode(true);
   // Suspend on ESC and refresh the submission_request rather than deleting it.
-  process.stdin.on('data', (key) => {
-    /* eslint-disable eqeqeq */
-    if (key == '\u001b') {
-      const task = 'refresh';
-      const id = requestId;
-      api({token, task, id});
-      console.log(chalk.green('Exited without deleting the submission_request...'));
-      console.log(chalk.green('The current submission_request will expire in an hour.'));
-      process.exit(0);
+  process.stdin.on('keypress', (str, key) => {
+    console.log(key);
+    switch (key.sequence) {
+      case '\u001b': // ESCAPE
+        api({token, task: 'refresh', id: requestId});
+        console.log(chalk.green('Exited without deleting the submission_request...'));
+        console.log(chalk.green('The current submission_request will expire in an hour.'));
+        process.exit(0);
+        break;
+      case '\u0003': // CTRL-C
+        process.exit(0);
+        api({token, task: 'delete', id: requestId}).then(() => {
+          console.log(chalk.green('Successfully deleted request and exited..'));
+          process.exit(0);
+        }).catch((err) => {
+          console.error(chalk.red('Was unable to exit cleanly.'));
+          console.error(err);
+          process.exit(1);
+        });
+        break;
+      case '1':
+        console.log('You got 1');
+        break;
+      case '2':
+        console.log('You got 2');
+        break;
+      default:
+        break;
     }
   });
 }
@@ -222,10 +225,10 @@ function assignmentNotification(projectInfo, submissionId) {
 
 async function checkAssigned() {
   const assignedResponse = await api({token, task: 'assigned'});
+  const oldAssignedIds = assigned.map(s => s.id);
+  assigned = assignedResponse.body;
 
   if (assignedResponse.body.length) {
-    const oldAssignedIds = assigned.map(s => s.id);
-    assigned = assignedResponse.body;
     assigned
       .filter(s => oldAssignedIds.indexOf(s.id) === -1)
       .forEach((s) => {
@@ -370,7 +373,7 @@ export const assignCmd = (ids, opts) => {
   projectIds = validateProjectIds(ids);
   options = opts;
   validateAccessToken();
-  setupExitListeners();
+  setEventListeners();
   createRequestBody();
   // Start the request loop.
   submissionRequests();
