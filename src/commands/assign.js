@@ -98,27 +98,25 @@ function setPrompt() {
   // Assigned info.
   //
   // Shows the number of projects that are currently assigned
-  console.log(chalk.green(`Currently assigned: ${chalk.white(assigned.length)}`));
+  console.log(chalk.green(`Currently assigned: ${chalk.white(assigned.length)}\n`));
 
   // Shows assigned projects in a table
   const submissionDetails = new Table({
     head: [
-      {hAlign: 'center', content: 'id'},
-      {hAlign: 'left', content: 'name'},
-      {hAlign: 'center', content: 'sub_id'},
-      {hAlign: 'center', content: 'time_left'}],
-    colWidths: [7, 40, 10, 15],
+      {hAlign: 'center', content: 'open'},
+      {hAlign: 'left', content: 'project name'},
+      {hAlign: 'center', content: 'time left'}],
+    colWidths: [8, 40, 15],
   });
 
   assigned
-    .forEach((submission) => {
+    .forEach((submission, idx) => {
       const assignedAt = moment.utc(submission.assigned_at);
       const completeTime = assignedAt.add(12, 'hours');
       const timeLeft = moment.utc().to(completeTime);
       submissionDetails.push([
-        {hAlign: 'center', content: submission.project_id},
+        {hAlign: 'center', content: `ctrl-${idx + 1}`},
         {hAlign: 'left', content: certs[submission.project_id].name},
-        {hAlign: 'center', content: submission.id},
         {hAlign: 'center', content: timeLeft},
       ]);
     });
@@ -226,18 +224,19 @@ async function checkAssigned() {
   const assignedResponse = await api({token, task: 'assigned'});
 
   if (assignedResponse.body.length) {
-    assignedResponse.body
-      .filter(submission => assigned.map(s => s.id).indexOf(submission.id) === -1)
-      .forEach((submission) => {
+    const oldAssignedIds = assigned.map(s => s.id);
+    assigned = assignedResponse.body;
+    assigned
+      .filter(s => oldAssignedIds.indexOf(s.id) === -1)
+      .forEach((s) => {
         // Only add it to the total number of assigned if it's been assigned
         // after the command was initiated.
-        if (Date.parse(submission.assigned_at) > Date.parse(startTime)) {
+        if (Date.parse(s.assigned_at) > Date.parse(startTime)) {
           assignedTotal += 1;
         }
-        assignmentNotification(submission.project, submission.id);
+        assignmentNotification(s.project, s.id);
       });
   }
-  assigned = assignedResponse.body;
 }
 
 async function checkPositions() {
