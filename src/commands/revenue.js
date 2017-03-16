@@ -37,16 +37,17 @@ function definePeriods(args, options) {
   }
 
   function createYearPeriod(year) {
-    const start = moment(year, 'YYYY').utc();
+    const start = moment(year, 'YYYY');
     // If year is the current year the end should be today, otherwise it should be the end of the year.
-    const end = year === currentYear ? defaultEndTime : moment(year, 'YYYY').utc().endOf('year');
+    const end = year === currentYear ? defaultEndTime : moment(year, 'YYYY').endOf('year');
     periods.push([start, end]);
   }
 
   function createMonthPeriod(month) {
-    const start = moment(month).utc();
+    const start = moment(month);
     // If month is the current month the end should be today, otherwise it should be the end of the month.
-    const end = month === currentMonth ? defaultEndTime : moment(month).utc().add(1, 'M');
+    const end = month === currentMonth ? defaultEndTime : moment(month).add(1, 'M');
+    console.log([start, end]);
     periods.push([start, end]);
   }
 
