@@ -212,8 +212,8 @@ function printReports() {
     const task = 'completed';
     const token = config.token;
     const body = {
-      start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
-      end_date: period[1].format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+      start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSS'),
+      end_date: period[1].format('YYYY-MM-DDTHH:mm:ss.SSS'),
     };
 
     const completed = await api({token, task, body});
