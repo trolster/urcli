@@ -13,10 +13,11 @@ function definePeriods(args, options) {
   const defaultEndTime = moment.utc().add(1, 'h');
   const defaultStartTime = moment.utc('2014-01-01');
   const currentMonth = moment.utc().format('YYYY-MM');
+  const currentYear = moment.utc().format('YYYY');
 
   const logErrorAndExit = (arg, reason) => {
     console.error(chalk.red(`\nYou have entered an invalid date: "${arg}": ${reason}`));
-    console.error('\nPlease enter dates in the following format: "YYYY-MM-DD" or "YYYY-MM"');
+    console.error('\nPlease enter dates in the following format: "YYYY-MM-DD", "YYYY-MM" or "YYYY"');
     console.error('You can also use the special shortcuts "today" and "yesterday" (ex.: urcli revenue today)');
     process.exit(0);
   };
@@ -32,6 +33,13 @@ function definePeriods(args, options) {
   function createOptionsPeriod() {
     const start = options.from ? moment.utc(options.from) : defaultStartTime;
     const end = options.to ? moment.utc(options.to) : defaultEndTime;
+    periods.push([start, end]);
+  }
+
+  function createYearPeriod(year) {
+    const start = moment(year, 'YYYY').utc();
+    // If year is the current year the end should be today, otherwise it should be the end of the year.
+    const end = year === currentYear ? defaultEndTime : moment(year, 'YYYY').utc().endOf('year');
     periods.push([start, end]);
   }
 
@@ -66,6 +74,7 @@ function definePeriods(args, options) {
     // Regex expressions to match user input. Note that MM and YYYY-MM inputs
     // are validated by the regex itself, while YYYY-MM-DD has to be validated
     // seperately by the moment library because of leap years and such nonsense.
+    const matchYear = /^201\d{1}$/; // YYYY.
     const matchMonth = /^\d{1}$|^[01]{1}[012]{1}$/; // 1-9, 01-09 and 10-12.
     const matchYearMonth = /^201\d{1}-\d{2}$|^201\d{1}-1{1}[012]{1}$/; // YYYY-MM.
     const matchYearMonthDay = /^201\d{1}-\d{2}-\d{2}$|^201\d{1}-1{1}[012]{1}-\d{2}$/; // YYYY-MM-DD
@@ -78,6 +87,8 @@ function definePeriods(args, options) {
     } else if (matchMonth.test(arg)) {
       const year = moment().month() + 1 < arg ? moment().year() - 1 : moment().year();
       createMonthPeriod(moment().year(year).month(arg - 1).format('YYYY-MM'));
+    } else if (matchYear.test(arg)) {
+      createYearPeriod(arg);
     } else if (arg === 'today') {
       createDayPeriod(moment.utc());
     } else if (arg === 'yesterday') {
