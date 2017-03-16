@@ -47,7 +47,6 @@ function definePeriods(args, options) {
     const start = moment(month);
     // If month is the current month the end should be today, otherwise it should be the end of the month.
     const end = month === currentMonth ? defaultEndTime : moment(month).add(1, 'M');
-    console.log([start, end]);
     periods.push([start, end]);
   }
 
