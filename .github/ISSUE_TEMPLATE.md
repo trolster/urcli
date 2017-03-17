@@ -8,16 +8,18 @@ please write the title as "Feature Request:" followed by a short description of 
 
 Describe bugs using this template:
 
-## Which version of Node.js are you running?
-You can see the version by running the following command: `node -v`.
+#### Which version of Node.js are you running (`node -v`)?
 
-## Which version of `urcli` are you running?
-You can see the version by running the following command: `urcli -V`.
+#### Which version of `urcli` are you running (`urcli -V`)?
 
-## What behavior were you expecting to see?
+#### What behavior were you expecting to see?
 
-## What was the actual behavior?
+#### What was the actual behavior?
 
-## Describe the steps needed to reproduce the problem?
+#### Describe the steps needed to reproduce the problem?
 
-## What is your Operating System (e.g., Linux Ubuntu, MacOS, Windows)?
+1.
+1.
+1.
+
+#### What is your Operating System (e.g., Linux Ubuntu, MacOS, Windows)?
