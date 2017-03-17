@@ -30,38 +30,33 @@ let unreadFeedbacks = [];
 let positions = [];
 let projectIds = [];
 
+// Create a new table for projects that the user is queued up for
+const projectDetails = new Table({
+  head: [
+    {hAlign: 'center', content: 'pos'},
+    {hAlign: 'center', content: 'id'},
+    {hAlign: 'left', content: 'name'},
+    {hAlign: 'center', content: 'lang'}],
+  colWidths: [5, 7, 40, 7],
+});
+
+// Shows assigned projects in a table
+const submissionDetails = new Table({
+  head: [
+    {hAlign: 'center', content: 'key'},
+    {hAlign: 'left', content: 'project name'},
+    {hAlign: 'center', content: 'expires'},
+    {hAlign: 'center', content: 'price'}],
+  colWidths: [5, 40, 15, 7],
+});
+
 function setPrompt() {
   // Clearing the screen.
   readline.cursorTo(process.stdout, 0, 0);
   readline.clearScreenDown(process.stdout);
 
-  // Warnings.
-  if (error) {
-    console.log(chalk.red('The API is currently not responding, or very slow to respond.'));
-    console.log(chalk.red('The script will continue to run and try to get a connection.'));
-    console.log(chalk.red(`Error Code: ${error}`));
-  }
-  error = '';
-  const tokenExpiryWarning = moment(tokenAge).diff(moment(), 'days') < 5;
-  const tokenExpires = moment(tokenAge).fromNow();
-  console.log(chalk[tokenExpiryWarning ? 'red' : 'green'](`Token expires ${tokenExpires}`));
-
-  // General info.
-  console.log(chalk.green(`Uptime: ${chalk.white(startTime.fromNow(true))}\n`));
-  // Positions in request queues.
-  console.log(chalk.blue('You are queued up for:\n'));
-
-  // Create a new table for projects that the user is queued up for
-  const projectDetails = new Table({
-    head: [
-      {hAlign: 'center', content: 'pos'},
-      {hAlign: 'center', content: 'id'},
-      {hAlign: 'left', content: 'name'},
-      {hAlign: 'center', content: 'lang'}],
-    colWidths: [5, 7, 40, 7],
-  });
-
   // Push projects, sorted by queue position, into the projectDetails table
+  projectDetails.length = 0;
   positions
     .sort((p1, p2) => p1.position - p2.position)
     .forEach((project) => {
@@ -73,10 +68,44 @@ function setPrompt() {
       ]);
     });
 
+  // Push assigned, sorted by time left, into the submissionDetails table
+  submissionDetails.length = 0;
+  assigned
+    .forEach((submission, idx) => {
+      const assignedAt = moment.utc(submission.assigned_at);
+      const completeTime = assignedAt.add(12, 'hours');
+      submissionDetails.push([
+        {hAlign: 'center', content: idx + 1},
+        {hAlign: 'left', content: submission.project.name},
+        {hAlign: 'center', content: completeTime.fromNow()},
+        {hAlign: 'center', content: submission.price},
+      ]);
+    });
+
+  // Warnings on error
+  if (error) {
+    console.log(chalk.red('The API is currently not responding, or very slow to respond.'));
+    console.log(chalk.red('The script will continue to run and try to get a connection.'));
+    console.log(chalk.red(`Error Code: ${error}`));
+  }
+  error = '';
+
+  // Token expiry warning
+  const tokenExpiryWarning = moment(tokenAge).diff(moment(), 'days') < 5;
+  const tokenExpires = moment(tokenAge).fromNow();
+  console.log(chalk[tokenExpiryWarning ? 'red' : 'green'](`Token expires ${tokenExpires}`));
+
+  // General info.
+  console.log(chalk.green(`Uptime: ${chalk.white(startTime.fromNow(true))}\n`));
+  // Positions in request queues.
+  console.log(chalk.blue('You are queued up for:\n'));
+
   // console.log a warning if max number of submissions are assigned, otherwise
   // console.log the projectDetails table
-  if (!positions.length) {
+  if (assigned.length === 2) {
     console.log(chalk.yellow(`    You have ${chalk.white(assigned.length)} (max) submissions assigned.\n`));
+  } else if (!projectDetails.length) {
+    console.log('Waiting for project details...\n');
   } else {
     console.log(`${projectDetails.toString()}\n`);
   }
@@ -101,41 +130,18 @@ function setPrompt() {
   if (assigned.length) {
     const count = assigned.length === 1 ? 'one submission' : 'two submissions';
     console.log(chalk.green(`You currently have ${count} assigned.`));
-    console.log(chalk.white.dim('Start a review in your default browser by pressing "key".'));
+    console.log(chalk.white.dim('Start a review in your default browser by pressing "key".\n'));
+    console.log(`${submissionDetails.toString()}\n`);
   } else {
     console.log(chalk.green('No submissions are currently assigned.'));
   }
   console.log(chalk.white.dim('Open the review dashboard by pressing "0".\n'));
 
-  // Shows assigned projects in a table
-  const submissionDetails = new Table({
-    head: [
-      {hAlign: 'center', content: 'key'},
-      {hAlign: 'left', content: 'project name'},
-      {hAlign: 'center', content: 'time left'}],
-    colWidths: [5, 40, 15],
-  });
-
-  assigned
-    .forEach((submission, idx) => {
-      const assignedAt = moment.utc(submission.assigned_at);
-      const completeTime = assignedAt.add(12, 'hours');
-      const timeLeft = moment.utc().to(completeTime);
-      submissionDetails.push([
-        {hAlign: 'center', content: idx + 1},
-        {hAlign: 'left', content: certs[submission.project_id].name},
-        {hAlign: 'center', content: timeLeft},
-      ]);
-    });
-  if (assigned.length > 0) {
-    console.log(`${submissionDetails.toString()}\n`);
-  }
-
   // Shows the number of projects that were assigned since the start of urcli
   console.log(chalk.green(`Total assigned: ${
     chalk.white(assignedTotal)} since ${startTime.format('dddd, MMMM Do YYYY, HH:mm')}\n`));
 
-  // How to exit.
+  // Info on how to exit
   console.log(chalk.green.dim(`Press ${
     chalk.white('ctrl+c')} to exit the queue cleanly by deleting the submission_request.`));
   console.log(chalk.green.dim(`Press ${
