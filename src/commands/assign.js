@@ -216,7 +216,7 @@ function assignmentNotification(projectInfo, submissionId) {
   // If the --push flag is set we push to active PushBullet devices
   if (accessToken) {
     const pusher = new PushBullet(accessToken);
-    pusher.link({}, title, open, (err) => {
+    pusher.note({}, title, `${message}\n\n${open}`, (err) => {
       if (err) throw new Error(`Pushbullet error: ${err}`);
     });
   }
