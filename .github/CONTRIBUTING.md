@@ -18,8 +18,8 @@ Thanks for checking out the urcli! We've put together the following guidelines t
 Please don't hesitate to open an [issue](https://github.com/trolster/ur-cli/issues). We'll need to know the following:
 
 * Version of Node
+* Version of `urcli`
 * Platform you're running on (macOS, SunOS, Linux, Windows)
-* Architecture you're running on (32bit or 64bit and x86 or ARM)
 * If you are getting any error messages, please include them as well
 
 ## Types of contributions we're looking for
@@ -73,7 +73,7 @@ To get started with Node, check out:
 
 Once you have cloned the repo, you should install all packages from npm: `npm install`.
 
-The project uses [Babel](https://babeljs.io/) for compilation of JavaScript. So when you are running commands directly from /src, you will need to run them using the `babel-node` command. Ex.: `babel-node src/urcli.js money 2017-02`. This is equivalent of running the command `urcli money 2017-02`
+The project uses [Babel](https://babeljs.io/) for compilation of JavaScript. So when you are running commands directly from /src, you will need to run them using the `babel-node` command. Ex.: `babel-node src revenue 2017-02`. This is equivalent to running the command `urcli revenue 2017-02` when `urcli` is installed globally.
 
 ## Contribution review process
 
