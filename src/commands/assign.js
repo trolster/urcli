@@ -189,6 +189,10 @@ function setEventListeners() {
       case '\u0003': // CTRL-C
         exit('SIGINT');
         break;
+      case 'r':
+        checkAssigned();
+        checkPositions();
+        break;
       case '0':
         opn(`${baseReviewURL}dashboard`);
         break;
