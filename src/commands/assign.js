@@ -188,7 +188,7 @@ function setEventListeners() {
         exit('SIGINT');
         break;
       case '0':
-        opn('https://review.udacity.com/#!/submissions/dashboard');
+        opn(`${baseReviewURL}dashboard`);
         break;
       case '1':
         if (assigned[0]) opn(`${baseReviewURL}${assigned[0].id}`);
