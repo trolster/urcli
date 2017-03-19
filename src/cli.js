@@ -42,6 +42,7 @@ cli
   .arguments('<ids...>')
   .option('--push <accessToken>', 'Get push notifications using <accessToken>.')
   .option('--feedbacks', 'Get notified on new feedbacks.')
+  .option('--silent', 'Skip the helptext.')
   .description('Place requests in the queue.')
   .action((ids, options) => {
     assignCmd(ids, options);

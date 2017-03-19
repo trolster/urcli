@@ -125,36 +125,38 @@ function setPrompt() {
     console.log(chalk.yellow('No submissions are currently assigned.\n'));
   }
 
-  // Shows the number of projects that were assigned since the start of urcli
-  console.log(chalk.green(`Total assigned: ${
-    chalk.white(assignedTotal)} since ${startTime.format('dddd, MMMM Do YYYY, HH:mm')}\n`));
+  if (!options.silent) {
+    // Shows the number of projects that were assigned since the start of urcli
+    console.log(chalk.green(`Total assigned: ${
+      chalk.white(assignedTotal)} since ${startTime.format('dddd, MMMM Do YYYY, HH:mm')}\n`));
 
-  // Info on when the next check will occur for queue position and feedbacks.
-  if (tick % infoInterval === 0) {
-    if (options.feedbacks) {
-      console.log(chalk.blue('Checked for new feedbacks a few seconds ago...'));
+    // Info on when the next check will occur for queue position and feedbacks.
+    if (tick % infoInterval === 0) {
+      if (options.feedbacks) {
+        console.log(chalk.blue('Checked for new feedbacks a few seconds ago...'));
+      }
+      console.log(chalk.blue('Checked the queue a few seconds ago...\n'));
+    } else {
+      const remainingSeconds = (infoInterval - (tick % infoInterval)) * (tickrate / 1000);
+      const infoIsCheckedAt = moment().add(remainingSeconds, 'seconds');
+      const humanReadableMessage = moment().to(infoIsCheckedAt);
+      if (options.feedbacks) {
+        console.log(chalk.blue(`Checking feedbacks ${humanReadableMessage}`));
+      }
+      console.log(chalk.blue(`Updating queue information ${humanReadableMessage}\n`));
     }
-    console.log(chalk.blue('Checked the queue a few seconds ago...\n'));
-  } else {
-    const remainingSeconds = (infoInterval - (tick % infoInterval)) * (tickrate / 1000);
-    const infoIsCheckedAt = moment().add(remainingSeconds, 'seconds');
-    const humanReadableMessage = moment().to(infoIsCheckedAt);
-    if (options.feedbacks) {
-      console.log(chalk.blue(`Checking feedbacks ${humanReadableMessage}`));
-    }
-    console.log(chalk.blue(`Updating queue information ${humanReadableMessage}\n`));
+
+    // Keyboard shortcuts helptext
+    console.log('KEYBOARD SHORTCUTS:\n');
+    console.log(chalk.green.dim(`  Press ${
+      chalk.white('0')} to open the review dashboard.`));
+    console.log(chalk.green.dim(`  Press ${
+      chalk.white('1')} or ${chalk.white('2')} to open your assigned submissions.\n`));
+    console.log(chalk.green.dim(`  Press ${
+      chalk.white('ctrl+c')} to exit the queue cleanly by deleting the submission_request.`));
+    console.log(chalk.green.dim(`  Press ${
+      chalk.white('ESC')} to suspend the script without deleting the submission_request.\n`));
   }
-
-  // Keyboard shortcuts helptext
-  console.log('KEYBOARD SHORTCUTS:\n');
-  console.log(
-    chalk.green.dim(`  Press ${chalk.white('0')} to open the review dashboard.`));
-  console.log(
-    chalk.green.dim(`  Press ${chalk.white('1')} or ${chalk.white('2')} to open your assigned submissions.\n`));
-  console.log(
-    chalk.green.dim(`  Press ${chalk.white('ctrl+c')} to exit the queue cleanly by deleting the submission_request.`));
-  console.log(
-    chalk.green.dim(`  Press ${chalk.white('ESC')} to suspend the script without deleting the submission_request.\n`));
 }
 
 function exit(key) {
