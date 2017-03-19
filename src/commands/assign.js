@@ -177,37 +177,6 @@ function exit(key) {
   }
 }
 
-function setEventListeners() {
-  const baseReviewURL = 'https://review.udacity.com/#!/submissions/';
-  readline.emitKeypressEvents(process.stdin);
-  process.stdin.setRawMode(true);
-  process.stdin.on('keypress', (str, key) => {
-    switch (key.sequence) {
-      case '\u001b': // ESCAPE
-        exit('escape');
-        break;
-      case '\u0003': // CTRL-C
-        exit('SIGINT');
-        break;
-      case 'r':
-        checkAssigned();
-        checkPositions();
-        break;
-      case '0':
-        opn(`${baseReviewURL}dashboard`);
-        break;
-      case '1':
-        if (assigned[0]) opn(`${baseReviewURL}${assigned[0].id}`);
-        break;
-      case '2':
-        if (assigned[1]) opn(`${baseReviewURL}${assigned[1].id}`);
-        break;
-      default:
-        break;
-    }
-  });
-}
-
 function validateProjectIds(ids) {
   const certIds = Object.keys(certs);
   if (ids[0] === 'all') {
@@ -352,6 +321,37 @@ async function checkFeedbacks() {
     // in unreadFeedbacks, will mean that the new unread_count is 0.
     unreadFeedbacks = [];
   }
+}
+
+function setEventListeners() {
+  const baseReviewURL = 'https://review.udacity.com/#!/submissions/';
+  readline.emitKeypressEvents(process.stdin);
+  process.stdin.setRawMode(true);
+  process.stdin.on('keypress', (str, key) => {
+    switch (key.sequence) {
+      case '\u001b': // ESCAPE
+        exit('escape');
+        break;
+      case '\u0003': // CTRL-C
+        exit('SIGINT');
+        break;
+      case 'r':
+        checkAssigned();
+        checkPositions();
+        break;
+      case '0':
+        opn(`${baseReviewURL}dashboard`);
+        break;
+      case '1':
+        if (assigned[0]) opn(`${baseReviewURL}${assigned[0].id}`);
+        break;
+      case '2':
+        if (assigned[1]) opn(`${baseReviewURL}${assigned[1].id}`);
+        break;
+      default:
+        break;
+    }
+  });
 }
 
 async function submissionRequests() {
