@@ -1,3 +1,4 @@
+
 // node modules
 import readline from 'readline';
 // npm modules
@@ -6,6 +7,7 @@ import notifier from 'node-notifier';
 import chalk from 'chalk';
 import Table from 'cli-table2';
 import PushBullet from 'pushbullet';
+import opn from 'opn';
 // our modules
 import {api, config} from '../utils';
 
@@ -28,38 +30,19 @@ let unreadFeedbacks = [];
 let positions = [];
 let projectIds = [];
 
-function setPrompt() {
-  // Clearing the screen.
-  readline.cursorTo(process.stdout, 0, 0);
-  readline.clearScreenDown(process.stdout);
+// Create a new table for projects that the user is queued up for
+const projectDetails = new Table({
+  head: [
+    {hAlign: 'center', content: 'pos'},
+    {hAlign: 'center', content: 'id'},
+    {hAlign: 'left', content: 'project name'},
+    {hAlign: 'center', content: 'lang'}],
+  colWidths: [5, 7, 40, 7],
+});
 
-  // Warnings.
-  if (error) {
-    console.log(chalk.red('The API is currently not responding, or very slow to respond.'));
-    console.log(chalk.red('The script will continue to run and try to get a connection.'));
-    console.log(chalk.red(`Error Code: ${error}`));
-  }
-  error = '';
-  const tokenExpiryWarning = moment(tokenAge).diff(moment(), 'days') < 5;
-  const tokenExpires = moment(tokenAge).fromNow();
-  console.log(chalk[tokenExpiryWarning ? 'red' : 'green'](`Token expires ${tokenExpires}`));
-
-  // General info.
-  console.log(chalk.green(`Uptime: ${chalk.white(startTime.fromNow(true))}\n`));
-  // Positions in request queues.
-  console.log(chalk.blue('You are queued up for:\n'));
-
-  // Create a new table for projects that the user is queued up for
-  const projectDetails = new Table({
-    head: [
-      {hAlign: 'center', content: 'pos'},
-      {hAlign: 'center', content: 'id'},
-      {hAlign: 'left', content: 'name'},
-      {hAlign: 'center', content: 'lang'}],
-    colWidths: [5, 7, 40, 7],
-  });
-
+function createProjectDetailsTable() {
   // Push projects, sorted by queue position, into the projectDetails table
+  projectDetails.length = 0;
   positions
     .sort((p1, p2) => p1.position - p2.position)
     .forEach((project) => {
@@ -70,14 +53,81 @@ function setPrompt() {
         {hAlign: 'center', content: project.language},
       ]);
     });
+  return projectDetails.toString();
+}
+
+// Shows assigned projects in a table
+const submissionDetails = new Table({
+  head: [
+    {hAlign: 'center', content: 'key'},
+    {hAlign: 'left', content: 'project name'},
+    {hAlign: 'center', content: 'expires'},
+    {hAlign: 'center', content: 'price'}],
+  colWidths: [5, 40, 15, 8],
+});
+
+function createSubmissionDetailsTable() {
+  // Push assigned, sorted by time left, into the submissionDetails table
+  submissionDetails.length = 0;
+  assigned
+    .forEach((submission, idx) => {
+      const assignedAt = moment.utc(submission.assigned_at);
+      const completeTime = assignedAt.add(12, 'hours');
+      submissionDetails.push([
+        {hAlign: 'center', content: idx + 1},
+        {hAlign: 'left', content: submission.project.name},
+        {hAlign: 'center', content: completeTime.fromNow()},
+        {hAlign: 'center', content: submission.price},
+      ]);
+    });
+  return submissionDetails.toString();
+}
+
+function setPrompt() {
+  // Clearing the screen.
+  readline.cursorTo(process.stdout, 0, 0);
+  readline.clearScreenDown(process.stdout);
+
+  // Warnings on error
+  if (error) {
+    console.log(chalk.red('The API is currently not responding, or very slow to respond.'));
+    console.log(chalk.red('The script will continue to run and try to get a connection.'));
+    console.log(chalk.red(`Error Code: ${error}`));
+  }
+  error = '';
+
+  // Token expiry warning
+  const tokenExpiryWarning = moment(tokenAge).diff(moment(), 'days') < 5;
+  const tokenExpires = moment(tokenAge).fromNow();
+  console.log(chalk[tokenExpiryWarning ? 'red' : 'green'](`Token expires ${tokenExpires}`));
+
+  // General info.
+  console.log(chalk.green(`Uptime: ${chalk.white(startTime.fromNow(true))}\n`));
+  // Positions in request queues.
+  console.log(chalk.blue('You are queued up for:\n'));
 
   // console.log a warning if max number of submissions are assigned, otherwise
   // console.log the projectDetails table
-  if (!positions.length) {
+  if (assigned.length === 2) {
     console.log(chalk.yellow(`    You have ${chalk.white(assigned.length)} (max) submissions assigned.\n`));
+  } else if (!positions.length) {
+    console.log(chalk.yellow('Waiting for project details...\n'));
   } else {
-    console.log(`${projectDetails.toString()}\n`);
+    console.log(`${createProjectDetailsTable()}\n`);
   }
+
+  // Assigned info.
+  if (assigned.length) {
+    const count = assigned.length === 1 ? 'one submission' : 'two submissions';
+    console.log(chalk.yellow(`You currently have ${count} assigned:\n`));
+    console.log(`${createSubmissionDetailsTable()}\n`);
+  } else {
+    console.log(chalk.yellow('No submissions are currently assigned.\n'));
+  }
+
+  // Shows the number of projects that were assigned since the start of urcli
+  console.log(chalk.green(`Total assigned: ${
+    chalk.white(assignedTotal)} since ${startTime.format('dddd, MMMM Do YYYY, HH:mm')}\n`));
 
   // Info on when the next check will occur for queue position and feedbacks.
   if (tick % infoInterval === 0) {
@@ -95,77 +145,59 @@ function setPrompt() {
     console.log(chalk.blue(`Updating queue information ${humanReadableMessage}\n`));
   }
 
-  // Assigned info.
-  //
-  // Shows the number of projects that are currently assigned
-  console.log(chalk.green(`Currently assigned: ${chalk.white(assigned.length)}`));
-
-  // Shows assigned projects in a table
-  const submissionDetails = new Table({
-    head: [
-      {hAlign: 'center', content: 'id'},
-      {hAlign: 'left', content: 'name'},
-      {hAlign: 'center', content: 'sub_id'},
-      {hAlign: 'center', content: 'time_left'}],
-    colWidths: [7, 40, 10, 15],
-  });
-
-  assigned
-    .forEach((submission) => {
-      const assignedAt = moment.utc(submission.assigned_at);
-      const completeTime = assignedAt.add(12, 'hours');
-      const timeLeft = moment.utc().to(completeTime);
-      submissionDetails.push([
-        {hAlign: 'center', content: submission.project_id},
-        {hAlign: 'left', content: certs[submission.project_id].name},
-        {hAlign: 'center', content: submission.id},
-        {hAlign: 'center', content: timeLeft},
-      ]);
-    });
-  if (assigned.length > 0) {
-    console.log(`${submissionDetails.toString()}\n`);
-  }
-
-  // Shows the number of projects that were assigned since the start of urcli
-  console.log(chalk.green(`Total assigned: ${
-    chalk.white(assignedTotal)} since ${startTime.format('dddd, MMMM Do YYYY, HH:mm')}\n`));
-
-  // How to exit.
-  console.log(chalk.green.dim(`Press ${
-    chalk.white('ctrl+c')} to exit the queue cleanly by deleting the submission_request.`));
-  console.log(chalk.green.dim(`Press ${
-    chalk.white('ESC')} to suspend the script without deleting the submission_request.\n`));
+  // Keyboard shortcuts helptext
+  console.log('KEYBOARD SHORTCUTS:\n');
+  console.log(
+    chalk.green.dim(`  Press ${chalk.white('0')} to open the review dashboard.`));
+  console.log(
+    chalk.green.dim(`  Press ${chalk.white('1')} or ${chalk.white('2')} to open your assigned submissions.\n`));
+  console.log(
+    chalk.green.dim(`  Press ${chalk.white('ctrl+c')} to exit the queue cleanly by deleting the submission_request.`));
+  console.log(
+    chalk.green.dim(`  Press ${chalk.white('ESC')} to suspend the script without deleting the submission_request.\n`));
 }
 
-function setupExitListeners() {
-  // It's necessary to add a readline interface to catch <ctrl>-C on Windows.
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  // Exit cleanly on <ctrl>-C by deleting the submission_request.
-  rl.on('SIGINT', () => {
-    const task = 'delete';
-    const id = requestId;
-    api({token, task, id}).then(() => {
+function exit(key) {
+  if (key === 'escape') {
+    // Suspend on ESC and refresh the submission_request rather than deleting it.
+    api({token, task: 'refresh', id: requestId});
+    console.log(chalk.green('Exited without deleting the submission_request...'));
+    console.log(chalk.green('The current submission_request will expire in an hour.'));
+    process.exit(0);
+  } else if (key === 'SIGINT') {
+    // Delete submission_request object and exit on CTRL-C
+    api({token, task: 'delete', id: requestId}).then(() => {
       console.log(chalk.green('Successfully deleted request and exited..'));
       process.exit(0);
-    }).catch((err) => {
-      console.error(chalk.red('Was unable to exit cleanly.'));
-      console.error(err);
-      process.exit(1);
     });
-  });
-  // Suspend on ESC and refresh the submission_request rather than deleting it.
-  process.stdin.on('data', (key) => {
-    /* eslint-disable eqeqeq */
-    if (key == '\u001b') {
-      const task = 'refresh';
-      const id = requestId;
-      api({token, task, id});
-      console.log(chalk.green('Exited without deleting the submission_request...'));
-      console.log(chalk.green('The current submission_request will expire in an hour.'));
-      process.exit(0);
+  } else {
+    process.exit(0);
+  }
+}
+
+function setEventListeners() {
+  const baseReviewURL = 'https://review.udacity.com/#!/submissions/';
+  readline.emitKeypressEvents(process.stdin);
+  process.stdin.setRawMode(true);
+  process.stdin.on('keypress', (str, key) => {
+    switch (key.sequence) {
+      case '\u001b': // ESCAPE
+        exit('escape');
+        break;
+      case '\u0003': // CTRL-C
+        exit('SIGINT');
+        break;
+      case '0':
+        opn(`${baseReviewURL}dashboard`);
+        break;
+      case '1':
+        if (assigned[0]) opn(`${baseReviewURL}${assigned[0].id}`);
+        break;
+      case '2':
+        if (assigned[1]) opn(`${baseReviewURL}${assigned[1].id}`);
+        break;
+      default:
+        break;
     }
   });
 }
@@ -224,34 +256,31 @@ function assignmentNotification(projectInfo, submissionId) {
 
 async function checkAssigned() {
   const assignedResponse = await api({token, task: 'assigned'});
+  const oldAssignedIds = assigned.map(s => s.id);
+  assigned = assignedResponse.body;
 
   if (assignedResponse.body.length) {
-    assignedResponse.body
-      .filter(submission => assigned.map(s => s.id).indexOf(submission.id) === -1)
-      .forEach((submission) => {
+    assigned
+      .filter(s => oldAssignedIds.indexOf(s.id) === -1)
+      .forEach((s) => {
         // Only add it to the total number of assigned if it's been assigned
         // after the command was initiated.
-        if (Date.parse(submission.assigned_at) > Date.parse(startTime)) {
+        if (Date.parse(s.assigned_at) > Date.parse(startTime)) {
           assignedTotal += 1;
         }
-        assignmentNotification(submission.project, submission.id);
+        assignmentNotification(s.project, s.id);
       });
   }
-  assigned = assignedResponse.body;
 }
 
 async function checkPositions() {
-  const task = 'position';
-  const id = requestId;
-  const positionResponse = await api({token, task, id});
+  const positionResponse = await api({token, task: 'position', id: requestId});
   positions = positionResponse.body.error ? [] : positionResponse.body;
   setPrompt();
 }
 
 async function createSubmissionRequest() {
-  const task = 'create';
-  const body = requestBody;
-  const createResponse = await api({token, task, body});
+  const createResponse = await api({token, task: 'create', body: requestBody});
   requestId = createResponse.body.id;
   checkPositions();
   // Reset tick to reset the timers.
@@ -275,10 +304,7 @@ let needToUpdate = (submissionRequest) => {
 };
 
 async function updateSubmissionRequest() {
-  const task = 'update';
-  const id = requestId;
-  const body = requestBody;
-  const updateResponse = await api({token, task, id, body});
+  const updateResponse = await api({token, task: 'update', id: requestId, body: requestBody});
   requestId = updateResponse.body.id;
   checkPositions();
   // Reset tick to reset the timers.
@@ -304,12 +330,10 @@ function feedbackNotification(rating, name, id) {
 }
 
 async function checkFeedbacks() {
-  let task = 'stats';
-  const stats = await api({token, task});
+  const stats = await api({token, task: 'stats'});
   const diff = stats.body.unread_count - unreadFeedbacks.length;
   if (diff > 0) {
-    task = 'feedbacks';
-    const feedbacksResponse = await api({token, task});
+    const feedbacksResponse = await api({token, task: 'feedbacks'});
     unreadFeedbacks = feedbacksResponse.body.filter(fb => fb.read_at === null);
     // Notify the user of the new feedbacks.
     unreadFeedbacks.slice(-diff).forEach((fb) => {
@@ -371,7 +395,7 @@ export const assignCmd = (ids, opts) => {
   projectIds = validateProjectIds(ids);
   options = opts;
   validateAccessToken();
-  setupExitListeners();
+  setEventListeners();
   createRequestBody();
   // Start the request loop.
   submissionRequests();

@@ -30,6 +30,7 @@
     "moment-parseformat": "^2.1.4",
     "node-fetch": "^1.6.0",
     "node-notifier": "^5.0.2",
+    "opn": "^4.0.2",
     "pushbullet": "^2.0.0",
     "request": "^2.74.0",
     "winston": "^2.2.0"
