@@ -4,7 +4,9 @@ import readline from 'readline';
 import moment from 'moment';
 import chalk from 'chalk';
 // our modules
-import {api, config} from '../utils';
+import {Api, Config} from '../utils';
+
+const config = new Config();
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -13,8 +15,9 @@ const rl = readline.createInterface({
 });
 
 export const setupCmd = (token) => {
-  let languages;
-  const tokenAge = moment().add(28, 'd');
+  config.token = token;
+  config.tokenAge = moment().add(28, 'd');
+  const api = new Api(token);
 
   console.log('You can now add all the languages that you are certified for.');
   console.log('Simply type in each language code and separate them with a space.');
@@ -35,7 +38,7 @@ export const setupCmd = (token) => {
                                   'Invalid language code(s). Try again (ex: "en-us pt-br") > ';
       rl.prompt();
     } else {
-      languages = lang;
+      config.languages = lang;
       console.log('You have entered the following language(s): ', lang);
       rl._prompt = 'Was this correct? (y/n) > ';
       rl.prompt();
@@ -51,7 +54,7 @@ export const setupCmd = (token) => {
       console.error(chalk.red(`This is the token you passed in as an argument: ${token}`));
       throw new Error();
     }
-    const certs = certifications.body
+    config.certs = certifications.body
       .filter(cert => cert.status === 'certified')
       .reduce((acc, cert) => {
         /* eslint-disable no-param-reassign */
@@ -61,6 +64,6 @@ export const setupCmd = (token) => {
         };
         return acc;
       }, {});
-    config.save({token, tokenAge, certs, languages});
+    config.save();
   });
 };
