@@ -59,7 +59,7 @@ You can get notified about any new feedbacks from students by using the `--feedb
 
 The script updates your queue position (and checks for new feedbacks) every 5 minutes. It outputs all relevant information to the terminal:
 
-<img src="http://i.imgur.com/8h2jjht.png" alt="CLI Prompt information display" width="700px">
+<img src="https://i.imgur.com/itACwFz.png" alt="CLI Prompt information display" width="700px">
 
 #### PushBullet Notifications
 
