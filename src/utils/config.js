@@ -2,8 +2,7 @@
 import fs from 'fs';
 // npm modules
 import homedir from 'homedir';
-// homedir() is a cross platform way of getting the users home directory.
-// On macOS it would end up being '/Users/username/.urcli_config.json'.
+
 const configFilePath = `${homedir()}/.urcli_config.json`;
 
 class Config {
@@ -28,9 +27,7 @@ class Config {
       console.error('Unable to save the config file.');
       throw new Error(e);
     }
-    console.log('configuration saved:');
-    console.log(config);
-    return Promise.resolve();
+    return this;
   }
 }
 
