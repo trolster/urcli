@@ -5,7 +5,7 @@ import homedir from 'homedir';
 
 const configFilePath = `${homedir()}/.urcli_config.json`;
 
-class Config {
+export class Config {
   constructor() {
     try {
       const config = JSON.parse(fs.readFileSync(configFilePath));
@@ -30,5 +30,3 @@ class Config {
     return this;
   }
 }
-
-export const config = new Config();
