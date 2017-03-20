@@ -55,7 +55,7 @@ The assign script updates every 30 seconds to see if you've gotten a submission 
 
 <img src="http://i.imgur.com/XaKNhaK.png" alt="Desktop notifications on a Mac" width="700px">
 
-##### PushBullet Notifications
+##### Assignment Notifications on Other Devices
 
 You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on and then run the `assign` command with the `--push <accessToken>` option.
 
