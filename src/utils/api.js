@@ -24,19 +24,23 @@ function endpoint(task, id) {
   }[task];
 }
 
-export const api = (options) => {
-  const {token, task, id} = options;
-  const [url, method] = endpoint(task, id);
-  const headers = {Authorization: token};
-  const json = true;
-  const body = options.body || '';
-  const timeout = 9000;
-
-  const requestOptions = {url, method, headers, json, body, timeout};
-  return new Promise((resolve, reject) => {
-    request(requestOptions, (error, res) => {
-      if (error) return reject({error, requestOptions, res});
-      return resolve(res);
+export class Api {
+  constructor(token) {
+    this.token = token;
+  }
+  call({task, id = '', body = ''}) {
+    const [url, method] = endpoint(task, id);
+    const headers = {Authorization: this.token};
+    const json = true;
+    const requestOptions = {url, method, headers, json, body};
+    return new Promise((resolve, reject) => {
+      request(requestOptions, (error, res) => {
+        if (error) {
+          reject({error, requestOptions, res});
+        } else {
+          resolve(res);
+        }
+      });
     });
-  });
-};
+  }
+}

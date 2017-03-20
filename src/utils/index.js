@@ -1,2 +1,2 @@
-export {api} from './api';
+export {Api} from './api';
 export {config} from './config';
