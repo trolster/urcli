@@ -18,11 +18,10 @@ export class Config {
       }
     }
   }
-  save(configValues) {
-    Object.assign(this, configValues);
-    const config = JSON.stringify(this, null, 2);
+  save() {
+    const newConfigs = JSON.stringify(this, null, 2);
     try {
-      fs.writeFileSync(configFilePath, config);
+      fs.writeFileSync(configFilePath, newConfigs);
     } catch (e) {
       // We can create both the config folder and file on ENOENT and throw on
       // everything else.
@@ -31,7 +30,7 @@ export class Config {
         throw new Error(e);
       }
       fs.mkdirSync(`${homedir()}/.urcli`);
-      fs.writeFileSync(configFilePath, config);
+      fs.writeFileSync(configFilePath, newConfigs);
     }
     return this;
   }
