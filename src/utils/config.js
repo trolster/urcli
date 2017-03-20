@@ -3,7 +3,7 @@ import fs from 'fs';
 // npm modules
 import homedir from 'homedir';
 
-const configFilePath = `${homedir()}/.urcli_config.json`;
+const configFilePath = `${homedir()}/.urcli/config.json`;
 
 export class Config {
   constructor() {
@@ -24,8 +24,14 @@ export class Config {
     try {
       fs.writeFileSync(configFilePath, config);
     } catch (e) {
-      console.error('Unable to save the config file.');
-      throw new Error(e);
+      // We can create both the config folder and file on ENOENT and throw on
+      // everything else.
+      if (e.code !== 'ENOENT') {
+        console.error('Error while saving the config file.');
+        throw new Error(e);
+      }
+      fs.mkdirSync(`${homedir()}/.urcli`);
+      fs.writeFileSync(configFilePath, config);
     }
     return this;
   }
