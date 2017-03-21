@@ -14,7 +14,7 @@
 
 1. Run `npm install -g urcli`.
 1. Get a new token from the API Access link in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard).
-<img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
+    <img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
 1. Run `urcli setup "your-token"`. You will be asked to type in the languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`.
 1. Run `urcli assign` proceeded by valid project ids for projects you are certified for. Ex:
     - `urcli assign 145`, places you in the queue for project 145.
