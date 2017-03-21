@@ -31,6 +31,14 @@ The `assign` command creates or updates a submission_request object on Udacity's
 - `urcli assign 134 145 46`, places you in the queues for project 145, 134 and 46.
 - `urcli assign all`, places you in the queue for every project you are certified for.
 
+#### Terminal Information
+
+The script updates your queue position (and checks for new feedbacks) every 5 minutes. It outputs all relevant information to the terminal:
+
+<img src="https://i.imgur.com/itACwFz.png" alt="CLI Prompt information display" width="700px">
+
+:bulb: You can use the flag `--silent` to have a shorter and cleaner version of the dashboard. This is suitable for small screens. 
+
 #### Exiting `assign`
 
 You can exit the script in two ways:
@@ -49,19 +57,7 @@ The assign script updates every 30 seconds to see if you've gotten a submission 
 
 <img src="http://i.imgur.com/XaKNhaK.png" alt="Desktop notifications on a Mac" width="700px">
 
-#### Feedback Notifications
-
-You can get notified about any new feedbacks from students by using the `--feedbacks` option with the `assign` command. Ex: `urcli assign 145 --feedbacks`.
-
-<img src="http://i.imgur.com/86RG4la.png" alt="Desktop notifications on a Mac" width="700px">
-
-#### Terminal Information
-
-The script updates your queue position (and checks for new feedbacks) every 5 minutes. It outputs all relevant information to the terminal:
-
-<img src="http://i.imgur.com/8h2jjht.png" alt="CLI Prompt information display" width="700px">
-
-#### PushBullet Notifications
+##### Assignment Notifications on Other Devices
 
 You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on and then run the `assign` command with the `--push <accessToken>` option.
 
@@ -70,6 +66,12 @@ You can get notified on other devices using the [PushBullet](https://www.pushbul
 Ex.: `urcli assign all --push "o.ZxY9mPKB7aWIjiAI2CPKvnMMMqBPxHT8"`
 
 Once you get a submission assigned you'll get a notification on all active devices with PushBullet installed.
+
+#### Feedback Notifications
+
+You can get notified about any new feedbacks from students by using the `--feedbacks` option with the `assign` command. Ex: `urcli assign 145 --feedbacks`.
+
+<img src="http://i.imgur.com/86RG4la.png" alt="Desktop notifications on a Mac" width="700px">
 
 ## The `revenue` command
 
