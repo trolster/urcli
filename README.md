@@ -37,6 +37,8 @@ The script updates your queue position (and checks for new feedbacks) every 5 mi
 
 <img src="https://i.imgur.com/itACwFz.png" alt="CLI Prompt information display" width="700px">
 
+:bulb: You can use the flag `--silent` to have a shorter and cleaner version of the dashboard. This is suitable for small screens. 
+
 #### Exiting `assign`
 
 You can exit the script in two ways:
