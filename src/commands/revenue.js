@@ -6,6 +6,12 @@ import currencyFormatter from 'currency-formatter';
 // our modules
 import {api, config} from '../utils';
 
+// TODO:
+// Fix imports
+// Fix config.startDate
+// Fix chalk.white
+// Fix api.call()
+
 const periods = [];
 
 function definePeriods(args, options) {
@@ -226,6 +232,13 @@ function printReports() {
 }
 
 export const revenueCmd = (args, options) => {
-  definePeriods(args, options);
+  const userInput = args;
+  if (options.from || options.to) {
+    userInput.push({from: options.from, to: options.to})
+  }
+  getPeriods(userInput, (err, periods) => {
+    if (err) throw err;
+    console.log('Yay\n\n', JSON.parse(periods));
+  })
   printReports();
 };
