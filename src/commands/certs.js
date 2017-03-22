@@ -1,12 +1,12 @@
 // our modules
-import {api, config} from '../utils';
+import {Config, Api} from '../utils';
+
+const config = new Config();
+const api = new Api(config.token);
 
 export const certsCmd = async () => {
-  const token = config.token;
-  const task = 'certifications';
-
-  const certsResponse = await api({token, task});
-  const certs = certsResponse.body
+  const certifications = await api.call({task: 'certifications'});
+  config.certs = certifications.body
     .filter(cert => cert.status === 'certified')
     .reduce((acc, cert) => {
       /* eslint-disable no-param-reassign */
@@ -16,5 +16,7 @@ export const certsCmd = async () => {
       };
       return acc;
     }, {});
-  config.save({certs}).then(() => process.exit(0));
+  config.save();
+  console.log(`Certifications saved:\n${JSON.stringify(config.certs, null, 2)}`);
+  process.exit(0);
 };
