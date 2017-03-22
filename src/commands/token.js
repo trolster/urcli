@@ -1,10 +1,14 @@
 // npm modules
 import moment from 'moment';
 // our modules
-import {config} from '../utils';
+import {Config} from '../utils';
+
+const config = new Config();
 
 export const tokenCmd = (newToken) => {
-  const token = newToken;
-  const tokenAge = moment().add(28, 'd');
-  config.save({token, tokenAge});
+  config.token = newToken;
+  config.tokenAge = moment().add(28, 'd');
+  config.save();
+  console.log('Token saved.');
+  process.exit(0);
 };
