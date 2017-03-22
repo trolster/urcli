@@ -22,8 +22,8 @@ export function definePeriods(args, cb) {
   const matchYearMonthDay = /^201\d{1}-\d{2}-\d{2}$|^201\d{1}-1{1}[012]{1}-\d{2}$/; // YYYY-MM-DD
 
   args.forEach((arg) => {
-    const start;
-    const end;
+    let start;
+    let end;
 
     if (typeof arg === 'object') {
       start = arg.from ? moment.utc(arg.from) : moment.utc(config.startDate);
