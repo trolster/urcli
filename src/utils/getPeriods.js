@@ -2,8 +2,8 @@
 import moment from 'moment';
 import momentParseformat from 'moment-parseformat';
 
-export function definePeriods(args, cb) {
-  const periods = [];
+export function getPeriods(args, cb) {
+  let periods = [];
   const currentMonth = moment.utc().format('YYYY-MM');
 
   function validateDate(arg) {
@@ -57,5 +57,11 @@ export function definePeriods(args, cb) {
     }
     periods.push([start, end]);
   });
+  periods = periods.map((period) => {
+    return {
+      start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSS'),
+      end_date: period[1].format('YYYY-MM-DDTHH:mm:ss.SSS')
+    }
+  })
   return cb(false, periods);
 }
