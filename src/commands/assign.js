@@ -326,7 +326,9 @@ async function checkFeedbacks() {
 function setEventListeners() {
   const baseReviewURL = 'https://review.udacity.com/#!/submissions/';
   readline.emitKeypressEvents(process.stdin);
-  process.stdin.setRawMode(true);
+  if (process.stdin.isTTY) {
+    process.stdin.setRawMode(true);
+  }
   process.stdin.on('keypress', (str, key) => {
     switch (key.sequence) {
       case '\u001b': // ESCAPE
