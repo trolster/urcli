@@ -1,43 +1,36 @@
-// node modules
-import readline from 'readline';
 // npm modules
 import moment from 'moment';
 import inquirer from 'inquirer';
-import chalk from 'chalk';
 // our modules
 import {Api, Config} from '../utils';
 
 const config = new Config();
 let api;
 
-function getUserInfo() {
-  /* SET FIRST REVIEW DATE */
+function getUserInfoFromApi() {
   const firstReviewDate = api.call({
     task: 'completed',
     body: {
-      start_date: moment('2017-03-21').format('YYYY-MM-DDTHH:mm:ss.SSS'),
+      start_date: moment('2014-01-01').format('YYYY-MM-DDTHH:mm:ss.SSS'),
       end_date: moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
     },
-  }).then((res) => {
-     // returns the smallest number
-    const firstDate = res.body
+  }).then((reviews) => {
+    const startDate = reviews.body
       .map(review => moment(review.assigned_at)) // returns date of review
       .map(date => date.valueOf()) // returns date in Unix Time (milliseconds from 1970)
-      .reduce((acc, val) => {
+      .reduce((acc, val) => { // returns the smallest number
         if (acc < val) {
           return acc;
         }
         return val;
       });
-    config.startDate = moment(firstDate).format('YYYY-MM-DD');
+    config.startDate = moment(startDate).format('YYYY-MM-DD');
     return Promise.resolve();
   });
-
-  /* SET THE CERTIFICATIONS */
   const certifications = api.call({
     task: 'certifications'
-  }).then((res) => {
-    const certs = res.body
+  }).then((certifications) => {
+    const certs = certifications.body
       .filter(cert => cert.status === 'certified')
       .reduce((acc, cert) => {
         /* eslint-disable no-param-reassign */
@@ -53,7 +46,6 @@ function getUserInfo() {
 
   Promise.all([firstReviewDate, certifications]).then(() => {
     config.save();
-    console.log(config);
     process.exit(0);
   })
 }
@@ -63,9 +55,9 @@ const accessToken = () => {
     type: 'input',
     name: 'accessToken',
     message: 'Input your access token:'
-  }]).then((answer) => {
-    Object.assign(config, answer);
-    getUserInfo();
+  }]).then((token) => {
+    Object.assign(config, token);
+    getUserInfoFromApi();
   })
 }
 
@@ -75,11 +67,11 @@ const pushbullet = () => {
     name: 'pushbullet',
     message: 'Do you wish to use PushBullet?',
     default: false
-  }]).then((answer) => {
-    if (answer.pushbullet) {
+  }]).then((confirm) => {
+    if (confirm.pushbullet) {
       accessToken();
     } else {
-      getUserInfo();
+      getUserInfoFromApi();
     }
   })
 }
@@ -90,14 +82,14 @@ const languages = () => {
     message: 'Select Language(s) that you are certified for:\n',
     name: 'languages',
     choices: ['en-us','pt-br','zh-cn','es-es'],
-    validate: function (answer) {
-      if (answer.length < 1) {
+    validate: function (langs) {
+      if (langs.length < 1) {
         return 'You must choose at least one language.';
       }
       return true;
     }
-  }]).then((answers) => {
-    Object.assign(config, answers);
+  }]).then((langs) => {
+    Object.assign(config, langs);
     pushbullet();
   })
 }
@@ -107,8 +99,8 @@ export const setupCmd = () => {
     type: 'input',
     name: 'token',
     message: 'Input your token:',
-    validate(answer) {
-      api = new Api(answer);
+    validate(token) {
+      api = new Api(token);
       return api.call({task: 'count'}).then((res) => {
         if (res.statusCode == '200') {
           return true
@@ -116,8 +108,8 @@ export const setupCmd = () => {
         return 'The token was invalid, try again.';
       })
     }
-  }]).then((answer) => {
-    config.token = answer;
+  }]).then((token) => {
+    Object.assign(config, token);
     languages();
   })
 }
