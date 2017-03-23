@@ -1,8 +1,8 @@
 // npm packages
 import moment from 'moment';
-import momentParseformat from 'moment-parseformat';
 
 export function getPeriods(args, cb) {
+  let err;
   let periods = [];
   const currentMonth = moment.utc().format('YYYY-MM');
 
@@ -21,20 +21,22 @@ export function getPeriods(args, cb) {
   const matchYearMonth = /^201\d{1}-\d{2}$|^201\d{1}-1{1}[012]{1}$/; // YYYY-MM.
   const matchYearMonthDay = /^201\d{1}-\d{2}-\d{2}$|^201\d{1}-1{1}[012]{1}-\d{2}$/; // YYYY-MM-DD
 
-  args.forEach((arg) => {
+  const argsLength = args.length;
+  for (let i = 0; i < argsLength; i += 1) {
+    const arg = args[i];
     let start;
     let end;
 
     if (typeof arg === 'object') {
-      start = arg.from ? moment.utc(arg.from) : moment.utc(config.startDate);
-      end = arg.to ? moment.utc(arg.to) : moment.utc();
+      start = moment.utc(arg.from);
+      end = moment.utc(arg.to);
     } else if (matchYearMonthDay.test(arg)) {
       validateDate(arg);
       start = moment.utc(arg).startOf('day');
       end = moment.utc(arg).endOf('day');
     } else if (matchYearMonth.test(arg)) {
       start = moment(arg);
-      end = month === currentMonth ? moment.utc() : moment(arg).add(1, 'M');
+      end = arg === currentMonth ? moment.utc() : moment(arg).add(1, 'M');
     } else if (matchMonth.test(arg)) {
       const year = moment().month() + 1 < arg ? moment().year() - 1 : moment().year();
       const month = moment().year(year).month(arg - 1).format('YYYY-MM');
@@ -51,17 +53,19 @@ export function getPeriods(args, cb) {
       end = moment.utc().subtract(1, 'd').endOf('day');
     } else {
       if (validateDate(arg)) {
-        return cb(new Error('EBADDATEFORMAT'), []);
+        err = new Error('EBADDATEFORMAT');
+      } else {
+        err = new Error('ENOMATCH');
       }
-      return cb(new Error('ENOMATCH'), []);
+      break;
     }
     periods.push([start, end]);
-  });
-  periods = periods.map((period) => {
-    return {
-      start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSS'),
-      end_date: period[1].format('YYYY-MM-DDTHH:mm:ss.SSS')
-    }
-  })
+  }
+
+  if (err) return cb(err, []);
+  periods = periods.map(period => ({
+    start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSS'),
+    end_date: period[1].format('YYYY-MM-DDTHH:mm:ss.SSS'),
+  }));
   return cb(false, periods);
 }
