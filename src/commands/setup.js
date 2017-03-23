@@ -1,8 +1,12 @@
 // npm modules
 import moment from 'moment';
 import inquirer from 'inquirer';
+import PushBullet from 'pushbullet';
 // our modules
 import {Api, Config} from '../utils';
+
+// TODO
+// Have a nice spinner
 
 const config = new Config();
 let api;
@@ -28,9 +32,9 @@ function getUserInfoFromApi() {
     return Promise.resolve();
   });
   const certifications = api.call({
-    task: 'certifications'
-  }).then((certifications) => {
-    const certs = certifications.body
+    task: 'certifications',
+  }).then((res) => {
+    const certs = res.body
       .filter(cert => cert.status === 'certified')
       .reduce((acc, cert) => {
         /* eslint-disable no-param-reassign */
@@ -47,54 +51,63 @@ function getUserInfoFromApi() {
   Promise.all([firstReviewDate, certifications]).then(() => {
     config.save();
     process.exit(0);
-  })
+  });
 }
 
 const accessToken = () => {
   inquirer.prompt([{
     type: 'input',
-    name: 'accessToken',
-    message: 'Input your access token:'
-  }]).then((token) => {
-    Object.assign(config, token);
+    name: 'pushbulletToken',
+    message: 'Input your PushBullet access token:',
+    validate(pushbulletToken) {
+      const pusher = new PushBullet(pushbulletToken);
+      return new Promise((resolve, reject) => {
+        pusher.devices((err) => {
+          if (err) reject(err);
+          resolve(true);
+        });
+      });
+    },
+  }]).then((pushbulletToken) => {
+    Object.assign(config, pushbulletToken);
     getUserInfoFromApi();
-  })
-}
+  });
+};
 
 const pushbullet = () => {
   inquirer.prompt([{
     type: 'confirm',
     name: 'pushbullet',
     message: 'Do you wish to use PushBullet?',
-    default: false
+    default: false,
   }]).then((confirm) => {
     if (confirm.pushbullet) {
       accessToken();
     } else {
       getUserInfoFromApi();
     }
-  })
-}
+  });
+};
 
 const languages = () => {
   inquirer.prompt([{
     type: 'checkbox',
     message: 'Select Language(s) that you are certified for:\n',
     name: 'languages',
-    choices: ['en-us','pt-br','zh-cn','es-es'],
-    validate: function (langs) {
+    choices: ['en-us', 'pt-br', 'zh-cn'],
+    validate: (langs) => {
       if (langs.length < 1) {
         return 'You must choose at least one language.';
       }
       return true;
-    }
+    },
   }]).then((langs) => {
     Object.assign(config, langs);
     pushbullet();
-  })
-}
+  });
+};
 
-export const setupCmd = () => {
+const tokenInput = () => {
   inquirer.prompt([{
     type: 'input',
     name: 'token',
@@ -102,14 +115,19 @@ export const setupCmd = () => {
     validate(token) {
       api = new Api(token);
       return api.call({task: 'count'}).then((res) => {
+        /* eslint-disable eqeqeq */
         if (res.statusCode == '200') {
-          return true
+          return true;
         }
         return 'The token was invalid, try again.';
-      })
-    }
+      });
+    },
   }]).then((token) => {
     Object.assign(config, token);
     languages();
-  })
-}
+  });
+};
+
+export const setupCmd = () => {
+  tokenInput();
+};
