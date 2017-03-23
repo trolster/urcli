@@ -2,56 +2,53 @@
 import moment from 'moment';
 import inquirer from 'inquirer';
 import PushBullet from 'pushbullet';
+import ora from 'ora';
 // our modules
 import {Api, Config} from '../utils';
-
-// TODO
-// Have a nice spinner
 
 const config = new Config();
 let api;
 
-function getUserInfoFromApi() {
-  const firstReviewDate = api.call({
+async function getUserInfoFromApi() {
+  const startDateSpinner = ora('Getting startDate...').start();
+  const completedReviews = await api.call({
     task: 'completed',
     body: {
       start_date: moment('2014-01-01').format('YYYY-MM-DDTHH:mm:ss.SSS'),
       end_date: moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
     },
-  }).then((reviews) => {
-    const startDate = reviews.body
-      .map(review => moment(review.assigned_at)) // returns date of review
-      .map(date => date.valueOf()) // returns date in Unix Time (milliseconds from 1970)
-      .reduce((acc, val) => { // returns the smallest number
-        if (acc < val) {
-          return acc;
-        }
-        return val;
-      });
-    config.startDate = moment(startDate).format('YYYY-MM-DD');
-    return Promise.resolve();
   });
-  const certifications = api.call({
-    task: 'certifications',
-  }).then((res) => {
-    const certs = res.body
-      .filter(cert => cert.status === 'certified')
-      .reduce((acc, cert) => {
-        /* eslint-disable no-param-reassign */
-        acc[cert.project.id] = {
-          name: cert.project.name,
-          price: cert.project.price,
-        };
+  const startDate = completedReviews.body
+    .map(review => moment(review.assigned_at)) // returns date of review
+    .map(date => date.valueOf()) // returns date in Unix Time (milliseconds from 1970)
+    .reduce((acc, val) => { // returns the smallest number
+      if (acc < val) {
         return acc;
-      }, {});
-    config.certs = certs;
-    return Promise.resolve();
-  });
+      }
+      return val;
+    });
+  config.startDate = moment(startDate).format('YYYY-MM-DD');
+  startDateSpinner.succeed(`Startdate is ${config.startDate}`);
 
-  Promise.all([firstReviewDate, certifications]).then(() => {
-    config.save();
-    process.exit(0);
+  const certSpinner = ora('Getting certifications...').start();
+  const certifications = await api.call({
+    task: 'certifications',
   });
+  config.certs = certifications.body
+    .filter(cert => cert.status === 'certified')
+    .reduce((acc, cert) => {
+      /* eslint-disable no-param-reassign */
+      acc[cert.project.id] = {
+        name: cert.project.name,
+        price: cert.project.price,
+      };
+      return acc;
+    }, {});
+  certSpinner.succeed(`Your certifications:\n${JSON.stringify(config.certs, null, 2)}`);
+  const configSpinner = ora('Saving configs...').start();
+  config.save();
+  configSpinner.succeed('Configs successfully save.');
+  process.exit(0);
 }
 
 const accessToken = () => {
@@ -124,6 +121,7 @@ const tokenInput = () => {
     },
   }]).then((token) => {
     Object.assign(config, token);
+    config.tokenAge = moment().add(28, 'd');
     languages();
   });
 };
