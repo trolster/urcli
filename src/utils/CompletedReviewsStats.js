@@ -3,22 +3,24 @@ import {Config} from './';
 
 const config = new Config();
 
-export class getCompletedStats {
+export class CompletedReviewsStats {
   constructor(reviews, period) {
+    this.period = period;
     this.startDate = period[0].format('YYYY-MM-DD');
     if (moment(config.startDate).isAfter(this.startDate)) {
       this.startDate = config.startDate;
     }
     this.endDate = period[1].format('YYYY-MM-DD');
-    this.reviews = reviews;
     this.projects = {};
     this.totalEarned = 0;
     this.totalAssigned = 0;
-  }
 
-  create() {
-    this.reviews.forEach((review) => {
+    reviews.forEach((review) => {
       this.countReview(review);
+    });
+    Object.keys(this.projects).forEach((id) => {
+      const stats = this.projects[id];
+      stats.avgTurnaroundTime = stats.totalTurnaroundTime / stats.totalAssigned;
     });
   }
 
@@ -39,13 +41,15 @@ export class getCompletedStats {
         failed: 0,
         ungradeable: 0,
         earned: 0,
-        turnaroundTime: 0,
+        totalTurnaroundTime: 0,
+        totalAssigned: 0,
       };
       this.countReview(review);
     } else {
       this.projects[id][review.result] += 1;
       this.projects[id].earned += price;
-      this.projects[id].turnaroundTime += turnaroundTime;
+      this.projects[id].totalTurnaroundTime += turnaroundTime;
+      this.projects[id].totalAssigned += 1;
       this.totalEarned += price;
       this.totalAssigned += 1;
     }

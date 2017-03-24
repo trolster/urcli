@@ -1,4 +1,4 @@
 export {Api} from './api';
 export {Config} from './config';
 export {getPeriods} from './getPeriods';
-export {geCompletedStats} from './geCompletedStats';
+export {CompletedReviewsStats} from './CompletedReviewsStats';
