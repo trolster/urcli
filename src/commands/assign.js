@@ -220,18 +220,6 @@ function validateProjectIds(ids) {
   return ids;
 }
 
-function validateAccessToken() {
-  if (options.push) {
-    accessToken = options.push;
-    const pusher = new PushBullet(accessToken);
-    // Throw an error if we find no active devices to push to.
-    pusher.devices((err, res) => {
-      if (err) throw new Error(`Pushbullet error: ${err}`);
-      if (!res.devices.length) throw new Error('Found no active devices to push to.');
-    });
-  }
-}
-
 function createRequestBody() {
   // Create a list of project/language pairs
   requestBody.projects = [];
@@ -400,7 +388,6 @@ async function submissionRequests() {
 export const assignCmd = (ids, opts) => {
   projectIds = validateProjectIds(ids);
   options = opts;
-  validateAccessToken();
   setEventListeners();
   createRequestBody();
   // Start the request loop.
