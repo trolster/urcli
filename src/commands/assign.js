@@ -14,16 +14,14 @@ const config = new Config();
 const api = new Api(config.token);
 
 const {tokenAge, languages, certs} = config;
-const requestBody = {};
 const startTime = moment();
-// The wait between calling submissionRequests().
+// The wait between calling assign().
 const tickrate = 30000; // 30 seconds
 const infoInterval = 10; // 10 * 30 seconds === 5 minutes
 
 let options;
 
 let error = '';
-let accessToken = '';
 let tick = 0;
 let assignedTotal = 0;
 let requestId = 0;
@@ -220,28 +218,17 @@ function validateProjectIds(ids) {
   return ids;
 }
 
-function createRequestBody() {
-  // Create a list of project/language pairs
-  requestBody.projects = [];
-  languages.forEach((language) => {
-    /* eslint-disable camelcase */
-    projectIds.forEach((project_id) => {
-      requestBody.projects.push({project_id, language});
-    });
-  });
-}
-
 function assignmentNotification(projectInfo, submissionId) {
   const {name, id} = projectInfo;
   const title = `New Review Assigned! (${assigned.length})`;
   const message = `${moment().format('HH:mm')} - ${name} (${id})`;
   const sound = 'Ping';
   const open = `https://review.udacity.com/#!/submissions/${submissionId}`;
+
   notifier.notify({title, message, sound, open});
 
-  // If the --push flag is set we push to active PushBullet devices
-  if (accessToken) {
-    const pusher = new PushBullet(accessToken);
+  if (options.push) {
+    const pusher = new PushBullet(config.pushbulletToken);
     pusher.note({}, title, `${message}\n\n${open}`, (err) => {
       if (err) throw new Error(`Pushbullet error: ${err}`);
     });
@@ -273,9 +260,15 @@ async function checkPositions() {
   setPrompt();
 }
 
-async function createSubmissionRequest() {
-  const createResponse = await api.call({task: 'create', body: requestBody});
-  requestId = createResponse.body.id;
+async function submissionRequestObject(task) {
+  /* eslint-disable camelcase, no-param-reassign */
+  const body = projectIds.reduce((acc, project_id) => {
+    const pairings = languages.map(language => ({project_id, language}));
+    acc.projects = acc.projects.concat(pairings);
+    return acc;
+  }, {projects: []});
+  const res = await api.call({task, id: requestId, body});
+  requestId = res.body.id;
   checkPositions();
   // Reset tick to reset the timers.
   tick = 0;
@@ -297,14 +290,6 @@ let needToUpdate = (submissionRequest) => {
   return invalidIds.length;
 };
 
-async function updateSubmissionRequest() {
-  const updateResponse = await api.call({task: 'update', id: requestId, body: requestBody});
-  requestId = updateResponse.body.id;
-  checkPositions();
-  // Reset tick to reset the timers.
-  tick = 0;
-}
-
 async function checkRefresh(closedAt) {
   const closingIn = Date.parse(closedAt) - Date.now();
   // If it expires in less than 5 minutes we refresh.
@@ -315,23 +300,21 @@ async function checkRefresh(closedAt) {
   }
 }
 
-function feedbackNotification(rating, name, id) {
-  const title = `New ${rating}-star Feedback!`;
-  const message = `Project: ${name}`;
-  const sound = 'Pop';
-  const open = `https://review.udacity.com/#!/reviews/${id}`;
-  notifier.notify({title, message, sound, open});
-}
-
 async function checkFeedbacks() {
   const stats = await api.call({task: 'stats'});
   const diff = stats.body.unread_count - unreadFeedbacks.length;
+
   if (diff > 0) {
     const feedbacksResponse = await api.call({task: 'feedbacks'});
     unreadFeedbacks = feedbacksResponse.body.filter(fb => fb.read_at === null);
     // Notify the user of the new feedbacks.
     unreadFeedbacks.slice(-diff).forEach((fb) => {
-      feedbackNotification(fb.rating, fb.project.name, fb.submission_id);
+      notifier.notify({
+        title: `New ${fb.rating}-star Feedback!`,
+        message: `Project: ${fb.project.name}`,
+        sound: 'Pop',
+        open: `https://review.udacity.com/#!/reviews/${fb.submission_id}`,
+      });
     });
   } else if (diff < 0) {
     // Note: If you check your feedbacks in the Reviews dashboard the unread
@@ -342,7 +325,7 @@ async function checkFeedbacks() {
   }
 }
 
-async function submissionRequests() {
+async function assign() {
   // Call API to check how many submissions are currently assigned.
   try {
     const count = await api.call({task: 'count'});
@@ -356,12 +339,12 @@ async function submissionRequests() {
       const submissionRequest = getResponse.body[0];
       // If there is no current submission_request we create a new one.
       if (!submissionRequest) {
-        createSubmissionRequest();
+        submissionRequestObject('create');
       } else {
         requestId = submissionRequest.id;
 
         if (needToUpdate(submissionRequest)) {
-          updateSubmissionRequest();
+          submissionRequestObject('update');
         } else {
           // Refresh the submission_request if it's is about to expire.
           checkRefresh(submissionRequest.closed_at);
@@ -381,7 +364,7 @@ async function submissionRequests() {
   setTimeout(() => {
     tick += 1;
     setPrompt();
-    submissionRequests();
+    assign();
   }, tickrate);
 }
 
@@ -389,8 +372,7 @@ export const assignCmd = (ids, opts) => {
   projectIds = validateProjectIds(ids);
   options = opts;
   setEventListeners();
-  createRequestBody();
   // Start the request loop.
-  submissionRequests();
+  assign();
   setPrompt();
 };
