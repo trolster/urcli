@@ -3,7 +3,7 @@ import moment from 'moment';
 
 export function getPeriods(args, cb) {
   let err;
-  let periods = [];
+  const periods = [];
   const currentMonth = moment.utc().format('YYYY-MM');
 
   function validateDate(arg) {
@@ -45,6 +45,9 @@ export function getPeriods(args, cb) {
     } else if (matchYear.test(arg)) {
       start = moment(arg, 'YYYY');
       end = arg === moment.utc().year() ? moment.utc() : moment(arg, 'YYYY').endOf('year');
+    } else if (arg === 'week') {
+      start = moment.utc().startOf('week');
+      end = moment.utc().endOf('week');
     } else if (arg === 'today') {
       start = moment.utc().startOf('day');
       end = moment.utc().endOf('day');
@@ -63,9 +66,5 @@ export function getPeriods(args, cb) {
   }
 
   if (err) return cb(err, []);
-  periods = periods.map(period => ({
-    start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSS'),
-    end_date: period[1].format('YYYY-MM-DDTHH:mm:ss.SSS'),
-  }));
   return cb(false, periods);
 }
