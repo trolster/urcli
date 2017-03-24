@@ -6,7 +6,7 @@ import {
   setupCmd,
   tokenCmd,
   certsCmd,
-  // assignCmd,
+  assignCmd,
   revenueCmd,
 } from './commands';
 
@@ -36,16 +36,16 @@ cli
     setupCmd();
   });
 
-// cli
-//   .command('assign')
-//   .arguments('<ids...>')
-//   .option('--push <accessToken>', 'Get push notifications using <accessToken>.')
-//   .option('--feedbacks', 'Get notified on new feedbacks.')
-//   .option('--silent', 'Skip the helptext.')
-//   .description('Place requests in the queue.')
-//   .action((ids, options) => {
-//     assignCmd(ids, options);
-//   });
+cli
+  .command('assign')
+  .arguments('<ids...>')
+  .option('--push <accessToken>', 'Get push notifications using <accessToken>.')
+  .option('--feedbacks', 'Get notified on new feedbacks.')
+  .option('--silent', 'Skip the helptext.')
+  .description('Place requests in the queue.')
+  .action((ids, options) => {
+    assignCmd(ids, options);
+  });
 
 cli
   .command('revenue')

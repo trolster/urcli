@@ -1,4 +1,3 @@
-
 // node modules
 import readline from 'readline';
 // npm modules
@@ -9,9 +8,12 @@ import Table from 'cli-table2';
 import PushBullet from 'pushbullet';
 import opn from 'opn';
 // our modules
-import {api, config} from '../utils';
+import {Api, Config} from '../utils';
 
-const {token, tokenAge, languages, certs} = config;
+const config = new Config();
+const api = new Api(config.token);
+
+const {tokenAge, languages, certs} = config;
 const requestBody = {};
 const startTime = moment();
 // The wait between calling submissionRequests().
@@ -40,6 +42,16 @@ const projectDetails = new Table({
   colWidths: [5, 7, 40, 7],
 });
 
+// Shows assigned projects in a table
+const assignedDetails = new Table({
+  head: [
+    {hAlign: 'center', content: 'key'},
+    {hAlign: 'left', content: 'project name'},
+    {hAlign: 'center', content: 'expires'},
+    {hAlign: 'center', content: 'price'}],
+  colWidths: [5, 40, 15, 8],
+});
+
 function createProjectDetailsTable() {
   // Push projects, sorted by queue position, into the projectDetails table
   projectDetails.length = 0;
@@ -56,31 +68,21 @@ function createProjectDetailsTable() {
   return projectDetails.toString();
 }
 
-// Shows assigned projects in a table
-const submissionDetails = new Table({
-  head: [
-    {hAlign: 'center', content: 'key'},
-    {hAlign: 'left', content: 'project name'},
-    {hAlign: 'center', content: 'expires'},
-    {hAlign: 'center', content: 'price'}],
-  colWidths: [5, 40, 15, 8],
-});
-
-function createSubmissionDetailsTable() {
-  // Push assigned, sorted by time left, into the submissionDetails table
-  submissionDetails.length = 0;
+function createAssignedDetailsTable() {
+  // Push assigned, sorted by time left, into the assignedDetails table
+  assignedDetails.length = 0;
   assigned
     .forEach((submission, idx) => {
       const assignedAt = moment.utc(submission.assigned_at);
       const completeTime = assignedAt.add(12, 'hours');
-      submissionDetails.push([
+      assignedDetails.push([
         {hAlign: 'center', content: idx + 1},
         {hAlign: 'left', content: submission.project.name},
         {hAlign: 'center', content: completeTime.fromNow()},
         {hAlign: 'center', content: submission.price},
       ]);
     });
-  return submissionDetails.toString();
+  return assignedDetails.toString();
 }
 
 function setPrompt() {
@@ -120,7 +122,7 @@ function setPrompt() {
   if (assigned.length) {
     const count = assigned.length === 1 ? 'one submission' : 'two submissions';
     console.log(chalk.yellow(`You currently have ${count} assigned:\n`));
-    console.log(`${createSubmissionDetailsTable()}\n`);
+    console.log(`${createAssignedDetailsTable()}\n`);
   } else {
     console.log(chalk.yellow('No submissions are currently assigned.\n'));
   }
@@ -162,13 +164,13 @@ function setPrompt() {
 function exit(key) {
   if (key === 'escape') {
     // Suspend on ESC and refresh the submission_request rather than deleting it.
-    api({token, task: 'refresh', id: requestId});
+    api.call({task: 'refresh', id: requestId});
     console.log(chalk.green('Exited without deleting the submission_request...'));
     console.log(chalk.green('The current submission_request will expire in an hour.'));
     process.exit(0);
   } else if (key === 'SIGINT') {
     // Delete submission_request object and exit on CTRL-C
-    api({token, task: 'delete', id: requestId}).then(() => {
+    api.call({task: 'delete', id: requestId}).then(() => {
       console.log(chalk.green('Successfully deleted request and exited..'));
       process.exit(0);
     });
@@ -180,7 +182,9 @@ function exit(key) {
 function setEventListeners() {
   const baseReviewURL = 'https://review.udacity.com/#!/submissions/';
   readline.emitKeypressEvents(process.stdin);
-  process.stdin.setRawMode(true);
+  if (process.stdin.isTTY) {
+    process.stdin.setRawMode(true);
+  }
   process.stdin.on('keypress', (str, key) => {
     switch (key.sequence) {
       case '\u001b': // ESCAPE
@@ -257,7 +261,7 @@ function assignmentNotification(projectInfo, submissionId) {
 }
 
 async function checkAssigned() {
-  const assignedResponse = await api({token, task: 'assigned'});
+  const assignedResponse = await api.call({task: 'assigned'});
   const oldAssignedIds = assigned.map(s => s.id);
   assigned = assignedResponse.body;
 
@@ -276,13 +280,13 @@ async function checkAssigned() {
 }
 
 async function checkPositions() {
-  const positionResponse = await api({token, task: 'position', id: requestId});
+  const positionResponse = await api.call({task: 'position', id: requestId});
   positions = positionResponse.body.error ? [] : positionResponse.body;
   setPrompt();
 }
 
 async function createSubmissionRequest() {
-  const createResponse = await api({token, task: 'create', body: requestBody});
+  const createResponse = await api.call({task: 'create', body: requestBody});
   requestId = createResponse.body.id;
   checkPositions();
   // Reset tick to reset the timers.
@@ -306,7 +310,7 @@ let needToUpdate = (submissionRequest) => {
 };
 
 async function updateSubmissionRequest() {
-  const updateResponse = await api({token, task: 'update', id: requestId, body: requestBody});
+  const updateResponse = await api.call({task: 'update', id: requestId, body: requestBody});
   requestId = updateResponse.body.id;
   checkPositions();
   // Reset tick to reset the timers.
@@ -319,7 +323,7 @@ async function checkRefresh(closedAt) {
   if (closingIn < 300000) {
     const task = 'refresh';
     const id = requestId;
-    api({token, task, id});
+    api.call({task, id});
   }
 }
 
@@ -332,10 +336,10 @@ function feedbackNotification(rating, name, id) {
 }
 
 async function checkFeedbacks() {
-  const stats = await api({token, task: 'stats'});
+  const stats = await api.call({task: 'stats'});
   const diff = stats.body.unread_count - unreadFeedbacks.length;
   if (diff > 0) {
-    const feedbacksResponse = await api({token, task: 'feedbacks'});
+    const feedbacksResponse = await api.call({task: 'feedbacks'});
     unreadFeedbacks = feedbacksResponse.body.filter(fb => fb.read_at === null);
     // Notify the user of the new feedbacks.
     unreadFeedbacks.slice(-diff).forEach((fb) => {
@@ -353,14 +357,14 @@ async function checkFeedbacks() {
 async function submissionRequests() {
   // Call API to check how many submissions are currently assigned.
   try {
-    const count = await api({token, task: 'count'});
+    const count = await api.call({task: 'count'});
     if (assigned.length !== count.body.assigned_count) {
       checkAssigned();
     }
     // If then the assigned.length is less than the maximum number of assignments
     // allowed, we go through checking the submission_request.
     if (assigned.length < 2) {
-      const getResponse = await api({token, task: 'get'});
+      const getResponse = await api.call({task: 'get'});
       const submissionRequest = getResponse.body[0];
       // If there is no current submission_request we create a new one.
       if (!submissionRequest) {
