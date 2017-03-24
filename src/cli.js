@@ -7,7 +7,7 @@ import {
   tokenCmd,
   certsCmd,
   // assignCmd,
-  // revenueCmd,
+  revenueCmd,
 } from './commands';
 
 cli
@@ -47,14 +47,14 @@ cli
 //     assignCmd(ids, options);
 //   });
 
-// cli
-//   .command('revenue')
-//   .arguments('[periods...]')
-//   .option('--from <date>', 'select from <date>.')
-//   .option('--to <date>', 'select to <date>.')
-//   .description('Lets you know how much you\'ve earned in a given period.')
-//   .action((periods, options) => {
-//     revenueCmd(periods, options);
-//   });
+cli
+  .command('revenue')
+  .arguments('[periods...]')
+  .option('--from <date>', 'select from <date>.')
+  .option('--to <date>', 'select to <date>.')
+  .description('Lets you know how much you\'ve earned in a given period.')
+  .action((periods, options) => {
+    revenueCmd(periods, options);
+  });
 
 export default cli;
