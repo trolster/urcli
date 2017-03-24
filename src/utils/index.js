@@ -1,4 +1,4 @@
-export {Api} from './api';
-export {Config} from './config';
+export {Api} from './Api';
+export {Config} from './Config';
+export {ReviewsStats} from './ReviewsStats';
 export {formatPeriods} from './formatPeriods';
-export {CompletedReviewsStats} from './CompletedReviewsStats';

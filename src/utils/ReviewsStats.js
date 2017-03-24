@@ -3,24 +3,31 @@ import {Config} from './';
 
 const config = new Config();
 
-export class CompletedReviewsStats {
+export class ReviewsStats {
   constructor(reviews, period) {
-    this.period = period;
     this.startDate = period[0].format('YYYY-MM-DD');
     if (moment(config.startDate).isAfter(this.startDate)) {
       this.startDate = config.startDate;
     }
     this.endDate = period[1].format('YYYY-MM-DD');
-    this.projects = {};
     this.totalEarned = 0;
     this.totalAssigned = 0;
-
+    // Create stats for each project type reviewed
+    this.projects = {};
     reviews.forEach((review) => {
       this.countReview(review);
     });
     Object.keys(this.projects).forEach((id) => {
-      const stats = this.projects[id];
-      stats.avgTurnaroundTime = stats.totalTurnaroundTime / stats.totalAssigned;
+      const project = this.projects[id];
+      // Set the average turnaround time for each project
+      project.avgTurnaroundTime = project.totalTurnaroundTime / project.totalAssigned;
+      // Find the average daily earnings
+      this.numberOfDays = moment.utc(this.endDate).diff(this.startDate, 'days');
+      const isCurrentMonth = (moment.utc(this.startDate).month() === moment.utc().month());
+      if (isCurrentMonth) {
+        this.numberOfDays = moment.utc().diff(moment(this.startDate), 'days');
+      }
+      this.dailyAverage = this.numberOfDays ? project.earned / this.numberOfDays : project.earned;
     });
   }
 
