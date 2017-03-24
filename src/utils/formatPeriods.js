@@ -1,7 +1,7 @@
 // npm packages
 import moment from 'moment';
 
-export function getPeriods(args, cb) {
+export function formatPeriods(args, cb) {
   let err;
   const periods = [];
   const currentMonth = moment.utc().format('YYYY-MM');
