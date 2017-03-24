@@ -35,16 +35,16 @@ export function getPeriods(args, cb) {
       start = moment.utc(arg).startOf('day');
       end = moment.utc(arg).endOf('day');
     } else if (matchYearMonth.test(arg)) {
-      start = moment(arg);
-      end = arg === currentMonth ? moment.utc() : moment(arg).add(1, 'M');
+      start = moment.utc(arg);
+      end = arg === currentMonth ? moment.utc() : moment.utc(arg).endOf('month');
     } else if (matchMonth.test(arg)) {
       const year = moment().month() + 1 < arg ? moment().year() - 1 : moment().year();
       const month = moment().year(year).month(arg - 1).format('YYYY-MM');
-      start = moment(month);
-      end = month === currentMonth ? moment.utc() : moment(month).add(1, 'M');
+      start = moment.utc(month);
+      end = month === currentMonth ? moment.utc() : moment.utc(month).endOf('month');
     } else if (matchYear.test(arg)) {
-      start = moment(arg, 'YYYY');
-      end = arg === moment.utc().year() ? moment.utc() : moment(arg, 'YYYY').endOf('year');
+      start = moment.utc(arg, 'YYYY');
+      end = arg === moment.utc().year() ? moment.utc() : moment.utc(arg, 'YYYY').endOf('year');
     } else if (arg === 'week') {
       start = moment.utc().startOf('week');
       end = moment.utc().endOf('week');
