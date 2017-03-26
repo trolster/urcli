@@ -1,11 +1,8 @@
 // our modules
-import {Config, Api} from '../utils';
-
-const config = new Config();
-const api = new Api(config.token);
+import {config, api} from '../utils';
 
 export const certsCmd = async () => {
-  const certifications = await api.call({task: 'certifications'});
+  const certifications = await api({task: 'certifications'});
   config.certs = certifications.body
     .filter(cert => cert.status === 'certified')
     .reduce((acc, cert) => {
