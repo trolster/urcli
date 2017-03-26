@@ -6,8 +6,8 @@ import {
   setupCmd,
   tokenCmd,
   certsCmd,
-  assignCmd,
   revenueCmd,
+  assignCmd,
 } from './commands';
 
 cli
@@ -37,6 +37,16 @@ cli
   });
 
 cli
+  .command('revenue')
+  .arguments('[periods...]')
+  .option('--from <date>', 'select from <date>.')
+  .option('--to <date>', 'select to <date>.')
+  .description('Lets you know how much you\'ve earned in a given period.')
+  .action((periods, options) => {
+    revenueCmd(periods, options);
+  });
+
+cli
   .command('assign')
   .arguments('<ids...>')
   .option('--push <accessToken>', 'Get push notifications using <accessToken>.')
@@ -45,16 +55,6 @@ cli
   .description('Place requests in the queue.')
   .action((ids, options) => {
     assignCmd(ids, options);
-  });
-
-cli
-  .command('revenue')
-  .arguments('[periods...]')
-  .option('--from <date>', 'select from <date>.')
-  .option('--to <date>', 'select to <date>.')
-  .description('Lets you know how much you\'ve earned in a given period.')
-  .action((periods, options) => {
-    revenueCmd(periods, options);
   });
 
 export default cli;

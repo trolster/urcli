@@ -1,0 +1,1 @@
+export {assignCmd} from './assign';
