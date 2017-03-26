@@ -326,6 +326,8 @@ async function checkFeedbacks() {
 function setEventListeners() {
   const baseReviewURL = 'https://review.udacity.com/#!/submissions/';
   readline.emitKeypressEvents(process.stdin);
+  // Set the correct mode when the terminal is running in a TTY context.
+  // Otherwise .setRawMode() will throw an error.
   if (process.stdin.isTTY) {
     process.stdin.setRawMode(true);
   }
