@@ -4,14 +4,11 @@ import inquirer from 'inquirer';
 import PushBullet from 'pushbullet';
 import ora from 'ora';
 // our modules
-import {Api, Config} from '../utils';
-
-const config = new Config();
-let api;
+import {api, config} from '../utils';
 
 async function getUserInfoFromApi() {
   const startDateSpinner = ora('Getting startDate...').start();
-  const completedReviews = await api.call({
+  const completedReviews = await api({
     task: 'completed',
     body: {
       start_date: moment('2014-01-01').format('YYYY-MM-DDTHH:mm:ss.SSS'),
@@ -31,7 +28,7 @@ async function getUserInfoFromApi() {
   startDateSpinner.succeed(`Startdate is ${config.startDate}`);
 
   const certSpinner = ora('Getting certifications...').start();
-  const certifications = await api.call({
+  const certifications = await api({
     task: 'certifications',
   });
   config.certs = certifications.body
@@ -110,8 +107,8 @@ const tokenInput = () => {
     name: 'token',
     message: 'Input your token:',
     validate(token) {
-      api = new Api(token);
-      return api.call({task: 'count'}).then((res) => {
+      config.token = token;
+      return api({task: 'count'}).then((res) => {
         /* eslint-disable eqeqeq */
         if (res.statusCode == '200') {
           return true;
