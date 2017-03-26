@@ -4,10 +4,7 @@ import chalk from 'chalk';
 import currencyFormatter from 'currency-formatter';
 import ora from 'ora';
 // our modules
-import {Api, Config, formatPeriods, ReviewsStats} from '../utils';
-
-const config = new Config();
-const api = new Api(config.token);
+import {api, config, formatPeriods, ReviewsStats} from '../utils';
 
 function print(report) {
   let output = `${chalk.blue(`\nEarnings Report for ${report.startDate} to ${report.endDate}:`)}\n`;
@@ -67,7 +64,7 @@ export const revenueCmd = (args, options) => {
   });
   // Output reports for each period
   const resolvedReports = periods.map(async (period) => {
-    const completedReviews = await api.call({
+    const completedReviews = await api({
       task: 'completed',
       body: {
         start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSS'),
