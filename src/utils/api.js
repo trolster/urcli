@@ -1,5 +1,7 @@
 // npm modules
 import request from 'request';
+// our modules
+import {config} from './';
 
 function endpoint(task, id) {
   const base = 'https://review-api.udacity.com/api/v1';
@@ -24,23 +26,18 @@ function endpoint(task, id) {
   }[task];
 }
 
-export class Api {
-  constructor(token) {
-    this.token = token;
-  }
-  call({task, id = '', body = ''}) {
-    const [url, method] = endpoint(task, id);
-    const headers = {Authorization: this.token};
-    const json = true;
-    const requestOptions = {url, method, headers, json, body};
-    return new Promise((resolve, reject) => {
-      request(requestOptions, (error, res) => {
-        if (error) {
-          reject({error, requestOptions, res});
-        } else {
-          resolve(res);
-        }
-      });
+export function api({task, id = '', body = ''}) {
+  const [url, method] = endpoint(task, id);
+  const headers = {Authorization: config.token};
+  const json = true;
+  const requestOptions = {url, method, headers, json, body};
+  return new Promise((resolve, reject) => {
+    request(requestOptions, (error, res) => {
+      if (error) {
+        reject({error, requestOptions, res});
+      } else {
+        resolve(res);
+      }
     });
-  }
+  });
 }
