@@ -1,7 +1,5 @@
 import moment from 'moment';
-import {Config} from './';
-
-const config = new Config();
+import {config} from './';
 
 export class ReviewsStats {
   constructor(reviews, period) {
