@@ -1,9 +1,7 @@
 // npm modules
 import moment from 'moment';
 // our modules
-import {Config} from '../utils';
-
-const config = new Config();
+import {config} from '../utils';
 
 export const tokenCmd = (newToken) => {
   config.token = newToken;
