@@ -111,7 +111,7 @@ class Report {
     // find the earliest date a submission was assigned. This date is needed to
     // get the correct number of days of the period, so we can calculate the
     // average daily earnings for the period.
-    if (moment(this.startDate).format('DD') === '01') {
+    if (this.startDate === '2014-01-01') {
       const firstDate = reviews
         .map(review => moment(review.assigned_at)) // returns date of review
         .map(date => date.valueOf()) // returns date in Unix Time (milliseconds from 1970)
