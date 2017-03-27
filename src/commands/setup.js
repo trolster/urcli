@@ -2,6 +2,7 @@
 import moment from 'moment';
 import inquirer from 'inquirer';
 import PushBullet from 'pushbullet';
+import Table from 'cli-table2';
 import ora from 'ora';
 // our modules
 import {api, config} from '../utils';
@@ -41,7 +42,28 @@ async function getUserInfoFromApi() {
       };
       return acc;
     }, {});
-  certSpinner.succeed(`Your certifications:\n${JSON.stringify(config.certs, null, 2)}`);
+
+  // Create a new table for certifications
+  const certsDetails = new Table({
+    head: [
+      {hAlign: 'center', content: 'id'},
+      {hAlign: 'left', content: 'project name'},
+      {hAlign: 'center', content: 'price'}],
+    colWidths: [5, 40, 7],
+  });
+
+  Object.keys(config.certs)
+    .sort((a, b) => a - b)
+    .forEach((id) => {
+      const {name, price} = config.certs[id];
+      certsDetails.push([
+        {hAlign: 'center', content: id},
+        {hAlign: 'left', content: name},
+        {hAlign: 'center', content: price},
+      ]);
+    });
+  certSpinner.succeed(`Your certifications:\n${certsDetails.toString()}`);
+
   const configSpinner = ora('Saving configs...').start();
   config.save();
   configSpinner.succeed('Configs successfully save.');
