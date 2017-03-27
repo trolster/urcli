@@ -45,7 +45,6 @@ async function getUserInfoFromApi() {
       };
       return acc;
     }, {});
-  certSpinner.succeed('Your certifications:');
 
   // Create a new table for certifications
   const certsDetails = new Table({
@@ -56,16 +55,17 @@ async function getUserInfoFromApi() {
     colWidths: [5, 40, 7],
   });
 
-  certifications.body
-    .filter(cert => cert.status === 'certified')
-    .forEach((cert) => {
+  Object.keys(config.certs)
+    .sort((a, b) => a - b)
+    .forEach((id) => {
+      const {name, price} = config.certs[id];
       certsDetails.push([
-        {hAlign: 'center', content: cert.project.id},
-        {hAlign: 'left', content: cert.project.name},
-        {hAlign: 'center', content: cert.project.price},
+        {hAlign: 'center', content: id},
+        {hAlign: 'left', content: name},
+        {hAlign: 'center', content: price},
       ]);
     });
-  console.log(`${certsDetails.toString()}\n`);
+  certSpinner.succeed(`Your certifications:\n${certsDetails.toString()}`);
 
   const configSpinner = ora('Saving configs...').start();
   config.save();
