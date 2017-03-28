@@ -1,7 +1,9 @@
 import moment from 'moment';
 
-const assignEnvironment = {
+export default {
   tick: 0,
+  tickrate: 3000, // How often submissionAssigner is called, in ms.
+  checkInfoInterval: 1, // Becomes n * tickrate ms.
   flags: {
     silent: false,
     assignment: false,
@@ -11,6 +13,7 @@ const assignEnvironment = {
   submission_request: {
     id: 0,
     body: {},
+    closed_at: '',
   },
   startTime: moment(),
   error: '',
@@ -21,5 +24,3 @@ const assignEnvironment = {
   positions: [],
   unreadFeedbacks: [],
 };
-
-export default assignEnvironment;

@@ -100,13 +100,13 @@ function prompt(options) {
       chalk.white(assignedTotal)} since ${startTime.format('dddd, MMMM Do YYYY, HH:mm')}\n`));
 
     // Info on when the next check will occur for queue position and feedbacks.
-    if (tick % infoInterval === 0) {
+    if (tick % checkInfoInterval === 0) {
       if (options.feedbacks) {
         console.log(chalk.blue('Checked for new feedbacks a few seconds ago...'));
       }
       console.log(chalk.blue('Checked the queue a few seconds ago...\n'));
     } else {
-      const remainingSeconds = (infoInterval - (tick % infoInterval)) * (tickrate / 1000);
+      const remainingSeconds = (checkInfoInterval - (tick % checkInfoInterval)) * (tickrate / 1000);
       const infoIsCheckedAt = moment().add(remainingSeconds, 'seconds');
       const humanReadableMessage = moment().to(infoIsCheckedAt);
       if (options.feedbacks) {
