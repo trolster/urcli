@@ -1,6 +1,8 @@
 // our modules
 import {config, api} from '../utils';
 
+// TODO: Add table view of certifications.
+
 export const certsCmd = async () => {
   const certifications = await api({task: 'certifications'});
   config.certs = certifications.body

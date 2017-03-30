@@ -5,6 +5,8 @@ import env from './assignConfig';
 import {api, config} from '../../utils';
 import handleKeypress from './handleKeypress';
 
+// TODO: Add --push flag
+
 const validateIds = (ids) => {
   if (ids[0] === 'all') {
     env.ids = Object.keys(config.certs);
