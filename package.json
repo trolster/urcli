@@ -1,6 +1,9 @@
 {
   "name": "urcli",
   "version": "3.0.0",
+  "publishConfig": {
+    "tag": "next"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trolster/ur-cli.git"
@@ -57,12 +60,6 @@
     "presets": [
       "es2015-node",
       "stage-3"
-    ]
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "collectCoverageFrom": [
-      "src/*.js"
     ]
   }
 }
