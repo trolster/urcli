@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import opn from 'opn';
 // our modules
 import {api} from '../../utils';
-import env from './assignEnvironment';
+import env from './assignConfig';
 
 const exit = () => {
   /* eslint-disable eqeqeq */

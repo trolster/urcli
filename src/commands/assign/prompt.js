@@ -45,7 +45,7 @@ const createProjectDetails = () => {
           {hAlign: 'center', content: project.language},
         ]);
       });
-    output += `QUEUE:\n${projectDetails.toString()}`;
+    output += `You are in the following queues:\n${projectDetails.toString()}`;
   }
 };
 
@@ -65,7 +65,7 @@ const createAssignedDetails = () => {
           {hAlign: 'center', content: submission.price},
         ]);
       });
-    output += `ASSIGNED:\n${assignedDetails.toString()}`;
+    output += `You are currently assigned the following:\n${assignedDetails.toString()}`;
   }
 };
 
@@ -102,13 +102,16 @@ const createSessionInfo = () => {
 
 const createHelptext = () => {
   if (env.flags.helptext) {
-    output += 'KEYBOARD SHORTCUTS:\n';
+    output += 'KEYBOARD SHORTCUTS:\n\n';
     output += chalk.green.dim(`  Press ${
-      chalk.white('0')} to open the review dashboard.`);
+      chalk.white('0')} to open the review dashboard.\n`);
     output += chalk.green.dim(`  Press ${
-      chalk.white('1')} or ${chalk.white('2')} to open your assigned submissions.\n`);
-    output += chalk.green.dim(`  Press ${
-      chalk.white('ctrl+c')} to exit the queue cleanly by deleting the submission_request.`);
+      chalk.white('1')} or ${chalk.white('2')} to open your assigned submissions.\n\n`);
+    output += 'You can toggle this helptext by pressing "h"\n';
+    output += 'You can toggle extra infotext by pressing "i"\n';
+    output += 'You can toggle all extra information off by pressing "s"\n';
+    output += chalk.green.dim(`\n  Press ${
+      chalk.white('CTRL-C')} to exit the queue cleanly by deleting the submission_request.\n`);
     output += chalk.green.dim(`  Press ${
       chalk.white('ESC')} to suspend the script without deleting the submission_request.\n`);
   }

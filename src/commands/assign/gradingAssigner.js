@@ -95,8 +95,12 @@ const refreshInfo = () => {
   }
 };
 
-const submissionAssigner = async () => {
+export default async () => {
   try {
+    // TODO: If there is a new assigned in the response we know we need to
+    // create a new submission_request. That way we won't have to check if
+    // there is a submission_request active. But can it somehow get out of
+    // sync?
     checkAssigned();
     if (env.assigned.length < 2) {
       const getResponse = await api({task: 'get'});
@@ -113,8 +117,6 @@ const submissionAssigner = async () => {
   prompt();
   setTimeout(() => {
     env.tick += 1;
-    submissionAssigner();
+    exports.default(); // Calling itself
   }, env.tickrate);
 };
-
-export default submissionAssigner;
