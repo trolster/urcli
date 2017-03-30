@@ -15,14 +15,12 @@
 1. Run `npm install -g urcli`.
 1. Get a new token from the API Access link in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard).
 <img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
-1. Run `urcli setup "your-token"`. You will be asked to type in the languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`.
+1. Run `urcli setup`. When prompted, paste in the token you just got and then go through the rest of the setup.
 1. Run `urcli assign` proceeded by valid project ids for projects you are certified for. Ex:
     - `urcli assign 145`, places you in the queue for project 145.
     - `urcli assign 134 145 46`, places you in the queues for project 145, 134 and 46.
     - `urcli assign all`, places you in the queue for every project you are certified for.
 1. Profit! (literally).
-
-:bulb: When using the `setup` command, be sure to put the token in quotes, `urcli setup "your-token"`, since tokens often include dashes (`-`) which messes things up.
 
 ## The `assign` command
 
@@ -63,11 +61,11 @@ The script updates your queue position (and checks for new feedbacks) every 5 mi
 
 #### PushBullet Notifications
 
-You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on and then run the `assign` command with the `--push <accessToken>` option.
+You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on and then run the `setup` command again, entering in your PushBullet access token when prompted. Then you can run the `assign` command with the `--push` option to get the notifications.
 
 :information_source: You can create an access token on your [pushbullet.com account page](https://www.pushbullet.com/#settings/account).
 
-Ex.: `urcli assign all --push "o.ZxY9mPKB7aWIjiAI2CPKvnMMMqBPxHT8"`
+Ex.: `urcli assign all --push`
 
 Once you get a submission assigned you'll get a notification on all active devices with PushBullet installed.
 
@@ -88,7 +86,7 @@ The `revenue` command creates an earnings report for the interval you specify:
 
 #### Revenue options
 
-To get really specific you can use the options `--from` and `--to`. After the flag you need to write out a valid date in the format, `YYYY-MM-DDTHH:MM:SS`, to which to calculate earnings (where `YYYY-MM` is required and `DD-THH:MM:SS` is optional).
+To get really specific you can use the options `--from` and `--to`. After the flag you need to write out a valid date in the format, `YYYY-MM-DDThh:mm:ss`, to which to calculate earnings (where `YYYY-MM` is required and `DD-Thh:mm:ss` is optional).
 
 Example: `urcli revenue --from 2016-01 --to 2016-07-26`, will generate an earnings report for the year 2016 up to (but not including) July 26th.
 
@@ -104,30 +102,28 @@ You renew your token using the token command: `urcli token "your-token"`. That a
 
 #### Token expiry warning
 
-The script always shows you the age of your token at the top of the prompt. It will give you a warning when your token is less than 5 days from expiring. The text goes from green to red, so it's fairly obvious.
+The script will show you the age of your token at the top of the prompt if you are running assign without any flags. But even with the `--silent` flag set, it will give you a warning when your token is less than 5 days from expiring.
 
 ## The `certs` command
 
-If you gain a new certification after you've started using urcli, you can update the stored list of certifications by running the `certs` command. It will also log the contents of your current configurations file to the terminal, which includes the updated list of your certifications.
-Tip: Certifications are also updated any time you run the `setup` command.
+If you gain a new certification after you've started using urcli, you can update the stored list of certifications by running the `certs` command. It will also log a list of your certifications to the terminal, which includes the updated list of your certifications.
+:bulb: Certifications are also updated any time you run the `setup` command.
 
 ## The `setup` command
 
-You only have to run this command when you first install urcli: `urcli setup "your-token"`. You have to supply it with a new token which you can find in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard) (see [Quickstart](#quickstart)).
+You only have to run this command when you first install urcli: `urcli setup`. Once prompted, you should supply it with a brand new token which you can find in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard) (see [Quickstart](#quickstart)).
 
-It gets your certifications from the API and asks you to record which languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will enter, `en-us pt-br`. If it's just english you simply enter, `en-us`. Once you've run this command you are ready to start using the cli.
-
-:bulb: Be sure to put the token in quotes since they often include dashes (`-`) which messes up the command.
+It then goes and gets your certifications from Udacity, using your token. Then it asks you to select which languages you are certified for, since there is no way to get this information from the API. So for instance, if you are certified for US english and brazilian portuguese, you will select both, `en-us` and `pt-br` (you navigate the list using the up and down arrow keys, and select by pressing spacebar). Lastly, it asks you fi you with to use PushBullet for push notifications. If you don't know what this is or don't plan to use it, just say no. Otherwise you will be promted to enter your PushBullet access token, which you can get from your [pushbullet.com account page](https://www.pushbullet.com/#settings/account).
 
 #### The configuration file
 
-The `setup` command creates a configuration file which is stored in your home folder. You find it here `~/.urcli_config`.
+The `setup` command creates a configuration folder in your home folder. You find the configuration file here `~/.urcli/config.json`.
 
 ## Contributing
 
 Got a question or an idea? Found a bug? Check out our [contributing guidelines](https://github.com/trolster/urcli/blob/master/.github/CONTRIBUTING.md) for ways to offer feedback and contribute.
 
-For bug fixes and minor documentation changes:
+For very minor changes:
 
 1. Fork this repository
 1. Create your branch (`git checkout -b my-new-thing`)
