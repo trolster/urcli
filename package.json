@@ -13,7 +13,8 @@
     "prelint": "npm run clean",
     "lint": "eslint ./src",
     "prebuild": "npm run lint",
-    "build": "babel src -d lib --presets es2015-node,stage-3"
+    "build": "babel src -d lib --presets es2015-node,stage-3",
+    "release": "np"
   },
   "bin": {
     "urcli": "./lib/index.js"
@@ -49,7 +50,8 @@
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.0"
+    "eslint-plugin-react": "^6.10.0",
+    "np": "^2.13.1"
   },
   "babel": {
     "presets": [
