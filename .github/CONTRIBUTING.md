@@ -15,19 +15,13 @@ Thanks for checking out the urcli! We've put together the following guidelines t
 0. [Community](#community)
 
 ## Found a bug?
-Please don't hesitate to open an [issue](https://github.com/trolster/ur-cli/issues). We'll need to know the following:
-
-* Version of Node
-* Version of `urcli`
-* Platform you're running on (macOS, SunOS, Linux, Windows)
-* If you are getting any error messages, please include them as well
+Please don't hesitate to open an [issue](https://github.com/trolster/ur-cli/issues). Just fill out the required information and we'll discuss from there.
 
 ## Types of contributions we're looking for
 First and foremost, this software is supposed to be easy to set up and use. Your first contribution might be starting a new conversation, or adding to an existing conversation, around making things easier to understand and/or easier to use. You can do so under [Issues](https://github.com/trolster/ur-cli/issues).
 
 There are also many ways you can directly contribute to the cli (in descending order of need):
 
-* Writing tests.
 * Add examples to the documentation that help people understand how to use the cli and how to contribute.
 * Revise language to be more approachable and friendly.
 * Translate docs into other languages.
@@ -37,10 +31,7 @@ Interested in making a contribution? Read on!
 
 ## Ground rules & expectations
 
-Before we get started, here are a few things we expect from you (and that you should expect from others):
-
-* Be kind and thoughtful in your conversations around this project. We all come from different backgrounds and projects, which means we likely have different perspectives on "how coding is done." Try to listen to others rather than convince them that your way is correct.
-* If you open a pull request, please ensure that your contribution passes all tests. If there are test failures, you will need to address them before we can merge your contribution.
+Be kind and thoughtful in your conversations around this project. We all come from different backgrounds and projects, which means we likely have different perspectives on "how coding is done." Try to listen to others rather than convince them that your way is correct.
 
 ## How to contribute
 
@@ -77,10 +68,10 @@ The project uses [Babel](https://babeljs.io/) for compilation of JavaScript. So 
 
 ## Contribution review process
 
-This repo is currently maintained by [@trolster](https://github.com/trolster). I will likely review your contribution. If you haven't heard from me within 10 days, feel free to bump the thread or @-mention me to review your contribution.
+This repo is currently maintained by [@trolster](https://github.com/trolster) and [@gabraganca](https://github.com/gabraganca). We will likely review your contribution. If you haven't heard from one of us within 10 days, feel free to bump the thread or @-mention one of us to review your contribution.
 
 ## Community
 
 Discussions about the urcli take place on this repository's [Issues](https://github.com/trolster/ur-cli/issues) and [Pull Requests](https://github.com/trolster/ur-cli/pulls) sections. Anybody is welcome to join these conversations.
 
-Wherever possible, do not take these conversations to private channels, including contacting me (the maintainer) directly. Keeping communication public means everybody can benefit and learn from the conversation.
+Wherever possible, do not take these conversations to private channels, including contacting us (the maintainers) directly. Keeping communication public means everybody can benefit and learn from the conversation.
