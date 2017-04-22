@@ -1,6 +1,7 @@
 # local files and folders
 lib/
 testing
+.vscode
 
 ### Node ###
 # Logs
