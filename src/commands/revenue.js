@@ -64,16 +64,21 @@ export const revenueCmd = (args, options) => {
   });
   // Output reports for each period
   const resolvedReports = periods.map(async (period) => {
-    const completedReviews = await api({
-      task: 'completed',
-      body: {
-        start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSS'),
-        end_date: period[1].format('YYYY-MM-DDTHH:mm:ss.SSS'),
-      },
-    });
-    const report = new ReviewsStats(completedReviews.body, period);
-    output += print(report);
-    return Promise.resolve();
+    try {
+      const completedReviews = await api({
+        task: 'completed',
+        body: {
+          start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSS'),
+          end_date: period[1].format('YYYY-MM-DDTHH:mm:ss.SSS'),
+        },
+      })
+      const report = new ReviewsStats(completedReviews.body, period);
+      output += print(report);
+      return Promise.resolve();
+    } catch (e) {
+      console.log(chalk.red(`\n\n  The API is returning the following error: "${e.error}"`));
+      process.exit(1);
+    }
   });
   Promise.all(resolvedReports).then(() => {
     spinner.succeed('Reports completed:');
