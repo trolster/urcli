@@ -36,7 +36,12 @@ export function api({task, id = '', body = ''}) {
       if (error) {
         reject({error, requestOptions, res});
       } else {
-        resolve(res);
+        if (res.body.error) {
+          reject({error: res.body.error, requestOptions, res})
+        } else {
+          console.log(res.body)
+          resolve(res);
+        }
       }
     });
   });
