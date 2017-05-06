@@ -35,13 +35,10 @@ export function api({task, id = '', body = ''}) {
     request(requestOptions, (error, res) => {
       if (error) {
         reject({error, requestOptions, res});
+      } else if (res.body.error) {
+        reject({error: res.body.error, requestOptions, res});
       } else {
-        if (res.body.error) {
-          reject({error: res.body.error, requestOptions, res})
-        } else {
-          console.log(res.body)
-          resolve(res);
-        }
+        resolve(res);
       }
     });
   });
