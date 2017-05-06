@@ -4,10 +4,12 @@ export default {
   tick: 0,
   tickrate: 3000, // How often submissionAssigner is called, in ms.
   checkInfoInterval: 1, // Becomes n * tickrate ms.
+  refreshInterval: 300000, // (60 seconds * 5 minutes) * 1000 for ms
   flags: {
-    silent: false,
-    assignment: false,
+    push: false,
     feedbacks: false,
+    silent: false,
+    debug: false,
     helptext: false,
   },
   submission_request: {

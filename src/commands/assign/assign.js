@@ -4,16 +4,18 @@ import ora from 'ora';
 import env from './assignConfig';
 import {api, config} from '../../utils';
 import handleKeypress from './handleKeypress';
+import mainLoop from './gradingAssigner';
 
 // TODO: Add --push flag
 
-const validateIds = (ids) => {
+const validateIds = (ids, spinner) => {
   if (ids[0] === 'all') {
     env.ids = Object.keys(config.certs);
   } else {
     const invalid = ids.filter(id => !Object.keys(config.certs).includes(id));
     if (invalid.length) {
-      throw new Error(`Error: You are not certified for project(s): ${[...invalid].join(', ')}`);
+      spinner.fail(`Error: You are not certified for project(s): ${[...invalid].join(', ')}`);
+      process.exit(1);
     }
     env.ids = ids;
   }
@@ -32,7 +34,10 @@ const createRequestBody = () => ({
           .map(language => ({project_id: id, language}))), []),
 });
 
+// When the command is run we either update the submission_request or create a
+// new one.
 const createOrUpdateSubmissionRequest = async () => {
+  env.submission_request.body = createRequestBody();
   const getResponse = await api({task: 'get'});
   if (getResponse.body[0]) {
     Object.assign(env.submission_request, getResponse.body[0]);
@@ -48,21 +53,22 @@ const createOrUpdateSubmissionRequest = async () => {
     });
     Object.assign(env.submission_request, createResponse.body);
   }
+  // Get positions once the submission_request is finalized.
   const positionResponse = await api({
     task: 'position',
     id: env.submission_request.id,
   });
-  env.positions = positionResponse.body.error ? [] : positionResponse.body;
+  env.positions = positionResponse.body;
 };
 
 export async function assignCmd(ids, options) {
-  const spinner = ora('Initializing...').start();
-  validateIds(ids);
+  const spinner = ora('Registering the request...').start();
+  validateIds(ids, spinner);
   registerOptions(options);
-  env.submission_request.body = createRequestBody();
-  handleKeypress();
   await createOrUpdateSubmissionRequest();
-  spinner.succeed('Ready...');
+  handleKeypress();
+  spinner.succeed('Environment ready:');
   console.log(env);
+  // mainLoop();
   process.exit(0);
 }

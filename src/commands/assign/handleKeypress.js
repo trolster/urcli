@@ -10,13 +10,16 @@ const exit = () => {
   /* eslint-disable eqeqeq */
   if (env.key == '\u001b') { // The ESCAPE key
     // Suspend on ESC and refresh the submission_request rather than deleting it.
-    api({task: 'refresh', id: env.submission_request.id});
-    console.log(chalk.green('Exited without deleting the submission_request...'));
-    console.log(chalk.green('The current submission_request will expire in an hour.'));
-    process.exit(0);
+    api({task: 'refresh', id: env.submission_request.id})
+    .then(() => {
+      console.log(chalk.green('Exited without deleting the submission_request...'));
+      console.log(chalk.green('The current submission_request will expire in an hour.'));
+      process.exit(0);
+    });
   } else if (env.key == '\u0003') { // The CTRL-C key
     // Delete submission_request object and exit on CTRL-C
-    api({task: 'refresh', id: env.submission_request.id}).then(() => {
+    api({task: 'refresh', id: env.submission_request.id})
+    .then(() => {
       console.log(chalk.green('Successfully deleted request and exited..'));
       process.exit(0);
     });
@@ -44,7 +47,7 @@ export default function handleKeypress() {
     if (env.key == '\u001b' || env.key == '\u0003') {
       exit();
     } else if (['0', '1', '2'].includes(env.key)) {
-      open(parseInt(env.key, 10), env.assigned);
+      open();
     }
   });
 }

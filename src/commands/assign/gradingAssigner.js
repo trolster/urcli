@@ -10,12 +10,12 @@ import prompt from './prompt';
 const checkAssigned = async () => {
   const assignedResponse = await api({task: 'assigned'});
   const oldAssignedIds = env.assigned.map(s => s.id);
-  const newAssigned = assignedResponse.body
+  const newlyAssigned = assignedResponse.body
     .filter(s => !oldAssignedIds.includes(s.id));
 
-  if (newAssigned.length) {
+  if (newlyAssigned.length) {
     env.assigned = assignedResponse.body;
-    newAssigned.forEach((s) => {
+    newlyAssigned.forEach((s) => {
       // Only add it to the total number of assigned if it's been assigned
       // after the command was initiated.
       if (Date.parse(s.assigned_at) > Date.parse(env.startTime)) {
@@ -44,7 +44,7 @@ const checkPositions = async () => {
   const positionResponse = await api({
     task: 'position',
     id: env.submission_request.id});
-  env.positions = positionResponse.body.error ? [] : positionResponse.body;
+  env.positions = positionResponse.body;
 };
 
 const checkFeedbacks = async () => {
@@ -65,8 +65,9 @@ const checkFeedbacks = async () => {
         });
       });
     }
+  } else if (stats.body.unread_count === 0) {
+    env.unreadFeedbacks = [];
   }
-  env.unreadFeedbacks = [];
 };
 
 const createNewSubmissionRequest = async () => {
@@ -79,36 +80,33 @@ const createNewSubmissionRequest = async () => {
   env.tick = 0;
 };
 
-const refreshSubmissionRequest = async () => {
-  const closingIn = Date.parse(env.submission_request.closed_at) - Date.now();
-  if (closingIn < 300000) { // Less than 5 minutes
-    api({task: 'refresh', id: env.submission_request.id});
-  }
-};
-
-const refreshInfo = () => {
-  if (env.tick % env.checkInfoInterval === 0) {
-    if (env.flags.feedbacks) {
-      checkFeedbacks();
-    }
-    checkPositions();
-  }
-};
-
-export default async () => {
+async function mainLoop() {
   try {
-    // TODO: If there is a new assigned in the response we know we need to
-    // create a new submission_request. That way we won't have to check if
-    // there is a submission_request active. But can it somehow get out of
-    // sync?
+    // Since assigned projects only get counted towards the total number of
+    // assigned projects, if it's been assigned in this session, it can be used
+    // as a realiable check to see if a new review was assigned since the last
+    // iteration of the loop.
+    const assignedTotal = env.assignedTotal;
     checkAssigned();
     if (env.assigned.length < 2) {
-      const getResponse = await api({task: 'get'});
-      if (getResponse.body[0]) {
-        refreshSubmissionRequest();
-        refreshInfo();
-      } else {
+      // If a new review was assigned we create a new request.
+      if (assignedTotal < env.assignedTotal) {
         createNewSubmissionRequest();
+      }
+      // Check if the request needs to be refreshed.
+      const timeSinceLastRefresh = Date.now() - Date.parse(env.submission_request.updated_at);
+      if (timeSinceLastRefresh > env.refreshInterval) { // Refreshes every 5 minutes
+        api({
+          task: 'refresh',
+          id: env.submission_request.id,
+        });
+      }
+      // Check if the info needs to update
+      if (env.tick % env.checkInfoInterval === 0) {
+        if (env.flags.feedbacks) {
+          checkFeedbacks();
+        }
+        checkPositions();
       }
     }
   } catch (e) {
@@ -117,6 +115,8 @@ export default async () => {
   prompt();
   setTimeout(() => {
     env.tick += 1;
-    exports.default(); // Calling itself
+    mainLoop(); // Calling itself
   }, env.tickrate);
-};
+}
+
+export default mainLoop;

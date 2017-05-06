@@ -71,7 +71,9 @@ const createAssignedDetails = () => {
 
 const createWarning = () => {
   if (env.error) {
-    output += chalk.red('The API is currently not responding, or very slow to respond. Trying to reconnect...\n');
+    output += chalk.red('The API is responding with the following error message:\n');
+    output += chalk.red(env.error.message);
+    env.error = '';
   }
   const tokenExpiryWarning = moment(config.tokenAge).diff(moment(), 'days') < 5;
   if (tokenExpiryWarning) {
