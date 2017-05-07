@@ -2,15 +2,18 @@ import moment from 'moment';
 
 export default {
   tick: 0,
-  tickrate: 3000, // How often submissionAssigner is called, in ms.
-  checkInfoInterval: 1, // Becomes n * tickrate ms.
-  refreshInterval: 300000, // (60 seconds * 5 minutes) * 1000 for ms
+  update: true,
+  updateInterval: 30, // 30 seconds.
+  updateInfo: true,
+  updateInfoInterval: 300, // 5 minutes.
+  refreshInterval: 300, // 5 minutes.
   flags: {
     push: false,
     feedbacks: false,
     silent: false,
-    debug: false,
+    verbose: false,
     helptext: false,
+    infotext: false,
   },
   submission_request: {
     id: 0,

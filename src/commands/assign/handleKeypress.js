@@ -48,6 +48,19 @@ export default function handleKeypress() {
       exit();
     } else if (['0', '1', '2'].includes(env.key)) {
       open();
+    } else if (env.key === 'r') {
+      env.tick = 0;
+      env.update = true;
+      env.updateInfo = true;
+    } else if (env.key === 'i') {
+      env.flags.infotext = !env.flags.infotext;
+      env.update = true;
+    } else if (env.key === 'h') {
+      env.flags.helptext = !env.flags.helptext;
+      env.update = true;
+    } else if (env.key === 's') {
+      env.flags.silent = !env.flags.silent;
+      env.update = true;
     }
   });
 }

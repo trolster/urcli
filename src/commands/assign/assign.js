@@ -6,7 +6,8 @@ import {api, config} from '../../utils';
 import handleKeypress from './handleKeypress';
 import mainLoop from './gradingAssigner';
 
-// TODO: Add --push flag
+// TODO: Add --verbose flag
+// TODO: Overhaul prompt
 
 const validateIds = (ids, spinner) => {
   if (ids[0] === 'all') {
@@ -68,7 +69,5 @@ export async function assignCmd(ids, options) {
   await createOrUpdateSubmissionRequest();
   handleKeypress();
   spinner.succeed('Environment ready:');
-  console.log(env);
-  // mainLoop();
-  process.exit(0);
+  mainLoop();
 }
