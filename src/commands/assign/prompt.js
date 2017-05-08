@@ -6,7 +6,7 @@ import Table from 'cli-table2';
 import chalk from 'chalk';
 // our modules
 import env from './assignConfig';
-import {config} from '../../utils';
+import {api, config} from '../../utils';
 
 // Create a new table for projects that the user is queued up for
 const projectDetailsTable = new Table({
@@ -129,6 +129,7 @@ const createHelptext = () => {
   output += chalk.green.dim(`  Press ${chalk.white('i')} to toggle extra infotext.\n`);
   output += chalk.green.dim(`  Press ${chalk.white('s')} to toggle all extra information off.\n`);
   output += chalk.green.dim(`  Press ${chalk.white('r')} to refresh the output.\n`);
+  output += chalk.green.dim(`  Press ${chalk.white('v')} to receive verbose output.\n`);
   output += chalk.green.dim(`\n  Press ${
     chalk.white('CTRL-C')} to exit the queue cleanly by deleting the submission_request.\n`);
   output += chalk.green.dim(`  Press ${
@@ -136,9 +137,22 @@ const createHelptext = () => {
   return output;
 };
 
+const createVerboseOutput = async () => {
+  const submissionRequest = await api({task: 'get'});
+  let output = '';
+  output += 'Debug INFO:\n';
+  output += `${chalk.blue(`List of request IDs (${env.requestIds.length}):`)} ${env.requestIds}\n`;
+  output += `${
+    chalk.blue('Submission Request returned from the server:')} ${
+      JSON.stringify(submissionRequest.body[0], null, 2)}\n`;
+  output += `${
+    chalk.blue('Stored Submission Request object:')} ${JSON.stringify(env.submission_request, null, 2)}\n`;
+  return output;
+};
+
 const helptext = createHelptext();
 
-function setPrompt() {
+async function setPrompt() {
   let output = '';
   // Clearing the screen.
   readline.cursorTo(process.stdout, 0, 0);
@@ -154,6 +168,9 @@ function setPrompt() {
     if (env.flags.helptext) {
       output += helptext;
     }
+  }
+  if (env.flags.verbose) {
+    output += await createVerboseOutput();
   }
   console.log(output);
 }

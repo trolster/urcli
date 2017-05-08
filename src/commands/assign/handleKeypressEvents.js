@@ -61,6 +61,9 @@ export default function handleKeypress() {
     } else if (env.key === 's') {
       env.flags.silent = !env.flags.silent;
       env.update = true;
+    } else if (env.key === 'v') {
+      env.flags.verbose = !env.flags.verbose;
+      env.update = true;
     }
   });
 }
