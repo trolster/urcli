@@ -38,12 +38,12 @@ const checkFeedbacks = async () => {
 };
 
 const createNewSubmissionRequest = async () => {
-  env.requestIds.push(env.submission_request.id);
-  const createResponse = await api({
+  const res = await api({
     task: 'create',
     body: createRequestBody(),
   });
-  env.submission_request = createResponse.body;
+  env.submission_request = res.body;
+  env.requestIds.push(env.submission_request.id);
   checkPositions();
   env.tick = 0;
 };
@@ -93,10 +93,13 @@ async function mainLoop() {
   }
   // Set/reset to the default update intervals.
   env.update = env.tick % env.updateInterval === 0;
-  env.updatePositions = env.tick % env.updateInfoInterval === 0;
   env.refresh = env.tick % env.refreshInterval === 0;
+  env.updatePositions = env.tick % env.updatePositionsInterval === 0;
   env.updateFeedbacks = env.tick % env.updateFeedbacksInterval === 0;
   env.tick += 1;
+  setTimeout(async () => {
+    await mainLoop();
+  }, 1000);
 }
 
 export default mainLoop;

@@ -77,7 +77,5 @@ export async function assignCmd(ids, options) {
   await checkAssigned();
   handleKeypressEvents();
   spinner.succeed('Environment ready. Starting main submission request loop.');
-  env.timerID = setInterval(() => {
-    mainLoop();
-  }, 1000);
+  mainLoop();
 }
