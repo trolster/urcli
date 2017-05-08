@@ -63,6 +63,7 @@ export const revenueCmd = (args, options) => {
     return res;
   });
   // Output reports for each period
+  // eslint-disable-next-line consistent-return
   const resolvedReports = periods.map(async (period) => {
     try {
       const completedReviews = await api({
@@ -71,7 +72,7 @@ export const revenueCmd = (args, options) => {
           start_date: period[0].format('YYYY-MM-DDTHH:mm:ss.SSS'),
           end_date: period[1].format('YYYY-MM-DDTHH:mm:ss.SSS'),
         },
-      })
+      });
       const report = new ReviewsStats(completedReviews.body, period);
       output += print(report);
       return Promise.resolve();

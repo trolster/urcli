@@ -120,20 +120,24 @@ const createSessionInfo = () => {
 };
 
 const createHelptext = () => {
-  let output = '';
-  output += 'KEYBOARD SHORTCUTS:\n\n';
-  output += chalk.green.dim(`  Press ${chalk.white('0')} to open the review dashboard.\n`);
-  output += chalk.green.dim(`  Press ${
-    chalk.white('1')} or ${chalk.white('2')} to open your assigned submissions.\n\n`);
-  output += chalk.green.dim(`  Press ${chalk.white('h')} to toggle this helptext.\n`);
-  output += chalk.green.dim(`  Press ${chalk.white('i')} to toggle extra infotext.\n`);
-  output += chalk.green.dim(`  Press ${chalk.white('s')} to toggle all extra information off.\n`);
-  output += chalk.green.dim(`  Press ${chalk.white('r')} to refresh the output.\n`);
-  output += chalk.green.dim(`  Press ${chalk.white('v')} to receive verbose output.\n`);
-  output += chalk.green.dim(`\n  Press ${
-    chalk.white('CTRL-C')} to exit the queue cleanly by deleting the submission_request.\n`);
-  output += chalk.green.dim(`  Press ${
-    chalk.white('ESC')} to suspend the script without deleting the submission_request.\n`);
+  const output = `
+KEYBOARD SHORTCUTS:
+
+${chalk.green.dim(`  Press ${chalk.white('0')} to open the review dashboard.`)}
+${chalk.green.dim(`  Press ${
+  chalk.white('1')} or ${chalk.white('2')} to open your assigned submissions.`)}
+
+${chalk.green.dim(`  Press ${chalk.white('h')} to toggle this helptext.`)}
+${chalk.green.dim(`  Press ${chalk.white('i')} to toggle extra infotext.`)}
+${chalk.green.dim(`  Press ${chalk.white('s')} to toggle all extra information off.`)}
+${chalk.green.dim(`  Press ${chalk.white('r')} to refresh the output.`)}
+${chalk.green.dim(`  Press ${chalk.white('v')} to receive verbose output.`)}
+
+${chalk.green.dim(`  Press ${
+  chalk.white('CTRL-C')} to exit the queue cleanly by deleting the submission_request.`)}
+${chalk.green.dim(`  Press ${
+  chalk.white('ESC')} to suspend the script without deleting the submission_request.`)}
+`;
   return output;
 };
 
@@ -154,9 +158,6 @@ const helptext = createHelptext();
 
 async function setPrompt() {
   let output = '';
-  // Clearing the screen.
-  readline.cursorTo(process.stdout, 0, 0);
-  readline.clearScreenDown(process.stdout);
   // Creating the output
   output += createWarning();
   output += createProjectDetailsTable();
@@ -172,6 +173,9 @@ async function setPrompt() {
   if (env.flags.verbose) {
     output += await createVerboseOutput();
   }
+  // Clearing the screen.
+  readline.cursorTo(process.stdout, 0, 0);
+  readline.clearScreenDown(process.stdout);
   console.log(output);
 }
 
