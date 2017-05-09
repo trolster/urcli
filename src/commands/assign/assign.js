@@ -4,7 +4,7 @@ import ora from 'ora';
 import env from './assignConfig';
 import {api, config} from '../../utils';
 import handleKeypressEvents from './handleKeypressEvents';
-import mainLoop from './gradingAssigner';
+import requestLoop from './gradingAssigner';
 import createRequestBody from './createRequestBody';
 import checkAssigned from './checkAssigned';
 
@@ -77,5 +77,5 @@ export async function assignCmd(ids, options) {
   await checkAssigned();
   handleKeypressEvents();
   spinner.succeed('Environment ready. Starting main submission request loop.');
-  mainLoop();
+  requestLoop();
 }

@@ -32,7 +32,7 @@ const refreshSubmissionRequest = async () => {
   env.submission_request = submissionRequest.body;
 };
 
-async function mainLoop() {
+async function requestLoop() {
   if (env.update) {
     try {
       // We have to check for new assignments every time, to account for edge
@@ -74,8 +74,8 @@ async function mainLoop() {
   env.updateFeedbacks = env.tick % env.updateFeedbacksInterval === 0;
   env.tick += 1;
   setTimeout(async () => {
-    await mainLoop();
+    await requestLoop();
   }, 1000);
 }
 
-export default mainLoop;
+export default requestLoop;
