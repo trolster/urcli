@@ -4,8 +4,8 @@ import {config} from '../../utils';
 const createRequestBody = () => ({
   projects: env.ids
     .reduce((acc, id) => acc
-        .concat(config.languages
-          .map(language => ({project_id: id, language}))), []),
+      .concat(config.languages
+        .map(language => ({project_id: id, language}))), []),
 });
 
 export default createRequestBody;
