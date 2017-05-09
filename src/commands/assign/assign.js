@@ -67,8 +67,10 @@ async function assignCmd(ids, options) {
   const spinner = ora('Registering the request...').start();
   validateIds(ids, spinner);
   registerOptions(options);
-  await createOrUpdateSubmissionRequest();
   await checkAssigned();
+  if (env.assigned.length < 2) {
+    await createOrUpdateSubmissionRequest();
+  }
   handleKeypressEvents();
   spinner.succeed('Environment ready. Starting main submission request loop.');
   requestLoop();
