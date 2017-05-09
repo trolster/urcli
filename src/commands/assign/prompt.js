@@ -39,9 +39,9 @@ const createProjectDetailsTable = () => {
   let output = '';
   if (!env.positions.length) {
     console.log(env.positions);
-    output += chalk.yellow('Waiting for queue information...\n');
+    output += chalk.yellow('Waiting for queue information...\n\n');
   } else if (env.assigned.length === 2) {
-    output += chalk.yellow(`    You have ${chalk.white(env.assigned.length)} (max) submissions assigned.\n`);
+    output += chalk.yellow(`You have ${chalk.white(env.assigned.length)} (max) submissions assigned.\n\n`);
   } else {
     projectDetailsTable.length = 0;
     env.positions
