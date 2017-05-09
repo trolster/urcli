@@ -6,16 +6,18 @@ import opn from 'opn';
 import {api} from '../../utils';
 import env from './assignConfig';
 
-const exit = () => {
+const exit = async () => {
   /* eslint-disable eqeqeq */
   if (env.key == '\u001b') { // The ESCAPE key
-    // Suspend on ESC and refresh the submission_request rather than deleting it.
-    api({task: 'refresh', id: env.submission_request.id})
-    .then(() => {
+    if (env.submission_request.id) {
+      // Suspend on ESC and refresh the submission_request rather than deleting it.
+      await api({task: 'refresh', id: env.submission_request.id});
       console.log(chalk.green('Exited without deleting the submission_request...'));
       console.log(chalk.green('The current submission_request will expire in an hour.'));
-      process.exit(0);
-    });
+    } else {
+      console.log(chalk.green('Exited..'));
+    }
+    process.exit(0);
   } else if (env.key == '\u0003') { // The CTRL-C key
     // Delete submission_request object and exit on CTRL-C
     api({task: 'refresh', id: env.submission_request.id})
