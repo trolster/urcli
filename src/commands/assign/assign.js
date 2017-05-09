@@ -1,5 +1,6 @@
 // npm modules
 import ora from 'ora';
+import chalk from 'chalk';
 // our modules
 import env from './assignConfig';
 import {api, config} from '../../utils';
@@ -14,14 +15,18 @@ const validateIds = (ids, spinner) => {
   } else {
     const invalid = ids.filter(id => !Object.keys(config.certs).includes(id));
     if (invalid.length) {
-      spinner.fail(`Error: You are not certified for project(s): ${[...invalid].join(', ')}`);
+      spinner.fail(chalk.red(`Error: You are not certified for project(s): ${[...invalid].join(', ')}`));
       process.exit(1);
     }
     env.ids = ids;
   }
 };
 
-const registerOptions = (options) => {
+const registerOptions = (options, spinner) => {
+  if (options.push && !config.pushbulletToken) {
+    spinner.fail(chalk.red('You have to set up pushbullet using the "urcli setup" command first.'));
+    process.exit(1);
+  }
   Object.keys(env.flags).forEach((flag) => {
     if (options[flag]) env.flags[flag] = true;
   });
@@ -66,7 +71,7 @@ const createOrUpdateSubmissionRequest = async () => {
 async function assignCmd(ids, options) {
   const spinner = ora('Registering the request...').start();
   validateIds(ids, spinner);
-  registerOptions(options);
+  registerOptions(options, spinner);
   await checkAssigned();
   if (env.assigned.length < 2) {
     await createOrUpdateSubmissionRequest();
