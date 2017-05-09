@@ -11,13 +11,20 @@ export default {
   refreshInterval: 300, // 5 minutes.
   updateFeedbacksInterval: 300, // 5 minutes
   flags: {
+    // Notifications
+    assignment: true,
     push: false,
     feedbacks: false,
+    ui: true,
+    // UI
+    queue: true,
+    assigned: true,
+    infotext: true,
     silent: false,
     verbose: false,
     helptext: false,
-    infotext: false,
   },
+
   requestIds: [],
   submission_request: {},
   startTime: moment(),
