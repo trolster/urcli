@@ -3,7 +3,7 @@ import moment from 'moment';
 import notifier from 'node-notifier';
 import PushBullet from 'pushbullet';
 // our modules
-import {api} from '../../utils';
+import {api, config} from '../../utils';
 import env from './assignConfig';
 
 async function checkAssigned() {
@@ -34,7 +34,7 @@ async function checkAssigned() {
         notifier.notify({title, message, sound, open});
         // PushBullet notifications
         if (env.flags.push) {
-          const pusher = new PushBullet(env.config.pushbulletToken);
+          const pusher = new PushBullet(config.pushbulletToken);
           pusher.note({}, title, `${message}\n\n${open}`, (err) => {
             if (err) throw new Error(`Pushbullet error: ${err}`);
           });
