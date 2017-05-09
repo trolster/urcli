@@ -1,50 +1,26 @@
-// npm modules
-import notifier from 'node-notifier';
 // our modules
 import {api} from '../../utils';
 import env from './assignConfig';
 import setPrompt from './prompt';
 import createRequestBody from './createRequestBody';
 import checkAssigned from './checkAssigned';
+import checkFeedbacks from './checkFeedbacks';
 
 const checkPositions = async () => {
-  const positionResponse = await api({
+  const positions = await api({
     task: 'position',
-    id: env.submission_request.id});
-  env.positions = positionResponse.body;
-};
-
-const checkFeedbacks = async () => {
-  const stats = await api({task: 'stats'});
-  const diff = stats.body.unread_count - env.unreadFeedbacks.length;
-
-  if (diff > 0) {
-    const feedbacksResponse = await api({task: 'feedbacks'});
-    env.unreadFeedbacks = feedbacksResponse.body.filter(fb => fb.read_at === null);
-    // Notify the user of the new feedbacks.
-    if (env.flags.feedbacks) {
-      env.unreadFeedbacks.slice(-diff).forEach((fb) => {
-        notifier.notify({
-          title: `New ${fb.rating}-star Feedback!`,
-          message: `Project: ${fb.project.name}`,
-          sound: 'Pop',
-          open: `https://review.udacity.com/#!/reviews/${fb.submission_id}`,
-        });
-      });
-    }
-  } else if (stats.body.unread_count === 0) {
-    env.unreadFeedbacks = [];
-  }
+    id: env.submission_request.id,
+  });
+  env.positions = positions.body;
 };
 
 const createNewSubmissionRequest = async () => {
-  const res = await api({
+  const submissionRequest = await api({
     task: 'create',
     body: createRequestBody(),
   });
-  env.submission_request = res.body;
+  env.submission_request = submissionRequest.body;
   env.requestIds.push(env.submission_request.id);
-  checkPositions();
   env.tick = 0;
 };
 
@@ -72,7 +48,7 @@ async function mainLoop() {
         // refreshed.
         if (submissionRequest) {
           env.submission_request = submissionRequest;
-          if (env.refresh) {
+          if (env.refresh && env.tick !== 0) {
             await refreshSubmissionRequest();
           }
         } else {

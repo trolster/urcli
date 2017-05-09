@@ -54,11 +54,11 @@ const createOrUpdateSubmissionRequest = async () => {
     }
     env.requestIds.push(env.submission_request.id);
     // Get positions once the submission_request is finalized.
-    const positionResponse = await api({
-      task: 'position',
-      id: env.submission_request.id,
-    });
-    env.positions = positionResponse.body;
+    // const positionResponse = await api({
+    //   task: 'position',
+    //   id: env.submission_request.id,
+    // });
+    // env.positions = positionResponse.body;
   } catch (e) {
     if (e.res.body) {
       console.error(e.res.body);

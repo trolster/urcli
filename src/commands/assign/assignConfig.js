@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 export default {
-  tick: 1,
+  tick: 0,
   update: true,
   refresh: false,
   updatePositions: false,
