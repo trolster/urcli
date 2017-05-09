@@ -20,7 +20,7 @@ function print(report) {
             Reviewed: ${passed + failed}
             Ungradeable: ${ungradeable}
         Earned: ${currencyFormatter.format(earned, {code: 'USD'})}
-        Average Turnaround Time: ${moment(avgTurnaroundTime).format('HH:mm')}\n`;
+        Average Turnaround Time: ${moment.utc(avgTurnaroundTime).format('HH:mm')}\n`;
   });
 
   const totalEarned = currencyFormatter.format(report.totalEarned, {code: 'USD'});
