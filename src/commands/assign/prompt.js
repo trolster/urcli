@@ -8,6 +8,13 @@ import chalk from 'chalk';
 import env from './assignConfig';
 import {api, config} from '../../utils';
 
+// TODO: Default is tables with headers
+// TODO: Silent only shows tables.
+// TODO: Decouple helptext from everything else.
+// TODO: Structure infotext.
+// TODO: Add daily revenue option.
+// TODO: Add notifications option.
+
 // Create a new table for projects that the user is queued up for
 const projectDetailsTable = new Table({
   head: [
@@ -120,23 +127,24 @@ const createSessionInfo = () => {
 };
 
 const createHelptext = () => {
+  const ON = chalk.green('ON');
+  const OFF = chalk.red('OFF');
   const output = `
 KEYBOARD SHORTCUTS:
 
-${chalk.green.dim(`  Press ${chalk.white('0')} to open the review dashboard.`)}
-${chalk.green.dim(`  Press ${
-  chalk.white('1')} or ${chalk.white('2')} to open your assigned submissions.`)}
+${chalk.green(`  Press ${chalk.white('0')} to open the review dashboard.
+  Press ${chalk.white('1')} or ${chalk.white('2')} to open your assigned submissions.
 
-${chalk.green.dim(`  Press ${chalk.white('h')} to toggle this helptext.`)}
-${chalk.green.dim(`  Press ${chalk.white('i')} to toggle extra infotext.`)}
-${chalk.green.dim(`  Press ${chalk.white('s')} to toggle all extra information off.`)}
-${chalk.green.dim(`  Press ${chalk.white('r')} to refresh the output.`)}
-${chalk.green.dim(`  Press ${chalk.white('v')} to receive verbose output.`)}
+  Press ${chalk.white('h')} to toggle this helptext. ${env.flags.helptext ? ON : OFF}
+  Press ${chalk.white('i')} to toggle extra infotext. ${env.flags.infotext ? ON : OFF}
+  Press ${chalk.white('s')} to toggle all extra information off. ${env.flags.silent ? ON : OFF}
+  Press ${chalk.white('f')} to receive notifications of new feedbacks. ${env.flags.feedbacks ? ON : OFF}
+  Press ${chalk.white('v')} to receive debugging output. ${env.flags.verbose ? ON : OFF}
 
-${chalk.green.dim(`  Press ${
-  chalk.white('CTRL-C')} to exit the queue cleanly by deleting the submission_request.`)}
-${chalk.green.dim(`  Press ${
-  chalk.white('ESC')} to suspend the script without deleting the submission_request.`)}
+  Press ${chalk.white('r')} to refresh the output.
+
+  Press ${chalk.white('CTRL-C')} to exit the queue cleanly by deleting the submission_request.
+  Press ${chalk.white('ESC')} to suspend the script without deleting the submission_request.`)}
 `;
   return output;
 };
@@ -154,8 +162,6 @@ const createVerboseOutput = async () => {
   return output;
 };
 
-const helptext = createHelptext();
-
 async function setPrompt() {
   let output = '';
   // Creating the output
@@ -167,7 +173,7 @@ async function setPrompt() {
       output += createSessionInfo();
     }
     if (env.flags.helptext) {
-      output += helptext;
+      output += createHelptext();
     }
   }
   if (env.flags.verbose) {
