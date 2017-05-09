@@ -62,7 +62,9 @@ async function requestLoop() {
       if (env.updateFeedbacks && env.flags.feedbacks) {
         checkFeedbacks();
       }
-      setPrompt();
+      if (env.flags.ui) {
+        setPrompt();
+      }
     } catch (e) {
       env.error = e;
     }
