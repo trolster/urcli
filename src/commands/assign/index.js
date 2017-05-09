@@ -1,1 +1,1 @@
-export {assignCmd} from './assign';
+export {default as assignCmd} from './assign';
