@@ -1,21 +1,34 @@
+// npm modules
+import ora from 'ora';
+import Table from 'cli-table2';
 // our modules
-import {config, api} from '../utils';
+import {config, getCerts} from '../utils';
 
-// TODO: Add table view of certifications.
+async function certsCmd() {
+  const certSpinner = ora('Getting certifications...').start();
+  await getCerts();
 
-export const certsCmd = async () => {
-  const certifications = await api({task: 'certifications'});
-  config.certs = certifications.body
-    .filter(cert => cert.status === 'certified')
-    .reduce((acc, cert) => {
-      /* eslint-disable no-param-reassign */
-      acc[cert.project.id] = {
-        name: cert.project.name,
-        price: cert.project.price,
-      };
-      return acc;
-    }, {});
-  config.save();
-  console.log(`Certifications saved:\n${JSON.stringify(config.certs, null, 2)}`);
+  // Create a table layout for presenting the certifications.
+  const certsDetails = new Table({
+    head: [
+      {hAlign: 'center', content: 'id'},
+      {hAlign: 'left', content: 'project name'},
+      {hAlign: 'center', content: 'price'}],
+    colWidths: [5, 40, 7],
+  });
+  Object.keys(config.certs)
+    .sort((a, b) => a - b)
+    .forEach((id) => {
+      const {name, price} = config.certs[id];
+      certsDetails.push([
+        {hAlign: 'center', content: id},
+        {hAlign: 'left', content: name},
+        {hAlign: 'center', content: price},
+      ]);
+    });
+
+  certSpinner.succeed(`Certifications saved:\n${certsDetails.toString()}`);
   process.exit(0);
-};
+}
+
+export default certsCmd;
