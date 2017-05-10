@@ -3,12 +3,12 @@ import moment from 'moment';
 export default {
   tick: 0,
   update: true,
-  refresh: false,
-  updatePositions: false,
-  updateFeedbacks: true,
   updateInterval: 30, // 30 seconds.
-  updatePositionsInterval: 300, // 5 minutes.
+  refresh: false,
   refreshInterval: 300, // 5 minutes.
+  updatePositions: false,
+  updatePositionsInterval: 300, // 5 minutes.
+  updateFeedbacks: true,
   updateFeedbacksInterval: 300, // 5 minutes
   flags: {
     // Notifications
