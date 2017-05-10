@@ -8,6 +8,11 @@ import env from './assignConfig';
 import selectOptions from './selectOptions';
 
 const exit = async () => {
+  // Only touch the API if we have less than max number of submissions assigned.
+  if (env.assigned.length > 1) {
+    console.log(chalk.green('Exited..'));
+    process.exit(0);
+  }
   /* eslint-disable eqeqeq */
   if (env.key == '\u001b') { // The ESCAPE key
     if (env.submission_request.id) {
