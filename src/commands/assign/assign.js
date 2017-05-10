@@ -69,11 +69,13 @@ const createOrUpdateSubmissionRequest = async () => {
 };
 
 async function assignCmd(ids, options) {
-  const spinner = ora('Registering the request...').start();
+  const spinner = ora('Checking command parameters..').start();
   validateIds(ids, spinner);
   registerOptions(options, spinner);
+  spinner.text = 'Checking for assigned reviews..';
   await checkAssigned();
   if (env.assigned.length < 2) {
+    spinner.text = 'Creating or updating submission request..';
     await createOrUpdateSubmissionRequest();
   }
   handleKeypressEvents();
