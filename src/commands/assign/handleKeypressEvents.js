@@ -5,6 +5,7 @@ import opn from 'opn';
 // our modules
 import {api} from '../../utils';
 import env from './assignConfig';
+import selectOptions from './selectOptions';
 
 const exit = async () => {
   /* eslint-disable eqeqeq */
@@ -37,13 +38,13 @@ const open = () => {
   if (env.key === '2' && env.assigned[1]) opn(`${baseReviewURL}${env.assigned[1].id}`);
 };
 
-export default function handleKeypress() {
+async function handleKeypress() {
   readline.emitKeypressEvents(process.stdin);
   if (process.stdin.isTTY) {
     process.stdin.setRawMode(true);
   }
 
-  process.stdin.on('keypress', (str, key) => {
+  process.stdin.on('keypress', async (str, key) => {
     /* eslint-disable eqeqeq */
     env.key = key.sequence;
     if (env.key == '\u001b' || env.key == '\u0003') {
@@ -54,21 +55,27 @@ export default function handleKeypress() {
       env.tick = 0;
       env.update = true;
       env.updateInfo = true;
-    } else if (env.key === 'i') {
-      env.flags.infotext = !env.flags.infotext;
+    } else if (env.key === 'o') {
+      env.flags.ui = false;
+      const selected = await selectOptions();
+      Object.keys(env.flags).forEach((flag) => {
+        if (selected.options.includes(flag)) {
+          env.flags[flag] = true;
+        } else {
+          env.flags[flag] = false;
+        }
+      });
+      env.flags.ui = true;
       env.update = true;
+      if (process.stdin.isTTY) {
+        process.stdin.setRawMode(true);
+      }
+      process.stdin.resume();
     } else if (env.key === 'h') {
       env.flags.helptext = !env.flags.helptext;
-      env.update = true;
-    } else if (env.key === 's') {
-      env.flags.silent = !env.flags.silent;
-      env.update = true;
-    } else if (env.key === 'v') {
-      env.flags.verbose = !env.flags.verbose;
-      env.update = true;
-    } else if (env.key === 'f') {
-      env.flags.feedbacks = !env.flags.feedbacks;
       env.update = true;
     }
   });
 }
+
+export default handleKeypress;
