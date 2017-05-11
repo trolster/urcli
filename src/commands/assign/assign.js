@@ -59,11 +59,7 @@ const createOrUpdateSubmissionRequest = async () => {
     }
     env.requestIds.push(env.submission_request.id);
   } catch (e) {
-    if (e.res.body) {
-      console.error(e.res.body);
-    } else {
-      console.error(e);
-    }
+    console.error(e);
     process.exit(1);
   }
 };
