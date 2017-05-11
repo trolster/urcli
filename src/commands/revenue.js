@@ -8,6 +8,8 @@ import {api, config, formatPeriods, ReviewsStats} from '../utils';
 
 function print(report) {
   let output = `${chalk.blue(`\nEarnings Report for ${report.startDate} to ${report.endDate}:`)}\n`;
+  output += '=============================================\n';
+  output += (`Total Projects Assigned: ${report.totalAssigned}\n`);
 
   Object.keys(report.projects).forEach((key) => {
     const {name, id, ungradeable, passed, failed, earned, avgTurnaroundTime, totalAssigned} = report.projects[key];
@@ -22,6 +24,7 @@ function print(report) {
         Earned: ${currencyFormatter.format(earned, {code: 'USD'})}
         Average Turnaround Time: ${moment.utc(avgTurnaroundTime).format('HH:mm')}\n`;
   });
+
 
   const totalEarned = currencyFormatter.format(report.totalEarned, {code: 'USD'});
   output += `\nTotal Earned: ${totalEarned}\n`;
