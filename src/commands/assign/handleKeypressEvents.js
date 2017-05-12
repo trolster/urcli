@@ -26,7 +26,7 @@ const exit = async () => {
     process.exit(0);
   } else if (env.key == '\u0003') { // The CTRL-C key
     // Delete submission_request object and exit on CTRL-C
-    api({task: 'refresh', id: env.submission_request.id})
+    api({task: 'delete', id: env.submission_request.id})
     .then(() => {
       console.log(chalk.green('Successfully deleted request and exited..'));
       process.exit(0);
