@@ -20,13 +20,14 @@ export class ReviewsStats {
       // Set the average turnaround time for each project
       project.avgTurnaroundTime = project.totalTurnaroundTime / project.totalAssigned;
       // Find the average daily earnings
-      this.numberOfDays = moment.utc(this.endDate).diff(this.startDate, 'days');
+      // Increase 1 to account the last day, since it considers that `endDate` starts at 00:00
+      this.numberOfDays = moment(this.endDate).diff(this.startDate, 'days') + 1;
       const isCurrentMonth = (moment.utc(this.startDate).month() === moment.utc().month());
       if (isCurrentMonth) {
-        this.numberOfDays = moment.utc().diff(moment(this.startDate), 'days');
+        this.numberOfDays = moment.utc().diff(moment.utc(this.startDate), 'days', true);
       }
-      this.dailyAverage = this.numberOfDays ? project.earned / this.numberOfDays : project.earned;
     });
+    this.dailyAverage = this.numberOfDays ? this.totalEarned / this.numberOfDays : this.totalEarned;
   }
 
   countReview(review) {
