@@ -153,14 +153,12 @@ const createHelptext = () => {
   if (env.flags.helptext) {
     let output = '';
     output += chalk.white('\nKeyboard Shortcuts:\n\n');
+    output += `Press ${chalk.white('h')} to toggle this helptext.\n`;
     output += `Press ${chalk.white('o')} for the options menu.\n`;
     output += `Press ${chalk.white('r')} to refresh the output.\n`;
     output += '\n';
     output += `Press ${chalk.white('0')} to open the review dashboard.\n`;
     output += `Press ${chalk.white('1')} or ${chalk.white('2')} to open your assigned submissions.\n`;
-    output += '\n';
-    output += `Press ${chalk.white('h')} to toggle this helptext.\n`;
-    output += `Press ${chalk.white('s')} to toggle all extra information off.\n`;
     output += '\n';
     output += `Press ${chalk.white('CTRL-C')} to exit the queue cleanly by deleting the submission_request.\n`;
     output += `Press ${chalk.white('ESC')} to suspend the script without deleting the submission_request.\n`;

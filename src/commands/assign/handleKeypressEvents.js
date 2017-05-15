@@ -79,9 +79,6 @@ async function handleKeypress() {
     } else if (env.key === 'h') {
       env.flags.helptext = !env.flags.helptext;
       env.update = true;
-    } else if (env.key === 's') {
-      env.flags.silent = !env.flags.silent;
-      env.update = true;
     }
   });
 }
