@@ -8,6 +8,7 @@ import handleKeypressEvents from './handleKeypressEvents';
 import requestLoop from './gradingAssigner';
 import createRequestBody from './createRequestBody';
 import checkAssigned from './checkAssigned';
+import configureAssign from './configureAssign';
 
 const validateIds = (ids, spinner) => {
   if (ids[0] === 'all') {
@@ -65,6 +66,25 @@ const createOrUpdateSubmissionRequest = async () => {
 };
 
 async function assignCmd(ids, options) {
+  // Set the environment to the user defined configuration if it exists.
+  env.flags = config.assign.flags || env.flags;
+  // Check if a default command has been configured if the user doesn't
+  // provide ids as arguments.
+  if (!ids.length) {
+    if (!config.assign.default) {
+      console.log(chalk.red('You have not yet configured default projects.'));
+      console.log(chalk.red('You have to provide project ids as arguments to this command.'));
+      console.log(`Use ${chalk.green('urcli assign config')} to configure the assing command.`);
+      process.exit(0);
+    }
+    /* eslint-disable no-param-reassign */
+    ids = config.assign.default;
+  }
+  // If the user is configuring the command we exit after configuration.
+  if (ids[0] === 'config') {
+    await configureAssign();
+    process.exit(0);
+  }
   const spinner = ora('Checking command parameters..').start();
   validateIds(ids, spinner);
   registerOptions(options, spinner);
