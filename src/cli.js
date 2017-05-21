@@ -49,7 +49,7 @@ cli
 
 cli
   .command('assign')
-  .arguments('<ids...>')
+  .arguments('[ids...]')
   .option('--push [accessToken]', 'Get push notifications using [accessToken].')
   .option('--feedbacks', 'Get notified on new feedbacks.')
   .option('--silent', 'Skip the helptext.')
