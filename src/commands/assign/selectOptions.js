@@ -58,7 +58,10 @@ async function selectOptions() {
   // Clearing the screen.
   readline.cursorTo(process.stdout, 0, 0);
   readline.clearScreenDown(process.stdout);
-  console.log(chalk.green('urcli is running in the background...\n'));
+  // Notify the user if the script is running..
+  if (env.submission_request) {
+    console.log(chalk.green('urcli is running in the background...\n'));
+  }
 
   const opts = await inquirer.prompt([{
     type: 'checkbox',
