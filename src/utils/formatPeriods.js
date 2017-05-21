@@ -1,11 +1,16 @@
 // npm packages
 import moment from 'moment';
 
+// This function takes in a list of user defined dates and a callback function
+// and returns the result of the callback, once the dates have been validated,
+// correctly formatted and defined as a period with both a start date and an
+// end date.
 export function formatPeriods(args, cb) {
   let err;
   const periods = [];
   const currentMonth = moment.utc().format('YYYY-MM');
 
+  // Uses the moment library's .isValid() method to check if the date exists.
   function validateDate(arg) {
     if (!moment(arg).isValid()) {
       return cb(new Error('EINVALIDDATE'), []);
@@ -65,6 +70,7 @@ export function formatPeriods(args, cb) {
     periods.push([start, end]);
   }
 
+  // returns the result of the callback. The first argument is the error.
   if (err) return cb(err, []);
   return cb(false, periods);
 }
