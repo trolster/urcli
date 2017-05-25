@@ -1,9 +1,10 @@
 // node modules
 import readline from 'readline';
+// npm modules
 import chalk from 'chalk';
 import opn from 'opn';
 // our modules
-import {api} from '../../utils';
+import {api, config} from '../../utils';
 import env from './assignConfig';
 import selectOptions from './selectOptions';
 
@@ -13,6 +14,9 @@ const exit = async () => {
     console.log(chalk.green('Exited..'));
     process.exit(0);
   }
+  // Delete any temporary configurations
+  delete config.temp;
+  config.save();
   /* eslint-disable eqeqeq */
   if (env.key == '\u001b') { // The ESCAPE key
     if (env.submission_request.id) {
@@ -38,9 +42,24 @@ const exit = async () => {
 
 const open = () => {
   const baseReviewURL = 'https://review.udacity.com/#!/submissions/';
+  if (parseInt(env.key, 10) > env.assigned.length) {
+    env.error = `No review is assigned to the key: ${env.key}.`;
+    env.update = true;
+  }
   if (env.key === '0') opn(`${baseReviewURL}dashboard`);
-  if (env.key === '1' && env.assigned[0]) opn(`${baseReviewURL}${env.assigned[0].id}`);
-  if (env.key === '2' && env.assigned[1]) opn(`${baseReviewURL}${env.assigned[1].id}`);
+  if (env.key === '1' || env.key === '2') {
+    try {
+      // Save the submission temporarily to the config file.
+      config.temp = env.assigned[env.key - 1];
+      config.save();
+      const scriptPath = config.assign.scripts[config.temp.project_id];
+      // Open the users script in a new shell.
+      opn(scriptPath, {wait: false});
+    } catch (e) {
+      env.error = `Unable to run user script. Error: ${e.code}.`;
+      env.update = true;
+    }
+  }
 };
 
 async function handleKeypress() {
