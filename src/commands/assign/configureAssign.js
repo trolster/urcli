@@ -8,7 +8,8 @@ import selectDefault from './selectDefault';
 import {config} from '../../utils';
 
 // Initialize by setting all options to the default.
-config.assign = config.assign || env.flags;
+config.assign = config.assign || {};
+config.assign.flags = config.assign.flags || env.flags;
 config.assign.scripts = config.assign.scripts || {};
 config.assign.default = config.assign.default || [];
 
