@@ -10,12 +10,12 @@ function validatePath(userPath) {
   try {
     return fs.statSync(userPath).isFile();
   } catch (e) {
-    // Check exception. If ENOENT - no such file or directory ok, file doesn't exist.
-    // Otherwise something else went wrong, we don't have rights to access the file, ...
+    // Something went wrong, like not having access rights to the file...
     if (e.code !== 'ENOENT') {
       throw e;
     }
-    return 'File does not exist. Please enter a valid path.';
+    // If ENOENT - the file doesn't exist and we return false.
+    return false;
   }
 }
 
@@ -46,7 +46,12 @@ async function selectScripts() {
       type: 'input',
       name: id,
       message: `Input script path for project ${id}`,
-      validate: validatePath,
+      validate: () => {
+        if (!validatePath) {
+          return 'File does not exist. Please enter a valid path.';
+        }
+        return true;
+      },
     }));
   const answers = await inquirer.prompt(questions);
   return answers;

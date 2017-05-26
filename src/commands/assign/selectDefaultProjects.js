@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import {config} from '../../utils';
 import env from './assignConfig';
 
-async function selectDefault() {
+async function selectDefaultProjects() {
   const choices = Object.keys(config.certs)
     .map(id => ({
       name: id,
@@ -31,4 +31,4 @@ async function selectDefault() {
   return opts.default;
 }
 
-export default selectDefault;
+export default selectDefaultProjects;

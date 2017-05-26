@@ -4,7 +4,7 @@ import inquirer from 'inquirer';
 import env from './assignConfig';
 import selectOptions from './selectOptions';
 import selectScripts from './selectScripts';
-import selectDefault from './selectDefault';
+import selectDefaultProjects from './selectDefaultProjects';
 import {config} from '../../utils';
 
 // Initialize by setting all options to the default.
@@ -43,7 +43,7 @@ const configureAssign = async () => {
   const selected = selection.opt;
   if (selected === 'exit') {
     config.save();
-    console.log(config.assign);
+    console.log('Configuration saved!');
     process.exit(0);
   } else {
     if (selected === 'ui') {
@@ -56,7 +56,7 @@ const configureAssign = async () => {
         }
       });
     } else if (selected === 'projects') {
-      config.assign.default = await selectDefault();
+      config.assign.default = await selectDefaultProjects();
     } else {
       config.assign.scripts = await selectScripts();
     }
