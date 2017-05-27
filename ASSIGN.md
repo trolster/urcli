@@ -2,16 +2,20 @@
 
 The `assign` command uses the [Reviews API](https://review.udacity.com/api-doc/index.html) to create or update a submission_request object on Udacity's servers. This object is what is keeping you in project queues. If you get a submission assigned the object is deleted on the server, and the `assign` script takes care of creating a new one.
 
-1. Basic assign command
-    - Keyboard Shortcuts
-    - Exiting the Assign Command
-    - Updating the List of Projects
-1. Notifications
-1. Configure the Assign Command
-1. Running Scripts When Opening a Review
-1. Running Assign on a Server
-1. How the Queue System Works
-1. FAQ
+1. [Basic assign command](#the-basic-assign-command)
+    - [Keyboard Shortcuts](#keyboard-shortcuts)
+    - [Exiting the Assign Command](#exiting-the-assign-command)
+    - [Updating the List of Projects](#updating-the-list-of-projects)
+1. [Notifications](#notifications)
+    - [Assignment Notifications](#assignment-notifications)
+    - [Feedback Notifications](#feedback-notification)
+    - [Terminal Information](#terminal-information)
+    - [Pushbullet Notifications](#pushbullet-notifications)
+1. [Configure the Assign Command](#configure-the-assign-command)
+1. [Running Scripts When Opening a Review](#running-scripts-when-opening-a-review)
+1. [Running Assign on a Server](#running-assign-on-a-server)
+1. [How the Queue System Works](#how-the-queue-system-works)
+1. [FAQ](#faq)
 
 ## The Basic Assign Command
 
@@ -106,16 +110,19 @@ Or in Python:
     webbrowser.open(url)
 ```
 
-To run anything of course you'll first need to create a shell script to run it. You can start by creating a `scripts` directory in your .urcli folder: `mkdir ~/.urcli/scripts`. Then create a shell script that you want to run every time you open a particular project type from the UI. Let's say it's project type `145`, then create it: `touch ~/.urcli/scripts/145.sh`. You'll want to make sure it's executable: `chmod a+x ~/.urcli/scripts/145.sh`. Now you can add a command in the script:
+To run anything of course you'll first need to create a shell script to run it. You can start by creating a `scripts` directory in your .urcli folder: `mkdir ~/.urcli/scripts`. Then create a shell script that you want to run every time you open a particular project type from the UI. Let's say it's project type "Article to Mockup", which has an id of `145`: `touch ~/.urcli/scripts/145.sh`. You'll want to make sure it's executable: `chmod a+x ~/.urcli/scripts/145.sh`. Now you can add commands in the shell script:
 
+File `145.sh`:
 ```shell
+#!/bin/bash
+
 echo 'Yo from the shell script'
 python path/to/script/you/want/to/run.py
 node path/to/js/script.js
-echo 'Yo Im done'
+echo 'Im done yo'
 ```
 
-Doing it this way allows a cross-platform way to run anything when you open a review.
+Using a shell script with the assign command, allows for a cross-platform way to run anything when you open a review.
 
 ## Running Assign on a Server
 
