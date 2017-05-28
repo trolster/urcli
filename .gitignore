@@ -1,6 +1,6 @@
 # local files and folders
 lib/
-testing.js
+testing/
 
 ### Node ###
 # Logs
