@@ -22,6 +22,8 @@
     - `urcli assign all`, places you in the queue for every project you are certified for.
 1. Profit! (literally).
 
+:bulb: If you gain a new certification after you've started using urcli, you can update the stored list of certifications by running the `certs` command.
+
 :bulb: When using the `setup` command, be sure to put the token in quotes, `urcli setup "your-token"`, since tokens often include dashes (`-`) which messes things up.
 
 ## The `assign` command
