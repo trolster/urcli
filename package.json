@@ -1,8 +1,8 @@
 {
   "name": "urcli",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "publishConfig": {
-    "tag": "next"
+    "tag": "master"
   },
   "repository": {
     "type": "git",
