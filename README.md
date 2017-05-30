@@ -24,50 +24,7 @@
 
 ## The `assign` command
 
-The `assign` command creates or updates a submission_request object on Udacity's servers. This object is what is keeping you in project queues. If you get a submission assigned the object is deleted on the server, and the `assign` script takes care of creating a new one. Ex.:
-- `urcli assign 145`, places you in the queue for project 145.
-- `urcli assign 134 145 46`, places you in the queues for project 145, 134 and 46.
-- `urcli assign all`, places you in the queue for every project you are certified for.
-
-#### Exiting `assign`
-
-You can exit the script in two ways:
-- Press `ESC` to exit without deleting your submission_request object on the server. The submission request will be refreshed so that you will stay in the queues you are in for an hour.
-- Press `CTRL-C` to exit _and_ delete the submission_request on the server. This means that you leave all the queues that you are in.
-
-#### Updating `assign`
-
-You can update your submission request instead of deleting it and creating a new one. You might want to do that in the case where you just want to change which projects you wish to review without leaving any queues. Simply exit the assign script by pressing `ESC` (this will leave the submission_request object intact on the server) and use the assign command again with the changed arguments.
-
-For instance, if you had previously run the command `urcli assign 145 144` and later wanted to change that to just 145, but _without_ leaving the queue for 145, you exit the script using `ESC` and run the command `urcli assign 145`. This will change the current submission_request object to only queue up for project 145, and will immediately remove you from the queue for project 144.
-
-#### Assignment Notifications
-
-The assign script updates every 30 seconds to see if you've gotten a submission assigned. If you've been assigned a submission it will notify you with a desktop notification:
-
-<img src="http://i.imgur.com/XaKNhaK.png" alt="Desktop notifications on a Mac" width="700px">
-
-#### Feedback Notifications
-
-You can get notified about any new feedbacks from students by using the `--feedbacks` option with the `assign` command. Ex: `urcli assign 145 --feedbacks`.
-
-<img src="http://i.imgur.com/86RG4la.png" alt="Desktop notifications on a Mac" width="700px">
-
-#### Terminal Information
-
-The script updates your queue position (and checks for new feedbacks) every 5 minutes. It outputs all relevant information to the terminal:
-
-<img src="http://i.imgur.com/8h2jjht.png" alt="CLI Prompt information display" width="700px">
-
-#### PushBullet Notifications
-
-You can get notified on other devices using the [PushBullet](https://www.pushbullet.com/) App. You will need to install the app on all of the devices you wish to receive notifications on and then run the `setup` command again, entering in your PushBullet access token when prompted. Then you can run the `assign` command with the `--push` option to get the notifications.
-
-:information_source: You can create an access token on your [pushbullet.com account page](https://www.pushbullet.com/#settings/account).
-
-Ex.: `urcli assign all --push`
-
-Once you get a submission assigned you'll get a notification on all active devices with PushBullet installed.
+[The documentation on the assign command has been moved to its own page.](./ASSIGN.md)
 
 ## The `revenue` command
 
