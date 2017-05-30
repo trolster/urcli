@@ -1,9 +1,6 @@
 {
   "name": "urcli",
   "version": "3.0.1",
-  "publishConfig": {
-    "tag": "master"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trolster/ur-cli.git"
