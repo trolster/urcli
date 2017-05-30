@@ -35,7 +35,7 @@ export function api({task, id = '', body = ''}) {
     request(requestOptions, (error, res) => {
       if (error) {
         reject({error, requestOptions, res});
-      } else if (res.body.error) {
+      } else if (res.body && res.body.error) {
         reject({error: res.body.error, requestOptions, res});
       } else {
         resolve(res);

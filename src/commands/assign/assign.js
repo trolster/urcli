@@ -50,14 +50,13 @@ const createOrUpdateSubmissionRequest = async () => {
         task: 'refresh',
         id: env.submission_request.id,
       });
-      env.submission_request = submissionRequest.body;
     } else {
       submissionRequest = await api({
         task: 'create',
         body: createRequestBody(),
       });
-      env.submission_request = submissionRequest.body[0];
     }
+    env.submission_request = submissionRequest.body;
     env.requestIds.push(env.submission_request.id);
   } catch (e) {
     console.error(e);
