@@ -13,14 +13,14 @@
 ## Quickstart
 
 1. Run `npm install -g urcli`.
-1. Get a new token from the API Access link in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard).
-<img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
-1. Run `urcli setup`. When prompted, paste in the token you just got and then go through the rest of the setup.
-1. Run `urcli assign` proceeded by valid project ids for projects you are certified for. Ex:
+2. Get a new token from the API Access link in the [Reviewer Dashboard[(https://review.udacity.com/#!/submissions/dashboard). <img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
+3. Run `urcli setup`. When prompted, paste in the token you just got and then go through the rest of the setup.
+4. Run `urcli assign` proceeded by valid project ids for projects you are certified for. Ex:
     - `urcli assign 145`, places you in the queue for project 145.
     - `urcli assign 134 145 46`, places you in the queues for project 145, 134 and 46.
     - `urcli assign all`, places you in the queue for every project you are certified for.
-1. Profit! (literally).
+5. Profit! (literally).
+
 
 ## The `assign` command
 
