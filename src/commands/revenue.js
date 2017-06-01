@@ -29,7 +29,7 @@ function print(report) {
   const totalEarned = currencyFormatter.format(report.totalEarned, {code: 'USD'});
   output += `\nTotal Earned: ${totalEarned}\n`;
 
-  if (report.numberOfDays) {
+  if (report.numberOfDays > 1) {
     const dailyAverage = currencyFormatter.format(report.dailyAverage, {code: 'USD'});
     output += `Daily Average: ${dailyAverage}\n`;
   }
