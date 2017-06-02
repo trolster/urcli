@@ -42,6 +42,8 @@ const configureAssign = async () => {
 
   const selected = selection.opt;
   if (selected === 'exit') {
+    // Make sure the ui flag is always set to true
+    config.assign.flags.ui = true;
     config.save();
     console.log('Configuration saved!');
     process.exit(0);
