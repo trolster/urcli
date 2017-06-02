@@ -3,15 +3,20 @@ import readline from 'readline';
 // npm modules
 import chalk from 'chalk';
 import opn from 'opn';
+import ora from 'ora';
 // our modules
 import {api, config} from '../../utils';
 import env from './assignConfig';
 import selectOptions from './selectOptions';
 
 const exit = async () => {
+  // Avoid updates while exiting
+  env.tick = 1;
+  env.updateInterval = 300; // 5 minutes should be enough
+  const spinner = ora('Exiting...').start();
   // Only touch the API if we have less than max number of submissions assigned.
   if (env.assigned.length > 1) {
-    console.log(chalk.green('Exited..'));
+    spinner.succeed('Exited successfully.');
     process.exit(0);
   }
   // Delete any temporary configurations
@@ -22,17 +27,18 @@ const exit = async () => {
     if (env.submission_request.id) {
       // Suspend on ESC and refresh the submission_request rather than deleting it.
       await api({task: 'refresh', id: env.submission_request.id});
-      console.log(chalk.green('Exited without deleting the submission_request...'));
+
+      spinner.succeed('Exited without deleting the submission_request.');
       console.log(chalk.green('The current submission_request will expire in an hour.'));
     } else {
-      console.log(chalk.green('Exited..'));
+      spinner.succeed('Exited successfully.');
     }
     process.exit(0);
   } else if (env.key == '\u0003') { // The CTRL-C key
     // Delete submission_request object and exit on CTRL-C
     api({task: 'delete', id: env.submission_request.id})
     .then(() => {
-      console.log(chalk.green('Successfully deleted request and exited..'));
+      spinner.succeed('Successfully deleted request and exited.');
       process.exit(0);
     });
   } else {
