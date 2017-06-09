@@ -23,7 +23,16 @@
 
 ## Usage
 
-All documentation for the various commands can be found in the [Wiki](https://github.com/trolster/urcli/wiki)
+All documentation for the various commands can be found in the [Wiki](https://github.com/trolster/urcli/wiki).
+
+1. [Commands](https://github.com/trolster/urcli/wiki/Commands)
+    + [setup](https://github.com/trolster/urcli/wiki/setup)
+    + [assign](https://github.com/trolster/urcli/wiki/assign)
+    + [token](https://github.com/trolster/urcli/wiki/token)
+    + [revenue](https://github.com/trolster/urcli/wiki/revenue)
+    + [certs](https://github.com/trolster/urcli/wiki/certs)
+1. [Community Guides](https://github.com/trolster/urcli/wiki/Community-Guides)
+1. [FAQ](https://github.com/trolster/urcli/wiki/faq)
 
 ## The configuration file
 
