@@ -1,6 +1,6 @@
 {
   "name": "urcli",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trolster/ur-cli.git"
