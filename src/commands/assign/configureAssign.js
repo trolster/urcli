@@ -1,7 +1,6 @@
 // npm modules
 import inquirer from 'inquirer';
 // our modules
-import env from './assignConfig';
 import selectOptions from './selectOptions';
 import selectScripts from './selectScripts';
 import selectDefaultProjects from './selectDefaultProjects';
@@ -9,7 +8,7 @@ import {config} from '../../utils';
 
 // Initialize by setting all options to the default.
 config.assign = config.assign || {};
-config.assign.flags = config.assign.flags || env.flags;
+config.assign.flags = config.assign.flags || {};
 config.assign.scripts = config.assign.scripts || {};
 config.assign.default = config.assign.default || [];
 

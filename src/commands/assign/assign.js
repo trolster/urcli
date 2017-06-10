@@ -66,7 +66,8 @@ const createOrUpdateSubmissionRequest = async () => {
 
 async function assignCmd(ids, options) {
   // Set the environment to the user defined configuration if it exists.
-  env.flags = config.assign.flags || env.flags;
+  const defaultFlagsAreDefined = !!Object.keys(config.assign.flags).length;
+  env.flags = defaultFlagsAreDefined ? config.assign.flags : env.flags;
   // Check if a default command has been configured if the user doesn't
   // provide ids as arguments.
   if (!ids.length) {
