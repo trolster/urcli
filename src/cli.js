@@ -6,7 +6,6 @@ import {
   setupCmd,
   tokenCmd,
   certsCmd,
-  debugCmd,
   revenueCmd,
   assignCmd,
 } from './commands';
@@ -59,13 +58,6 @@ cli
   .description('Place requests in the queue.')
   .action((ids, options) => {
     assignCmd(ids, options);
-  });
-
-cli
-  .command('debugger')
-  .description('Save your certifications')
-  .action(() => {
-    debugCmd();
   });
 
 export default cli;
