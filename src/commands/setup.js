@@ -1,9 +1,10 @@
 // npm modules
-import moment from 'moment';
+import chalk from 'chalk';
 import inquirer from 'inquirer';
+import moment from 'moment';
+import ora from 'ora';
 import PushBullet from 'pushbullet';
 import Table from 'cli-table2';
-import ora from 'ora';
 // our modules
 import {api, config} from '../utils';
 
@@ -70,7 +71,7 @@ async function getUserInfoFromApi() {
   process.exit(0);
 }
 
-const accessToken = () => {
+const pushbulletTokenInput = () => {
   inquirer.prompt([{
     type: 'input',
     name: 'pushbulletToken',
@@ -90,7 +91,7 @@ const accessToken = () => {
   });
 };
 
-const pushbullet = () => {
+const pushbulletChoice = () => {
   inquirer.prompt([{
     type: 'confirm',
     name: 'pushbullet',
@@ -98,7 +99,7 @@ const pushbullet = () => {
     default: false,
   }]).then((confirm) => {
     if (confirm.pushbullet) {
-      accessToken();
+      pushbulletTokenInput();
     } else {
       getUserInfoFromApi();
     }
@@ -119,7 +120,7 @@ const languages = () => {
     },
   }]).then((langs) => {
     Object.assign(config, langs);
-    pushbullet();
+    pushbulletChoice();
   });
 };
 
@@ -130,13 +131,20 @@ const tokenInput = () => {
     message: 'Input your token:',
     validate(token) {
       config.token = token;
-      return api({task: 'count'}).then((res) => {
-        /* eslint-disable eqeqeq */
-        if (res.statusCode == '200') {
-          return true;
-        }
-        return 'The token was invalid, try again.';
-      });
+      return api({task: 'count'})
+        .then((res) => {
+          /* eslint-disable eqeqeq */
+          if (res.statusCode == '200') {
+            return true;
+          }
+          return 'The token was invalid, try again.';
+        })
+        .catch((err) => {
+          console.log('There was an error validating the token.');
+          console.log('Make sure you entered the token correctly and that you are not having connectivity issues.');
+          console.log(`\n${chalk.red('The API request returned with the following error:')}\n\n${err}`);
+          process.exit(1);
+        });
     },
   }]).then((token) => {
     Object.assign(config, token);
