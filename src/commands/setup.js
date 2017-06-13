@@ -142,7 +142,8 @@ const tokenInput = () => {
         .catch((err) => {
           console.log('There was an error validating the token.');
           console.log('Make sure you entered the token correctly and that you are not having connectivity issues.');
-          console.log(`\n${chalk.red('The API request returned with the following error:')}\n\n${err}`);
+          console.log(`
+            ${chalk.red('The API request returned with the following error:')}\n\n${JSON.stringify(err, null, 4)}`);
           process.exit(1);
         });
     },
