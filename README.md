@@ -10,7 +10,7 @@
 - [Node.js](https://nodejs.org/en/download/) v6.0.0 or higher
 - NPM (v3.0.0+ recommended) (this comes with Node.js)
 
-## Quickstart
+## :zap: Quickstart
 
 1. Run `npm install -g urcli`.
 2. Get a new token from the API Access link in the [Reviewer Dashboard](https://review.udacity.com/#!/submissions/dashboard). <img src="http://i.imgur.com/QH7onbk.png" alt="Token retrieval" width="500px">
@@ -21,9 +21,9 @@
     - `urcli assign all`, places you in the queue for every project you are certified for.
 5. Profit! (literally).
 
-## Usage
+## Documentation
 
-All documentation for the various commands can be found in the [Wiki](https://github.com/trolster/urcli/wiki).
+Documentation can be found in the [Wiki](https://github.com/trolster/urcli/wiki).
 
 1. [Commands](https://github.com/trolster/urcli/wiki/Commands)
     + [setup](https://github.com/trolster/urcli/wiki/setup)
