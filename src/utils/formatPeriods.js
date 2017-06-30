@@ -49,7 +49,7 @@ export function formatPeriods(args, cb) {
       end = month === currentMonth ? moment.utc() : moment.utc(month).endOf('month');
     } else if (matchYear.test(arg)) {
       start = moment.utc(arg, 'YYYY');
-      end = arg === moment.utc().year() ? moment.utc() : moment.utc(arg, 'YYYY').endOf('year');
+      end = arg === moment.utc().year().toString() ? moment.utc() : moment.utc(arg, 'YYYY').endOf('year');
     } else if (arg === 'week') {
       start = moment.utc().startOf('week');
       end = moment.utc().endOf('week');
