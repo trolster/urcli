@@ -19,14 +19,19 @@ export class ReviewsStats {
       const project = this.projects[id];
       // Set the average turnaround time for each project
       project.avgTurnaroundTime = project.totalTurnaroundTime / project.totalAssigned;
-      // Find the average daily earnings
+    });
+
+    // Find the average daily earnings
+
+    // Checks if the endTime is today. If yes, it calculate the number of days
+    // from startDate up to now.
+    const endIsToday = moment.utc().isSame(this.endDate, 'day');
+    if (endIsToday) {
+      this.numberOfDays = moment.utc().diff(moment.utc(this.startDate), 'days', true);
+    } else {
       // Increase 1 to account the last day, since it considers that `endDate` starts at 00:00
       this.numberOfDays = moment(this.endDate).diff(this.startDate, 'days') + 1;
-      const isCurrentMonth = (moment.utc(this.startDate).month() === moment.utc().month());
-      if (isCurrentMonth) {
-        this.numberOfDays = moment.utc().diff(moment.utc(this.startDate), 'days', true);
-      }
-    });
+    }
     this.dailyAverage = this.numberOfDays ? this.totalEarned / this.numberOfDays : this.totalEarned;
   }
 
