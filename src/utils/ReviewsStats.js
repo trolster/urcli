@@ -23,10 +23,9 @@ export class ReviewsStats {
 
     // Find the average daily earnings
 
-    // Checks if the endTime is today or in the future. If yes it calculates
-    // the number of days considering the endDate as the current time. If not,
-    // it uses the endTime provided by the user.
-    const endIsToday = moment.utc().diff(this.endDate, 'days', true) < 1;
+    // Checks if the endTime is today. If yes, it calculate the number of days
+    // from startDate up to now.
+    const endIsToday = moment.utc().isSame(this.endDate, 'day');
     if (endIsToday) {
       this.numberOfDays = moment.utc().diff(moment.utc(this.startDate), 'days', true);
     } else {
