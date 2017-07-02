@@ -17,15 +17,22 @@ async function getUserInfoFromApi() {
       end_date: moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
     },
   });
-  const startDate = completedReviews.body
-    .map(review => moment(review.assigned_at)) // returns date of review
-    .map(date => date.valueOf()) // returns date in Unix Time (milliseconds from 1970)
-    .reduce((acc, val) => { // returns the smallest number
-      if (acc < val) {
-        return acc;
-      }
-      return val;
-    });
+  // Check if user has a startDate. If s/he is a new reviewer, there will be no
+  // startDate, so we set it to the present day.
+  let startDate;
+  if (completedReviews.body.length) {
+    startDate = completedReviews.body
+      .map(review => moment(review.assigned_at)) // returns date of review
+      .map(date => date.valueOf()) // returns date in Unix Time (milliseconds from 1970)
+      .reduce((acc, val) => { // returns the smallest number
+        if (acc < val) {
+          return acc;
+        }
+        return val;
+      });
+  } else {
+    startDate = moment.utc();
+  }
   config.startDate = moment(startDate).format('YYYY-MM-DD');
   startDateSpinner.succeed(`Startdate is ${config.startDate}`);
 
