@@ -17,8 +17,10 @@ async function getUserInfoFromApi() {
       end_date: moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
     },
   });
+  // Check if user has a startDate. If s/he is a new reviewer, there will be no
+  // startDate, so we set it to the present day.
   let startDate;
-  if (completedReviews) {
+  if (completedReviews.body.length) {
     startDate = completedReviews.body
       .map(review => moment(review.assigned_at)) // returns date of review
       .map(date => date.valueOf()) // returns date in Unix Time (milliseconds from 1970)
