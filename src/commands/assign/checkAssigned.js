@@ -2,12 +2,19 @@
 import moment from 'moment';
 import notifier from 'node-notifier';
 import PushBullet from 'pushbullet';
+import chalk from 'chalk';
 // our modules
 import {api, config} from '../../utils';
 import env from './assignConfig';
 
 async function checkAssigned() {
-  const assignedResponse = await api({task: 'assigned'});
+  let assignedResponse;
+  try {
+    assignedResponse = await api({task: 'assigned'});
+  } catch (e) {
+    console.log(chalk.red(`\n\n  The API is returning the following error: "${e.error}"`));
+    process.exit(1);
+  }
   // There are edge-cases where someone completes a reviews within the update
   // window, and also gets one assigned. This happens. So we have to always
   // check the actual reviews that are assigned. We can't just check if the
