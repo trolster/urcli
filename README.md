@@ -21,6 +21,14 @@
     - `urcli assign all`, places you in the queue for every project you are certified for.
 5. Profit! (literally).
 
+## Upgrade
+
+2. Get a new token (See Quickstart #2).
+1. Press `ESC` to stop the currently running instance (If you have urcli running).
+3. Run `npm i -g urcli`.
+4. Run `urcli setup`.
+5. Run your assign command, `urcli assign all`.
+
 ## Documentation
 
 Documentation can be found in the [Wiki](https://github.com/trolster/urcli/wiki).
