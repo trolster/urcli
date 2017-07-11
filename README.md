@@ -29,6 +29,10 @@
 4. Run `urcli setup`.
 5. Run your assign command, `urcli assign all`.
 
+## Executables
+
+If you don't know how to use Node and npm, you can use the [executables](https://github.com/trolster/urcli/tree/master/executables) instead. See the [wiki entry](https://github.com/trolster/urcli/wiki/Executables) for more.
+
 ## Documentation
 
 Documentation can be found in the [Wiki](https://github.com/trolster/urcli/wiki).
