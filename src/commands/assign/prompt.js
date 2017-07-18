@@ -49,6 +49,7 @@ const createProjectDetailsTable = () => {
           ]);
         });
       if (env.flags.infotext) {
+        output += `Current submission_request_id: ${env.submission_request.id}\n`;
         output += 'You are in the following queues:\n';
       }
       output += `${projectDetailsTable.toString()}\n\n`;
