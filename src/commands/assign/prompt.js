@@ -116,6 +116,7 @@ const createSessionUptimeInfo = () => {
 };
 
 const createSessionAssignedInfo = () => {
+  /* eslint-disable comma-dangle */
   let output = '';
   if (env.flags.infotext) {
     output += chalk.green(
