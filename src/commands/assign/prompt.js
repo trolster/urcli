@@ -119,7 +119,14 @@ const createSessionAssignedInfo = () => {
   let output = '';
   if (env.flags.infotext) {
     output += chalk.green(
-      `Total assigned: ${chalk.white(env.assignedTotal)} since ${env.startTime.format('dddd, MMMM Do YYYY, HH:mm')}\n`);
+      `Total assigned: ${chalk.white(
+        env.assignedTotal
+      )} since ${env.startTime.format(
+        'dddd, MMMM Do YYYY, HH:mm'
+      )}\nCurrent submission_request_id: ${chalk.white(
+        env.submission_request.id
+      )}\n`
+    );
   }
   return output;
 };
