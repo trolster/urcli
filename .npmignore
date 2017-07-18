@@ -1,3 +1,2 @@
-src/
-__tests__
-__mocks__
+/src
+/executables
