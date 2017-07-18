@@ -49,7 +49,6 @@ const createProjectDetailsTable = () => {
           ]);
         });
       if (env.flags.infotext) {
-        output += `Current submission_request_id: ${env.submission_request.id}\n`;
         output += 'You are in the following queues:\n';
       }
       output += `${projectDetailsTable.toString()}\n\n`;
@@ -120,7 +119,14 @@ const createSessionAssignedInfo = () => {
   let output = '';
   if (env.flags.infotext) {
     output += chalk.green(
-      `Total assigned: ${chalk.white(env.assignedTotal)} since ${env.startTime.format('dddd, MMMM Do YYYY, HH:mm')}\n`);
+      `Total assigned: ${chalk.white(
+        env.assignedTotal
+      )} since ${env.startTime.format(
+        'dddd, MMMM Do YYYY, HH:mm'
+      )}\nCurrent submission_request_id: ${chalk.white(
+        env.submission_request.id
+      )}\n`
+    );
   }
   return output;
 };
