@@ -4,7 +4,7 @@ import request from 'request';
 import {config} from './';
 
 function endpoint(task, id) {
-  const base = 'https://review-api.udacity.com/api/v1';
+  const base = process.env.UDACITY_API_BASE || 'https://review-api.udacity.com/api/v1';
   return {
     certifications: [`${base}/me/certifications/`, 'GET'],
     assigned: [`${base}/me/submissions/assigned/`, 'GET'],
