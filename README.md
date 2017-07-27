@@ -31,7 +31,7 @@
 
 ## Executables
 
-If you don't know how to use Node and npm, you can use the [executables](https://github.com/trolster/urcli/tree/master/executables) instead. See the [wiki entry](https://github.com/trolster/urcli/wiki/Executables) for more.
+If you don't know how to use Node and npm, you can use the [executables](https://github.com/trolster/urcli/releases) instead. See the [wiki entry](https://github.com/trolster/urcli/wiki/Executables) for more.
 
 ## Documentation
 
