@@ -61,13 +61,6 @@ For very minor changes:
 
 For new features you need to do everything above, but before you write any code you should first read the [contributing guidelines](https://github.com/trolster/urcli/blob/master/.github/CONTRIBUTING.md) and then open an issue explaining what you have in mind. Making sure your feature fits with the direction the project is going can save you a lot of otherwise wasted effort.
 
-## Contributors
-
-Thanks to the people who helped make this project better:
-
-- [Gustavo Bragança](https://github.com/gabraganca)
-- [Gilad Gressel](https://github.com/giladgressel)
-
 ## License
 
 [MIT](LICENSE) © Mikkel Trolle Larsen.
