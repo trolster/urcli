@@ -37,7 +37,7 @@ export class ReviewsStats {
 
   countReview(review) {
     const id = review.project_id;
-    const price = parseInt(review.price, 10);
+    const price = parseFloat(review.price);
     const assignedAt = moment(review.assigned_at);
     const completedAt = moment(review.completed_at);
     const turnaroundTime = completedAt.diff(assignedAt);
