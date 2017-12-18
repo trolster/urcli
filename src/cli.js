@@ -8,6 +8,7 @@ import {
   certsCmd,
   revenueCmd,
   assignCmd,
+  rateCmd
 } from './commands';
 
 cli
@@ -59,5 +60,15 @@ cli
   .action((ids, options) => {
     assignCmd(ids, options);
   });
+
+cli
+  .command('rate')
+  .arguments('[periods...]')
+  .option('--from <date>', 'select from <date>.')
+  .option('--to <date>', 'select to <date>.')
+  .description('Lets you know how is your rating in a given period.')
+  .action((periods, options) => {
+    rateCmd(periods, options);
+  })
 
 export default cli;
