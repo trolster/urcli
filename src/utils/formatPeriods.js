@@ -1,5 +1,6 @@
 // npm packages
 import moment from 'moment';
+import {config} from '../utils';
 
 // This function takes in a list of user defined dates and a callback function
 // and returns the result of the callback, once the dates have been validated,
@@ -73,4 +74,24 @@ export function formatPeriods(args, cb) {
   // returns the result of the callback. The first argument is the error.
   if (err) return cb(err, []);
   return cb(false, periods);
+}
+
+export function formatUserInput(args, options) {
+  const userInput = args;
+  // Check if the user is using the --from and --to flags.
+  if (options.from || options.to) {
+    userInput.push({
+      from: options.from || config.startDate,
+      to: options.to || moment.utc().format('YYYY-MM-DDTHH:mm:ss.SSS'),
+    });
+  }
+  // If the user didn't input any args, we create a period that represents
+  // the total time the reviewer has been actively reviewing projects.
+  if (!args.length) {
+    userInput.push({
+      from: config.startDate,
+      to: moment().endOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS'),
+    });
+  }
+  return userInput;
 }
