@@ -1,6 +1,6 @@
 # CLI tool for the Udacity Reviews API
 
-> **DISCLAIMER:** The API is going to be shut down and `urcli` will become inactive in the following months. We would like to thank all contributors and users for making `urcli` so awesome!
+> **IMPORTANT NOTICE:** The API is going to be shut down and `urcli` will become inactive in the following months. You should no longer use `urcli` alongside any official Udacity mentor dashboard features. The only commands that are currently recommended are `revenue` and `notify`.
 
 `urcli` is a Command Line Interface for configuring and running API calls against the Udacity Reviews API. You can find the API documentation here: https://review.udacity.com/api-doc/index.html.
 
