@@ -8,11 +8,19 @@ import {
   certsCmd,
   revenueCmd,
   assignCmd,
+  notifyCmd,
 } from './commands';
 
 cli
   .version(pkg.version)
   .usage('<command> <args> [options]');
+
+cli
+  .command('notify')
+  .description('Notifications when a submission is assigned.')
+  .action(() => {
+    notifyCmd();
+  });
 
 cli
   .command('token')
