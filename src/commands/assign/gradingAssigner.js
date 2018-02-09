@@ -41,7 +41,7 @@ async function requestLoop() {
       await checkAssigned();
       // We only need to deal with the submission request and the queue if we
       // haven't got max number of submissions assigned.
-      if (env.assigned.length < 2) {
+      if (env.assigned.length < 5) {
         const res = await api({task: 'get'});
         const submissionRequest = res.body[0];
         // If a submission_request exists, we save it and check if it should be
