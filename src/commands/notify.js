@@ -11,7 +11,9 @@ import {api, config} from '../utils';
 
 const env = {
   push: false,
+  startTime: moment(),
   assigned: [],
+  assignedTotal: 0,
 };
 
 // Shows assigned projects in a table
@@ -94,7 +96,10 @@ async function checkAssigned() {
   setPrompt();
 }
 
-export default () => {
+export default (options) => {
+  if (options.push) {
+    env.push = true;
+  }
   checkAssigned();
   setInterval(() => {
     checkAssigned();

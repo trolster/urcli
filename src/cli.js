@@ -17,9 +17,10 @@ cli
 
 cli
   .command('notify')
+  .option('--push', 'Get push notifications.')
   .description('Notifications when a submission is assigned.')
-  .action(() => {
-    notifyCmd();
+  .action((options) => {
+    notifyCmd(options);
   });
 
 cli
