@@ -1,12 +1,15 @@
-# CLI tool for the Udacity Reviews API
 
-> **IMPORTANT NOTICE:** The API is going to be shut down and `urcli` will become inactive in the following months. You should no longer use `urcli` alongside any official Udacity mentor dashboard features. The only commands that are currently recommended are `revenue` and `notify`.
+
+# CLI tool for the Udacity Reviews API
 
 `urcli` is a Command Line Interface for configuring and running API calls against the Udacity Reviews API. You can find the API documentation here: https://review.udacity.com/api-doc/index.html.
 
 [![npm downloads](https://img.shields.io/npm/dt/urcli.svg?style=flat)](https://www.npmjs.com/package/urcli)
 [![npm version](https://img.shields.io/npm/v/urcli.svg?style=flat)](https://www.npmjs.com/package/urcli)
 [![npm license](https://img.shields.io/npm/l/urcli.svg?style=flat)](https://www.npmjs.com/package/urcli)
+
+---
+**IMPORTANT NOTICE:** The API is going to be shut down and `urcli` will become inactive in the following months. You should no longer use `urcli` alongside any official Udacity mentor dashboard features. The only command that is currently recommended is `notify`. You can read about `notify` in the following section:
 
 ## The `notify` Command
 
@@ -18,6 +21,7 @@ urcli notify
 
 This command only hits the `/me/assigned` endpoint, so it doesn't touch the submission request or interact with the queue in any way. That being said, Udacity has been clear in saying that it doesn't support 3rd party tools anymore, so this new feature will not be supported by anyone. It's one of those take-it-or-leave-it things :smile:. There is no one to complain to if it breaks your computer. With that also being said, it really should be safe to use it while we wait for an official notification feature.
 
+---
 ## Requirements
 - [Node.js](https://nodejs.org/en/download/) v6.0.0 or higher
 - NPM (v3.0.0+ recommended) (this comes with Node.js)
