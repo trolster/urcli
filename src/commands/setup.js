@@ -4,7 +4,7 @@ import inquirer from 'inquirer';
 import moment from 'moment';
 import ora from 'ora';
 import PushBullet from 'pushbullet';
-import Table from 'cli-table2';
+import Table from 'cli-table3';
 // our modules
 import {api, config} from '../utils';
 
