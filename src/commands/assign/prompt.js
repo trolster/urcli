@@ -2,7 +2,7 @@
 import readline from 'readline';
 // npm modules
 import moment from 'moment';
-import Table from 'cli-table2';
+import Table from 'cli-table3';
 import chalk from 'chalk';
 // our modules
 import env from './assignConfig';

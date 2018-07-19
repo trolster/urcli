@@ -5,7 +5,7 @@ import moment from 'moment';
 import notifier from 'node-notifier';
 import PushBullet from 'pushbullet';
 import chalk from 'chalk';
-import Table from 'cli-table2';
+import Table from 'cli-table3';
 // our modules
 import {api, config} from '../utils';
 

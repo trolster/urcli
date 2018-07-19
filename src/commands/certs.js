@@ -1,6 +1,6 @@
 // npm modules
 import ora from 'ora';
-import Table from 'cli-table2';
+import Table from 'cli-table3';
 // our modules
 import {config, getCerts} from '../utils';
 
