@@ -9,17 +9,7 @@
 [![npm license](https://img.shields.io/npm/l/urcli.svg?style=flat)](https://www.npmjs.com/package/urcli)
 
 ---
-**IMPORTANT NOTICE:** The API is going to be shut down and `urcli` will become inactive in the following months. You should no longer use `urcli` alongside any official Udacity mentor dashboard features. The only command that is currently recommended is `notify`. You can read about `notify` in the following section:
-
-## The `notify` Command
-
-While the reviews developer team works on implementing all of the functionality in the dashboard I've added a new command that let's `urcli` show Desktop notifications when submissions are assigned:
-
-```
-urcli notify
-```
-
-This command only hits the `/me/assigned` endpoint, so it doesn't touch the submission request or interact with the queue in any way. That being said, Udacity has been clear in saying that it doesn't support 3rd party tools anymore, so this new feature will not be supported by anyone. It's one of those take-it-or-leave-it things :smile:. There is no one to complain to if it breaks your computer. With that also being said, it really should be safe to use it while we wait for an official notification feature.
+**IMPORTANT NOTICE:** The Udacity Reviews API has been shut down. `urcli` no longer works and this repo has been archived. Thanks to everyone who contributed with code and ideas! 
 
 ---
 ## Requirements
